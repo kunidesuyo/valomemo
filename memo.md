@@ -10,3 +10,6 @@
 `docker image build ./ -t node-test`
 - imageからコンテナ作成  
 `docker container run -d --rm --name node-test -it node-test`
+### Docker-compose
+- compose  
+`docker-compose up -d --build`
