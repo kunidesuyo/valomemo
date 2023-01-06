@@ -3,7 +3,7 @@ const app = express()
 const port = 80
 
 app.get('/', (req, res) => {
-  res.send('Docker-compose test complete')
+  res.send('nodemon test complete')
 })
 
 app.listen(port, () => {
