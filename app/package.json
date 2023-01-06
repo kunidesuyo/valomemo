@@ -5,7 +5,7 @@
     "nodemon": "^2.0.20"
   },
   "scripts": {
-    "start": "nodemon -e js,ejs -L app.js",
+    "start": "nodemon -e js,ejs -L ./src/app.js",
     "help": "nodemon --help options"
   }
 }
