@@ -4,7 +4,8 @@ From node:19.3.0-alpine
 # 移動しないとnpm install でエラーになる
 WORKDIR /usr/app
 COPY package*.json ./
-RUN npm install --only=production
-COPY ./src ./src
+RUN npm install
+COPY ./app.js ./
+COPY ./views ./views
 EXPOSE 80
 CMD ["npm", "run", "start"]

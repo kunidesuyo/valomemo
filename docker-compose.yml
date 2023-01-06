@@ -7,4 +7,6 @@ services:
     ports:
     - 8080:80
     volumes:
-    - ./app/src:/usr/app/src
+      - type: bind
+        source: ./app/
+        target: /usr/app/
