@@ -1,5 +1,18 @@
 version: '3.7'
 services:
+
+  db:
+    image: mysql:8.0.31
+
+    environment:
+      - MYSQL_ROOT_PASSWORD="root"
+
+    volumes:
+      - ./db/conf:/etc/mysql/conf.d/:ro
+
+    networks:
+      - backend
+
   app:
     build:
       context: ./app
@@ -10,3 +23,11 @@ services:
       - type: bind
         source: ./app/src
         target: /usr/app/src
+    networks:
+      - backend
+
+    depends_on:
+      - db
+
+networks:
+  backend:
