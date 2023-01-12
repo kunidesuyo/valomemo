@@ -5,13 +5,14 @@ const port = 80;
 const mysql = require('mysql');
 
 const connection = mysql.createConnection({
-  //host: 'mysql-test',
-  host: 'localhost',
+  host: 'valomemo-db-1', 
+  //コンテナ名を指定(同ネットワーク内なので名前解決できる？)
+  //host: 'localhost',
   //port: '3306',
-  user: 'kuni',
+  user: 'root',
   password: 'password'
 });
-//
+
 
 connection.connect((error) => {
   if (error) {
@@ -33,6 +34,16 @@ app.use(express.static('/usr/app/src/public'));
 app.get('/', (req, res) => {
   //res.send('test complete')
   res.render('hello.ejs');
+});
+
+app.get('/db-test', (req, res) => {
+  //dbから情報を持ってきて出力
+  connection.query(
+    'SELECT User, Host, Plugin FROM mysql.user',
+    (error, results) => {
+      console.log(results);
+    }
+  );
 });
 
 app.listen(port, () => {
