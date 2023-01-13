@@ -12,8 +12,9 @@ const connection = mysql.createConnection({
   //host: 'localhost',
   //port: '3306',
   user: 'root',
-  password: 'password',
-  //database: 'memo'
+  //password: 'password',
+  password: process.env.MYSQL_ROOT_PASSWORD,
+  database: process.env.MYSQL_DATABASE
 });
 
 

@@ -5,8 +5,8 @@ services:
     image: mysql:8.0.31
 
     environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=valomemo
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
 
     ports:
       - '3306:3306'
@@ -18,7 +18,7 @@ services:
       - backend
 
     healthcheck:
-      test: ["CMD", "mysql", "-uroot", "-ppassword"]
+      test: ["CMD", "mysql", "-uroot", "-p${DB_PASSWORD}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -28,12 +28,19 @@ services:
     build:
       context: ./app
       dockerfile: Dockerfile
+
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+
     ports:
     - 8080:80
+
     volumes:
       - type: bind
         source: ./app/src
         target: /usr/app/src
+
     networks:
       - backend
 
