@@ -6,6 +6,7 @@ services:
 
     environment:
       - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=valomemo
 
     ports:
       - '3306:3306'
@@ -15,6 +16,13 @@ services:
 
     networks:
       - backend
+
+    healthcheck:
+      test: ["CMD", "mysql", "-uroot", "-ppassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   app:
     build:
@@ -30,7 +38,8 @@ services:
       - backend
 
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
 networks:
   backend:

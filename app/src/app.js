@@ -4,13 +4,16 @@ const port = 80;
 
 const mysql = require('mysql');
 
+//dbコンテナが完全に立ち上がるまで待たないといけない
+
 const connection = mysql.createConnection({
   host: 'valomemo-db-1', 
   //コンテナ名を指定(同ネットワーク内なので名前解決できる？)
   //host: 'localhost',
   //port: '3306',
   user: 'root',
-  password: 'password'
+  password: 'password',
+  //database: 'memo'
 });
 
 
@@ -21,6 +24,29 @@ connection.connect((error) => {
     console.log('db connected');
   }
 });
+
+/*connection.query(
+  'CREATE TABLE memos (id INT AUTO_INCREMENT, memo TEXT, PRIMARY KEY (id))',
+  (error, result) => {
+    if(error) {
+      console.log(error);
+    } else {
+      console.log('table created');
+    }
+  }
+);
+
+connection.query(
+  'INSERT INTO memos(memo) VALUES ("test")',
+  (error, result) => {
+    if(error) {
+      console.log(error);
+    } else {
+      console.log('insert test data');
+    }
+  }
+)*/
+
 
 // なくても動くけど一応
 app.set('view engine', 'ejs');
@@ -36,7 +62,7 @@ app.get('/', (req, res) => {
   res.render('hello.ejs');
 });
 
-app.get('/db-test', (req, res) => {
+/*app.get('/db-test', (req, res) => {
   //dbから情報を持ってきて出力
   connection.query(
     'SELECT User, Host, Plugin FROM mysql.user',
@@ -44,7 +70,7 @@ app.get('/db-test', (req, res) => {
       console.log(results);
     }
   );
-});
+});*/
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
