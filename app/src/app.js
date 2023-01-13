@@ -46,9 +46,6 @@ connection.query(
   }
 );
 
-
-
-
 // なくても動くけど一応
 app.set('view engine', 'ejs');
 
@@ -69,6 +66,28 @@ app.get('/db-test', (req, res) => {
     'SELECT * FROM memos',
     (error, results) => {
       console.log(results);
+    }
+  );
+});
+
+app.get('/list', (req, res) => {
+  connection.query(
+    'SELECT * FROM memos',
+    (error, results) => {
+      res.render('index.ejs', {items: results})
+    }
+  )
+});
+
+app.get('/add-data', (req, res) => {
+  connection.query(
+    'INSERT INTO memos(memo) VALUES ("kuni")',
+    (error, results) => {
+      if(error) {
+        console.log(error);
+      } else {
+        console.log('add data success')
+      }
     }
   );
 });
