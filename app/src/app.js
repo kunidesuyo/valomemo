@@ -26,14 +26,14 @@ connection.connect((error) => {
 
 // table初期化
 connection.query(
-  'CREATE TABLE memos (id INT AUTO_INCREMENT, memo TEXT, PRIMARY KEY (id))',
+  'CREATE TABLE memos (id INT AUTO_INCREMENT, content TEXT, PRIMARY KEY (id))',
   (error, result) => {
     if(error) {
       console.log(error);
     } else {
       console.log('table created');
       connection.query(
-        'INSERT INTO memos(memo) VALUES ("test")',
+        'INSERT INTO memos(content) VALUES ("test")',
         (error, result) => {
           if(error) {
             console.log(error);
@@ -55,6 +55,9 @@ app.set('views', '/usr/app/src/views');
 //cssとimageを使用可能にする
 app.use(express.static('/usr/app/src/public'));
 
+//フォームの値を受け取るための文
+app.use(express.urlencoded({extended: false}));
+
 app.get('/', (req, res) => {
   //res.send('test complete')
   res.render('hello.ejs');
@@ -74,20 +77,58 @@ app.get('/list', (req, res) => {
   connection.query(
     'SELECT * FROM memos',
     (error, results) => {
-      res.render('index.ejs', {items: results})
+      res.render('list.ejs', {items: results})
     }
-  )
+  );
 });
 
-app.get('/add-data', (req, res) => {
+app.get('/create', (req, res) => {
+  res.render('create.ejs');
+});
+
+app.post('/create', (req, res) => {
+  //dbに追加
+  //console.log(req.body.content);
   connection.query(
-    'INSERT INTO memos(memo) VALUES ("kuni")',
+    'INSERT INTO memos (content) VALUES (?)',
+    [req.body.content],
     (error, results) => {
-      if(error) {
-        console.log(error);
-      } else {
-        console.log('add data success')
-      }
+      //一覧画面を表示
+      res.redirect('/list');
+    }
+  );
+});
+
+app.post('/delete/:id', (req, res) => {
+  //メモを削除する処理
+  //console.log(req.params.id);
+  connection.query(
+    'DELETE FROM memos WHERE id=?',
+    [req.params.id],
+    (error, results) => {
+      res.redirect('/list');
+    }
+  );
+});
+
+app.get('/edit/:id', (req, res) => {
+  connection.query(
+    'SELECT * FROM memos WHERE id=?',
+    [req.params.id],
+    (error, results) => {
+      console.log(results);
+      res.render('edit.ejs', {item: results[0]});
+    }
+  );
+});
+
+app.post('/update/:id', (req, res) => {
+  //console.log(req.body.content);
+  connection.query(
+    'UPDATE memos SET content=? WHERE id=?',
+    [req.body.content, req.params.id],
+    (error, results) => {
+      res.redirect('/list');
     }
   );
 });

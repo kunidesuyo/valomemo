@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>memo list</title>
+  </head>
+  <body>
+    <h1>memo list</h1>
+    <a href="/create">新規作成</a>
+    <ul>
+      <% items.forEach((item) => { %>
+        <li>
+          <span><%= item.id %></span>
+          <span><%= item.content %></span>
+          <a href="/edit/<%=item.id%>">編集</a>
+          <form action="/delete/<%=item.id%>" method="post">
+            <input type="submit" value="削除">
+          </form>
+        </li>
+      <% }); %>
+    </ul>
+  </body>
+</html>
