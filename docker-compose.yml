@@ -4,6 +4,8 @@ services:
   db:
     image: mysql:8.0.31
 
+    container_name: ${DB_CONTAINER_NAME}
+
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
       - MYSQL_DATABASE=${DB_NAME}
@@ -32,6 +34,8 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
       - MYSQL_DATABASE=${DB_NAME}
+      - DB_CONTAINER_NAME=${DB_CONTAINER_NAME}
+      - TABLE_NAME=${TABLE_NAME}
 
     ports:
     - 8080:80

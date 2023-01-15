@@ -4,10 +4,10 @@ const port = 80;
 
 const mysql = require('mysql');
 
-//dbコンテナが完全に立ち上がるまで待たないといけない
+const table_name = process.env.TABLE_NAME;
 
 const connection = mysql.createConnection({
-  host: 'valomemo-db-1', 
+  host: process.env.DB_CONTAINER_NAME, 
   //コンテナ名を指定(同ネットワーク内なので名前解決できる？)
   user: 'root',
   //password: 'password',
@@ -24,16 +24,18 @@ connection.connect((error) => {
   }
 });
 
+
 // table初期化
 connection.query(
-  'CREATE TABLE memos (id INT AUTO_INCREMENT, content TEXT, PRIMARY KEY (id))',
+  //?でtable_nameを入れると「'」で囲まれる
+  'CREATE TABLE '+ table_name + ' (id INT AUTO_INCREMENT, content TEXT, PRIMARY KEY (id))',
   (error, result) => {
     if(error) {
       console.log(error);
     } else {
       console.log('table created');
       connection.query(
-        'INSERT INTO memos(content) VALUES ("test")',
+        'INSERT INTO ' + table_name + ' (content) VALUES ("test")',
         (error, result) => {
           if(error) {
             console.log(error);
@@ -63,19 +65,9 @@ app.get('/', (req, res) => {
   res.render('hello.ejs');
 });
 
-app.get('/db-test', (req, res) => {
-  //dbから情報を持ってきて出力
-  connection.query(
-    'SELECT * FROM memos',
-    (error, results) => {
-      console.log(results);
-    }
-  );
-});
-
 app.get('/list', (req, res) => {
   connection.query(
-    'SELECT * FROM memos',
+    'SELECT * FROM ' + table_name,
     (error, results) => {
       res.render('list.ejs', {items: results})
     }
@@ -88,9 +80,8 @@ app.get('/create', (req, res) => {
 
 app.post('/create', (req, res) => {
   //dbに追加
-  //console.log(req.body.content);
   connection.query(
-    'INSERT INTO memos (content) VALUES (?)',
+    'INSERT INTO ' + table_name + ' (content) VALUES (?)',
     [req.body.content],
     (error, results) => {
       //一覧画面を表示
@@ -101,9 +92,8 @@ app.post('/create', (req, res) => {
 
 app.post('/delete/:id', (req, res) => {
   //メモを削除する処理
-  //console.log(req.params.id);
   connection.query(
-    'DELETE FROM memos WHERE id=?',
+    'DELETE FROM ' + table_name + ' WHERE id=?',
     [req.params.id],
     (error, results) => {
       res.redirect('/list');
@@ -113,19 +103,17 @@ app.post('/delete/:id', (req, res) => {
 
 app.get('/edit/:id', (req, res) => {
   connection.query(
-    'SELECT * FROM memos WHERE id=?',
+    'SELECT * FROM ' + table_name + ' WHERE id=?',
     [req.params.id],
     (error, results) => {
-      console.log(results);
       res.render('edit.ejs', {item: results[0]});
     }
   );
 });
 
 app.post('/update/:id', (req, res) => {
-  //console.log(req.body.content);
   connection.query(
-    'UPDATE memos SET content=? WHERE id=?',
+    'UPDATE ' + table_name + ' SET content=? WHERE id=?',
     [req.body.content, req.params.id],
     (error, results) => {
       res.redirect('/list');
