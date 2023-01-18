@@ -8,7 +8,9 @@
 
 
 # today task
+- reactの本購入の検討
+- creat-react-appの詳細を調べる
 - appコンテナとfrontendコンテナを接続する
 - CRUD操作をできるようにする
 - サイトの見た目を作る。
-ab
+
