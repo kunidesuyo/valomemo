@@ -4,6 +4,8 @@
 `docker container run -d --rm --name node-test -it node:latest`  
 - コンテナ操作  
 `docker container exec -it node-test /bin/sh`
+- コンテナからファイルをホストにコピー
+`docker container cp <コピー元> <コピー先>`
 ## Dockerfile
 - imageをビルド  
 `docker image build ./ -t node-test`
