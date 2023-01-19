@@ -121,6 +121,11 @@ app.post('/update/:id', (req, res) => {
   );
 });
 
+app.get('/connect', (req, res) => {
+  console.log("connect test");
+  res.json({id: 1, content: "connect test"});
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 });
