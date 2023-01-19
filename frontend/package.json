@@ -38,5 +38,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://valomemo-app-1:80"
+  "proxy": "http://valomemo-app-1:8080"
 }

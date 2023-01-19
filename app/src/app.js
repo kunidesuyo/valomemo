@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 80;
+const port = 8080;
 
 const mysql = require('mysql');
 
@@ -123,7 +123,7 @@ app.post('/update/:id', (req, res) => {
 
 app.get('/connect', (req, res) => {
   console.log("connect test");
-  res.json({id: 1, content: "connect test"});
+  res.json({id: 2, content: "connect test"});
 });
 
 app.listen(port, () => {
