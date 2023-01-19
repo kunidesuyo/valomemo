@@ -47,3 +47,7 @@ depends onでコンテナの起動順序を指定したが、コンテナ内のm
 healthcheckで実現
 [参考](https://docs.docker.jp/engine/reference/builder.html#healthcheck)
 [参考2](https://qiita.com/knjname/items/9c0a89af2d9e49749017)
+
+# React
+## react-router-dom v6が上手く動かない
+`<Route />`単体でも`<Routes><\Routes>`で囲まないといけない
