@@ -8,7 +8,6 @@
 
 
 # today task
-- appコンテナとfrontendコンテナを接続する(axios)
 - CRUD操作をできるようにする
 - reactの本購入の検討
 - creat-react-appの詳細を調べる
