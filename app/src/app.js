@@ -24,7 +24,7 @@ connection.connect((error) => {
   }
 });
 
-
+/*
 // table初期化
 connection.query(
   //?でtable_nameを入れると「'」で囲まれる
@@ -47,6 +47,7 @@ connection.query(
     }
   }
 );
+*/
 
 // なくても動くけど一応
 app.set('view engine', 'ejs');

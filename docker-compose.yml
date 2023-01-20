@@ -15,6 +15,7 @@ services:
 
     volumes:
       - ./db/conf:/etc/mysql/conf.d/:ro
+      - ./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
 
     networks:
       - backend

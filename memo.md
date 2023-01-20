@@ -13,7 +13,7 @@
 `docker container run -d --rm --name node-test -it node-test`
 ## Docker-compose
 - compose  
-`docker-compose up -d --build`
+`docker compose up -d --build`
 
 ## db container
 - mysqlコンテナを公式imageから作成  
@@ -21,6 +21,12 @@
 
 - docker-compose-test.ymlと同じ処理をするコマンド
 `docker container run -d --rm -e MYSQL_ROOT_PASSWORD="password" -p 3306:3306 --mount type=bind,source=C:\Users\Kuni\MyHome\valomemo\db\conf,target=/etc/mysql/conf.d/,readonly --name mysql-test -it mysql:8.0.31`
+
+- バックアップ
+ホスト`docker exec valomemo_db bash -c "mysqldump -uroot -ppassword valomemo_db > test.sql`  
+
+- コンテナ起動時に/docker-entrypoint-initdb.dフォルダ内のsqlファイルを実行してくれる
+バックアップしたsqlファイルを上記フォルダに配置すれば復元できる
 
 ## mysql container
 ### docker container run で立てたコンテナはコンテナ内部からmysqlにログインできるがdocker composeで立てたコンテナはmysqlにログインできない  
