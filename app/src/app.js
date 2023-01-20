@@ -127,6 +127,17 @@ app.get('/connect', (req, res) => {
   res.json({id: 2, content: "connect test"});
 });
 
+//api
+app.get('/api/read', (req, res) => {
+  connection.query(
+    'SELECT * FROM ' + table_name,
+    (error, results) => {
+      console.log(results);
+      res.send(results);
+    }
+  )
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 });
