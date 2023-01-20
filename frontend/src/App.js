@@ -2,6 +2,7 @@
 //import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Connect from './components/Connect'
+import Read from './components/Read'
 
 
 function App() {
@@ -18,12 +19,10 @@ function App() {
     //react router dom v6で動かない
     <Router>
       <div>
-        <h1>connect-test</h1>
-        <div>
-          <Routes>
-            <Route path='connect' element={<Connect />} />
-          </Routes>
-        </div>
+        <Routes>
+          <Route path='connect' element={<Connect />} />
+          <Route path='read' element={<Read />} />
+        </Routes>
       </div>
     </Router>
 
