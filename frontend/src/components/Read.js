@@ -5,13 +5,26 @@ import Delete from './Delete'
 
 export default function Read() {
   const [APIData, setAPIData] = useState([]);
-  useEffect(() => {
+  const [detectDelete, setDetectDelete] = useState([0]);
+
+  /*useEffect(() => {
+    console.log('init')
     axios.get('/api/read')
     .then((res) => {
       //console.log(res.data[0]);
       setAPIData(res.data);
     })
-  }, []);
+  }, []);*/
+  
+  useEffect(() => {
+    console.log('detect delete')
+    axios.get('/api/read')
+    .then((res) => {
+      //console.log(res.data[0]);
+      setAPIData(res.data);
+    })
+  }, [detectDelete]);
+  
   //console.log(APIData);
   return (
     <div>
@@ -28,7 +41,7 @@ export default function Read() {
               <span>{item.id} </span>
               <span>{item.content}</span>
               <Link to="/update" state={{id: item.id, content: item.content}}>更新</Link>
-              <Delete id={item.id} />
+              <Delete id={item.id} detectDelete={detectDelete} setDetectDelete={setDetectDelete} />
             </li>
           )
         })}
