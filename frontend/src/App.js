@@ -5,7 +5,7 @@ import Connect from './components/Connect'
 import Read from './components/Read'
 import Create from './components/Create'
 import Update from './components/Update'
-
+import Delete from './components/Delete'
 
 function App() {
   return (
