@@ -12,14 +12,12 @@ export default function Create() {
   const postData = () => {
     var params = new URLSearchParams();
     params.append("content", content);
-    //console.log(111);
     axios.post('api/create', params)
     .then((res) => {
       //readにリダイレクト
       console.log(res);
       navigate('/read');
     })
-    //navigate('/read');
   }
 
   return (
@@ -27,7 +25,7 @@ export default function Create() {
       <h2>create</h2>
       <form>
         <input onChange={(e) => {setContent(e.target.value)}}/>
-        <input onClick={postData}  type="button" value="作成" />
+        <input onClick={postData} type="button" value="作成" />
       </form>
     </div>
   )

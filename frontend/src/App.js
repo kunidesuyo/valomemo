@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Connect from './components/Connect'
 import Read from './components/Read'
 import Create from './components/Create'
+import Update from './components/Update'
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path='connect' element={<Connect />} />
           <Route path='read' element={<Read />} />
           <Route path='create' element={<Create />} />
+          <Route path='update' element={<Update />} />
         </Routes>
       </div>
     </Router>
