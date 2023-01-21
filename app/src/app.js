@@ -75,11 +75,11 @@ app.get('/list', (req, res) => {
   );
 });
 
-app.get('/create', (req, res) => {
+/*app.get('/create', (req, res) => {
   res.render('create.ejs');
-});
+});*/
 
-app.post('/create', (req, res) => {
+/*app.post('/create', (req, res) => {
   //dbに追加
   connection.query(
     'INSERT INTO ' + table_name + ' (content) VALUES (?)',
@@ -89,7 +89,7 @@ app.post('/create', (req, res) => {
       res.redirect('/list');
     }
   );
-});
+});*/
 
 app.post('/delete/:id', (req, res) => {
   //メモを削除する処理
@@ -136,6 +136,23 @@ app.get('/api/read', (req, res) => {
       res.send(results);
     }
   )
+});
+
+app.post('/api/create', (req, res) => {
+  console.log(req.body);
+  console.log(req.body.content);
+  connection.query(
+    'INSERT INTO ' + table_name + ' (content) VALUES (?)',
+    [req.body.content],
+    (error, results) => {
+      if(error) {
+        res.send(error);
+      } else {
+        res.send(results);
+      }
+    }
+  )
+  //res.send(req.body)
 });
 
 app.listen(port, () => {
