@@ -91,7 +91,7 @@ app.get('/list', (req, res) => {
   );
 });*/
 
-app.post('/delete/:id', (req, res) => {
+/*app.post('/delete/:id', (req, res) => {
   //メモを削除する処理
   connection.query(
     'DELETE FROM ' + table_name + ' WHERE id=?',
@@ -100,7 +100,7 @@ app.post('/delete/:id', (req, res) => {
       res.redirect('/list');
     }
   );
-});
+});*/
 
 app.get('/edit/:id', (req, res) => {
   connection.query(
@@ -170,6 +170,23 @@ app.post('/api/update', (req, res) => {
       }
     }
   )
+});
+
+app.delete('/api/delete/:id', (req, res) => {
+  //メモを削除する処理
+  console.log('---------delete--------');
+  console.log(req.params.id);
+  connection.query(
+    'DELETE FROM ' + table_name + ' WHERE id=?',
+    [req.params.id],
+    (error, results) => {
+      if(error) {
+        res.send(error);
+      } else {
+        res.send(results);
+      }
+    }
+  );
 });
 
 app.listen(port, () => {
