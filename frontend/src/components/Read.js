@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 export default function Read() {
   const [APIData, setAPIData] = useState([]);
@@ -10,7 +11,7 @@ export default function Read() {
       setAPIData(res.data);
     })
   }, []);
-  console.log(APIData);
+  //console.log(APIData);
   return (
     <div>
       <h2>read</h2>
@@ -24,6 +25,7 @@ export default function Read() {
             <li>
               <span>{item.id} </span>
               <span>{item.content}</span>
+              <Link to="/update" state={{id: item.id, content: item.content}}>更新</Link>
             </li>
           )
         })}
