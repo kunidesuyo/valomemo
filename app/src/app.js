@@ -112,7 +112,7 @@ app.get('/edit/:id', (req, res) => {
   );
 });
 
-app.post('/update/:id', (req, res) => {
+/*app.post('/update/:id', (req, res) => {
   connection.query(
     'UPDATE ' + table_name + ' SET content=? WHERE id=?',
     [req.body.content, req.params.id],
@@ -120,7 +120,7 @@ app.post('/update/:id', (req, res) => {
       res.redirect('/list');
     }
   );
-});
+});*/
 
 app.get('/connect', (req, res) => {
   console.log("connect test");
@@ -153,6 +153,23 @@ app.post('/api/create', (req, res) => {
     }
   )
   //res.send(req.body)
+});
+
+app.post('/api/update', (req, res) => {
+  //console.log('---------connect-----------')
+  //console.log(req.body.id);
+  //console.log(req.body.content);
+  connection.query(
+    'UPDATE ' + table_name + ' SET content=? WHERE id=?',
+    [req.body.content, req.body.id],
+    (error, results) => {
+      if(error) {
+        res.send(error);
+      } else {
+        res.send(results);
+      }
+    }
+  )
 });
 
 app.listen(port, () => {
