@@ -4,7 +4,7 @@ import axios from 'axios';
 export default function Read() {
   const [APIData, setAPIData] = useState([]);
   useEffect(() => {
-    axios.get(`/api/read`)
+    axios.get('/api/read')
     .then((res) => {
       //console.log(res.data[0]);
       setAPIData(res.data);
