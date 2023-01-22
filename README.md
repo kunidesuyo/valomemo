@@ -14,3 +14,4 @@
   - id map agent skill position_image aim_image landing_image content 
 + [ ] mysqlテーブルの定義を変更して表示画面も対応する
 + [ ] materialUIで作ってみる
++ [ ] 画像の扱いを調べる
