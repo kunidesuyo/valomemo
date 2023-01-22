@@ -66,14 +66,14 @@ app.get('/', (req, res) => {
   res.render('hello.ejs');
 });
 
-app.get('/list', (req, res) => {
+/*app.get('/list', (req, res) => {
   connection.query(
     'SELECT * FROM ' + table_name,
     (error, results) => {
       res.render('list.ejs', {items: results})
     }
   );
-});
+});*/
 
 /*app.get('/create', (req, res) => {
   res.render('create.ejs');
@@ -102,7 +102,7 @@ app.get('/list', (req, res) => {
   );
 });*/
 
-app.get('/edit/:id', (req, res) => {
+/*app.get('/edit/:id', (req, res) => {
   connection.query(
     'SELECT * FROM ' + table_name + ' WHERE id=?',
     [req.params.id],
@@ -110,7 +110,7 @@ app.get('/edit/:id', (req, res) => {
       res.render('edit.ejs', {item: results[0]});
     }
   );
-});
+});*/
 
 /*app.post('/update/:id', (req, res) => {
   connection.query(
@@ -156,16 +156,22 @@ app.post('/api/create', (req, res) => {
 });
 
 app.post('/api/update', (req, res) => {
-  //console.log('---------connect-----------')
-  //console.log(req.body.id);
+  console.log('---------connect-----------')
+  console.log(req.body);
+  console.log('---------connect-----------')
+  //console.log(Object.values(req.body))
   //console.log(req.body.content);
   connection.query(
-    'UPDATE ' + table_name + ' SET content=? WHERE id=?',
-    [req.body.content, req.body.id],
+    //queryを変数にしたい
+    'UPDATE ' + table_name + 
+    ' SET map=?, agent=?, skill=?, position_image=?, aim_image=?, landing_image=?, content=? WHERE id=?',
+    [req.body.map, req.body.agent, req.body.skill, req.body.position_image, req.body.aim_image, req.body.landing_image, req.body.content, req.body.id],
     (error, results) => {
       if(error) {
+        console.log('error')
         res.send(error);
       } else {
+        console.log('success');
         res.send(results);
       }
     }
