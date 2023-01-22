@@ -37,7 +37,7 @@ export default function Read() {
         </li>
         {APIData.map((item) => {
           return (  
-            <li>
+            <li key={item.id}>
               <span>{item.id} </span>
               <span>{item.content}</span>
               <Link to="/update" state={{id: item.id, content: item.content}}>更新</Link>
