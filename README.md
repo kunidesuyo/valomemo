@@ -11,11 +11,6 @@
 
 # today task
 + [ ] mysqlのテーブルの定義を決める
-  - id map agent skill position_image aim_image content ここ編集中
-+ [ ] appサーバーをapiサーバーにし、reactコンテナで最低限のCRUD機能を作成
-  + [ ] Create
-  + [ ] Read
-  + [ ] Update
-  + [ ] Delete
-+ [ ] cssのライブラリを決め、適用
-+ [ ] サイトの見た目を最低限整える
+  - id map agent skill position_image aim_image landing_image content 
++ [ ] mysqlテーブルの定義を変更して表示画面も対応する
++ [ ] materialUIで作ってみる
