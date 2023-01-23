@@ -22,3 +22,38 @@ export const init_db_data =
   "landing_image": "landing_image_test",
   "content": ""
 };
+
+export const agent_names = [
+  "Brimstone",
+  "Viper",
+  "Omen",
+  "Cypher",
+  "Sova",
+  "Sage",
+  "Phoenix",
+  "Jett",
+  "Raze",
+  "Breach",
+  "Reyna",
+  "Killjoy",
+  "Skye",
+  "Yoru",
+  "Astra",
+  "KAY/O",
+  "Chamber",
+  "Neon",
+  "Fade",
+  "Harbor"
+];
+
+export const map_names = [
+  "Haven",
+  "Bind",
+  "Split",
+  "Ascent",
+  "Icebox",
+  "Breeze",
+  "Fracture",
+  "Pearl",
+  "Lotus"
+];

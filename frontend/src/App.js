@@ -5,31 +5,36 @@ import Connect from './components/Connect'
 import Read from './components/Read'
 import Create from './components/Create'
 import Update from './components/Update'
-import Delete from './components/Delete'
+
+import MuiTest from './components/MuiTest';
+
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+//サイト全体のテーマを設定できる
+//とりあえずデフォルトで使う
+const theme = createTheme();
+
 
 function App() {
   return (
-    //react router dom v5で動く
-    /*<Router>
-      <div>
-        <h1>connect-test</h1>
-        <div>
-          <Route exact path='/connect' component={Connect} />
-        </div>
-      </div>
-    </Router>*/
-    //react router dom v6で動かない
-    <Router>
-      <div>
-        <Routes>
-          <Route path='connect' element={<Connect />} />
-          <Route path='read' element={<Read />} />
-          <Route path='create' element={<Create />} />
-          <Route path='update' element={<Update />} />
-        </Routes>
-      </div>
-    </Router>
+    <>
+      {/*<MuiTest />*/}
+      <ThemeProvider theme={theme}>
+        {/* ヘッダー作る */}
+        <Router>
+          <div>
+            <Routes>
+              <Route path='connect' element={<Connect />} />
+              <Route path='read' element={<Read />} />
+              <Route path='create' element={<Create />} />
+              <Route path='update' element={<Update />} />
+            </Routes>
+          </div>
+        </Router>
+        {/* フッター作る */}
+      </ThemeProvider>
 
+    </>
   );
 
 }
