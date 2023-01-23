@@ -3,7 +3,17 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 import { db_column_name } from '../db_info';
-import { init_db_data } from '../db_info';
+import { init_db_data, agent_names, map_names } from '../db_info';
+
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import Container from '@mui/material/Container';
+
+
+
 
 export default function Create() {
   const [content, setContent] = useState(init_db_data);
@@ -35,6 +45,23 @@ export default function Create() {
 
   return (
     <>
+    <Container maxWidth="xs">
+      <Box sx={{ maxWidth: 120 }}>
+        <FormControl fullWidth>
+          <InputLabel id="agent-select">Agent</InputLabel>
+          <Select>
+            {agent_names.map((agent) => {
+              return (
+                <MenuItem value={agent}>{agent}</MenuItem>
+              )
+            })}
+          </Select>
+        </FormControl>
+      </Box>
+    </Container>
+
+
+    
       <h2>create</h2>
       {Object.entries(init_db_data).map(([key, value]) => {
         if(key !== "id") {
