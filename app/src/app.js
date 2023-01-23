@@ -139,15 +139,19 @@ app.get('/api/read', (req, res) => {
 });
 
 app.post('/api/create', (req, res) => {
+  console.log('create connect------------');
   console.log(req.body);
-  console.log(req.body.content);
+  //バリデーションチェック追加予定
+  //console.log(req.body.content);
   connection.query(
-    'INSERT INTO ' + table_name + ' (content) VALUES (?)',
-    [req.body.content],
+    'INSERT INTO ' + table_name + ' (map, agent, skill, position_image, aim_image, landing_image, content) VALUES (?,?,?,?,?,?,?)',
+    [req.body.map, req.body.agent, req.body.skill, req.body.position_image, req.body.aim_image, req.body.landing_image, req.body.content],
     (error, results) => {
       if(error) {
+        console.log(error)
         res.send(error);
       } else {
+        console.log('success')
         res.send(results);
       }
     }
