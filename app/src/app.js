@@ -199,6 +199,37 @@ app.delete('/api/delete/:id', (req, res) => {
   );
 });
 
+// imgur api
+
+const refresh_token = process.env.IMGUR_API_REFRESH_TOKEN;
+const client_id = process.env.IMGUR_API_CLIENT_ID;
+const client_secret = process.env.IMGUR_API_CLIENT_SECRET;
+
+//import axios from 'axios';
+const axios = require('axios');
+
+let access_token = "";
+
+app.get('/imgur-test', (req, res) => {
+  console.log(refresh_token);
+  console.log(client_id);
+  console.log(client_secret);
+  var params = new URLSearchParams();
+  params.append("refresh_token", refresh_token);
+  params.append("client_id", client_id);
+  params.append("client_secret", client_secret);
+  params.append("grant_type", "refresh_token");
+  axios.post("https://api.imgur.com/oauth2/token", params)
+  .then((res) => {
+    console.log("success");
+    console.log(res.data);
+  })
+  .catch((error) => {
+    console.log("error");
+    console.log(error);
+  })
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 });
