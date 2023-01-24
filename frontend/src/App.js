@@ -18,7 +18,6 @@ const theme = createTheme();
 function App() {
   return (
     <>
-      {/*<MuiTest />*/}
       <ThemeProvider theme={theme}>
         {/* ヘッダー作る */}
         <Router>
