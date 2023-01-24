@@ -16,12 +16,24 @@ export const init_db_data =
   "id": "",
   "map": "",
   "agent": "",
-  "skill": "1",
+  "skill": "",
   "position_image": "position_image_test",
   "aim_image": "aim_image_test",
   "landing_image": "landing_image_test",
   "content": ""
 };
+
+export const map_names = [
+  "Haven",
+  "Bind",
+  "Split",
+  "Ascent",
+  "Icebox",
+  "Breeze",
+  "Fracture",
+  "Pearl",
+  "Lotus"
+];
 
 export const agent_names = [
   "Brimstone",
@@ -46,14 +58,5 @@ export const agent_names = [
   "Harbor"
 ];
 
-export const map_names = [
-  "Haven",
-  "Bind",
-  "Split",
-  "Ascent",
-  "Icebox",
-  "Breeze",
-  "Fracture",
-  "Pearl",
-  "Lotus"
-];
+export const skills = [1, 2, 3, 4];
+
