@@ -41,7 +41,7 @@ CREATE TABLE `setup_list` (
 
 LOCK TABLES `setup_list` WRITE;
 /*!40000 ALTER TABLE `setup_list` DISABLE KEYS */;
-INSERT INTO `setup_list` VALUES (1,'ascent','killjoy',3,'test','test','test','test');
+INSERT INTO `setup_list` VALUES (1,'Ascent','Killjoy',3,'test','test','test','test');
 /*!40000 ALTER TABLE `setup_list` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
