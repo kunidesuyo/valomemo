@@ -41,7 +41,7 @@ export default function Read() {
         </Button>
         {setups.map((setup) => {
           return (
-            <Box border={1} sx={{m:3}}>
+            <Box key="setup.id" border={1} sx={{m:3}}>
               <Grid container sx={{p:1}} spacing={1}>
                 <Grid item xs={4}>
                   <TextField 
