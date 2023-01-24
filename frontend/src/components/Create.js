@@ -18,14 +18,14 @@ import Button from '@mui/material/Button'
 
 
 export default function Create() {
-  const [setupElement, setSetupElement] = useState(init_db_data);
+  const [setupElements, setSetupElements] = useState(init_db_data);
   let navigate = useNavigate();
   //デバック
-  useEffect(() => {console.log(setupElement)}, [setupElement]);
+  useEffect(() => {console.log(setupElements)}, [setupElements]);
 
   const postData = () => {
     var params = new URLSearchParams();
-    Object.entries(setupElement).map(([key, value]) => {
+    Object.entries(setupElements).map(([key, value]) => {
       if(key !== "id") {
         params.append([key], value);
       }
@@ -41,8 +41,8 @@ export default function Create() {
   const handleChange = (e) => {
     //console.log(e.target);
     //console.log(e.target.value);
-    setSetupElement({...setupElement, [e.target.name]: e.target.value});
-    //console.log(setupElement);
+    setSetupElements({...setupElements, [e.target.name]: e.target.value});
+    //console.log(setupElements);
   }
 
   return (
@@ -57,7 +57,7 @@ export default function Create() {
                 label="Map"
                 name="map"
                 onChange={(e) => handleChange(e)}
-                value={setupElement.map}
+                value={setupElements.map}
               >
                 {map_names.map((map) => {
                   return (
@@ -74,7 +74,7 @@ export default function Create() {
                 label="Agent"
                 name="agent"
                 onChange={(e) => handleChange(e)}
-                value={setupElement.agent}
+                value={setupElements.agent}
               >
                 {agent_names.map((agent) => {
                   return (
@@ -91,7 +91,7 @@ export default function Create() {
                 label="Skill"
                 name="skill"
                 onChange={(e) => handleChange(e)}
-                value={setupElement.skill}
+                value={setupElements.skill}
               >
                 {skills.map((skill) => {
                   return (
@@ -110,7 +110,7 @@ export default function Create() {
                 label="position_image"
                 name="position_image"
                 onChange={(e) => handleChange(e)}
-                value={setupElement.position_image}
+                value={setupElements.position_image}
               />
             </FormControl>
           </Box>
@@ -120,7 +120,7 @@ export default function Create() {
                 label="aim_image"
                 name="aim_image"
                 onChange={(e) => handleChange(e)}
-                value={setupElement.aim_image}
+                value={setupElements.aim_image}
               />
             </FormControl>
           </Box>
@@ -130,7 +130,7 @@ export default function Create() {
                 label="landing_image"
                 name="landing_image"
                 onChange={(e) => handleChange(e)}
-                value={setupElement.landing_image}
+                value={setupElements.landing_image}
               />
             </FormControl>
           </Box>
@@ -140,7 +140,7 @@ export default function Create() {
                 label="content"
                 name="content"
                 onChange={(e) => handleChange(e)}
-                value={setupElement.content}
+                value={setupElements.content}
               />
             </FormControl>
           </Box>

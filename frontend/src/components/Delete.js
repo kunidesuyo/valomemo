@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+import Button from '@mui/material/Button'
+
 
 
 export default function Delete(props) {
@@ -27,6 +29,6 @@ export default function Delete(props) {
     //navigate('/read');
   }
   return (
-    <button onClick={deleteData}>削除</button>
+    <Button onClick={deleteData} variant="contained">削除</Button>
   )
 }

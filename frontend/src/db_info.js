@@ -16,7 +16,7 @@ export const init_db_data =
   "id": "",
   "map": "",
   "agent": "",
-  "skill": "",
+  "skill": "1",
   "position_image": "position_image_test",
   "aim_image": "aim_image_test",
   "landing_image": "landing_image_test",

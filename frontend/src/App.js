@@ -6,7 +6,6 @@ import Read from './components/Read'
 import Create from './components/Create'
 import Update from './components/Update'
 
-import MuiTest from './components/MuiTest';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
