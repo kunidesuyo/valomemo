@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 import { db_column_name } from '../db_info';
-import { init_db_data, agent_names, map_names } from '../db_info';
+import { init_db_data, agent_names, map_names, skills } from '../db_info';
 
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -11,21 +11,21 @@ import FormControl from '@mui/material/FormControl';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import Container from '@mui/material/Container';
-
-
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button'
 
 
 export default function Create() {
-  const [content, setContent] = useState(init_db_data);
+  const [setupElement, setSetupElement] = useState(init_db_data);
   let navigate = useNavigate();
-  //console.log(db_column_name);
-
   //デバック
-  useEffect(() => {console.log(content)}, [content]);
+  useEffect(() => {console.log(setupElement)}, [setupElement]);
 
   const postData = () => {
     var params = new URLSearchParams();
-    Object.entries(content).map(([key, value]) => {
+    Object.entries(setupElement).map(([key, value]) => {
       if(key !== "id") {
         params.append([key], value);
       }
@@ -39,42 +39,118 @@ export default function Create() {
   }
 
   const handleChange = (e) => {
-    setContent({...content, [e.target.id]: e.target.value});
-    //console.log(content);
+    //console.log(e.target);
+    //console.log(e.target.value);
+    setSetupElement({...setupElement, [e.target.name]: e.target.value});
+    //console.log(setupElement);
   }
 
   return (
     <>
-    <Container maxWidth="xs">
-      <Box sx={{ maxWidth: 120 }}>
-        <FormControl fullWidth>
-          <InputLabel id="agent-select">Agent</InputLabel>
-          <Select>
-            {agent_names.map((agent) => {
-              return (
-                <MenuItem value={agent}>{agent}</MenuItem>
-              )
-            })}
-          </Select>
-        </FormControl>
-      </Box>
-    </Container>
-
-
-    
-      <h2>create</h2>
-      {Object.entries(init_db_data).map(([key, value]) => {
-        if(key !== "id") {
-          return (
-            <>
-              <span>{key}</span>
-              <input id={key} onChange={(e) => handleChange(e)} defaultValue={value}/>
-              <br></br>
-            </>
-          )
-        }
-      })}
-      <input onClick={postData} type="button" value="作成" />
+      <Container maxWidth="xs">
+        <Grid container sx={{p:1}} spacing={1}>
+          <Grid item xs={4}>
+            <FormControl fullWidth>
+              <InputLabel id="map-select">Map</InputLabel>
+              <Select
+                labelId="map-select"
+                label="Map"
+                name="map"
+                onChange={(e) => handleChange(e)}
+                value={setupElement.map}
+              >
+                {map_names.map((map) => {
+                  return (
+                    <MenuItem value={map}>{map}</MenuItem>
+                  )
+                })}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={4}>
+            <FormControl fullWidth>
+              <InputLabel id="agent-select">Agent</InputLabel>
+              <Select
+                label="Agent"
+                name="agent"
+                onChange={(e) => handleChange(e)}
+                value={setupElement.agent}
+              >
+                {agent_names.map((agent) => {
+                  return (
+                    <MenuItem value={agent}>{agent}</MenuItem>
+                  )
+                })}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={4}>
+            <FormControl fullWidth>
+              <InputLabel id="skill-select">Skill</InputLabel>
+              <Select
+                label="Skill"
+                name="skill"
+                onChange={(e) => handleChange(e)}
+                value={setupElement.skill}
+              >
+                {skills.map((skill) => {
+                  return (
+                    <MenuItem value={skill}>{skill}</MenuItem>
+                  )
+                })}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+        
+        <Stack sx={{p:1}} spacing={1}>
+          <Box>
+            <FormControl fullWidth>
+              <TextField 
+                label="position_image"
+                name="position_image"
+                onChange={(e) => handleChange(e)}
+                value={setupElement.position_image}
+              />
+            </FormControl>
+          </Box>
+          <Box>
+            <FormControl fullWidth>
+              <TextField 
+                label="aim_image"
+                name="aim_image"
+                onChange={(e) => handleChange(e)}
+                value={setupElement.aim_image}
+              />
+            </FormControl>
+          </Box>
+          <Box>
+            <FormControl fullWidth>
+              <TextField 
+                label="landing_image"
+                name="landing_image"
+                onChange={(e) => handleChange(e)}
+                value={setupElement.landing_image}
+              />
+            </FormControl>
+          </Box>
+          <Box>
+            <FormControl fullWidth>
+              <TextField 
+                label="content"
+                name="content"
+                onChange={(e) => handleChange(e)}
+                value={setupElement.content}
+              />
+            </FormControl>
+          </Box>
+          <Box>
+            <FormControl fullWidth>
+              <Button variant="contained" onClick={postData}>作成</Button>
+            </FormControl>
+          </Box>
+        </Stack>
+      </Container>
     </>
   )
 
