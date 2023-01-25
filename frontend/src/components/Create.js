@@ -30,11 +30,15 @@ export default function Create() {
         params.append([key], value);
       }
     })
+    console.log("send data")
     axios.post('api/create', params)
     .then((res) => {
       //readにリダイレクト
       console.log(res);
       navigate('/read');
+    })
+    .catch((err) => {
+      console.log(err);
     })
   }
 
@@ -132,7 +136,7 @@ export default function Create() {
         </Box>
 
         <Box>
-          <p>position_image</p>
+          <p>aim_image</p>
           <Button variant="contained" component="label">
             ファイルを選択
             <input name="aim_image" type='file' hidden accept="image/*" onChange={handleFile}/>
@@ -141,7 +145,7 @@ export default function Create() {
         </Box>
 
         <Box>
-          <p>position_image</p>
+          <p>landing_image</p>
           <Button variant="contained" component="label">
             ファイルを選択
             <input name="landing_image" type='file' hidden accept="image/*" onChange={handleFile}/>
