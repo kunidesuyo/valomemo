@@ -72,6 +72,7 @@ export default function Read() {
                   value={setup.position_image}
                   label="position_image"
                 />
+                <img src={setup.position_image} width="100%"/>
                 <TextField
                   InputProps={{readOnly: true}}
                   value={setup.aim_image}
