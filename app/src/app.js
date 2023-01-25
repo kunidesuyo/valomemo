@@ -122,10 +122,35 @@ app.get('/', (req, res) => {
   );
 });*/
 
-app.get('/connect', (req, res) => {
+/*app.get('/connect', (req, res) => {
   console.log("connect test");
   res.json({id: 2, content: "connect test"});
+});*/
+
+
+// imgur api
+const refresh_token = process.env.IMGUR_API_REFRESH_TOKEN;
+const client_id = process.env.IMGUR_API_CLIENT_ID;
+const client_secret = process.env.IMGUR_API_CLIENT_SECRET;
+
+const axios = require('axios');
+const fs = require('fs');
+const handleImgurApi = require('./handleImgurApi.js');
+const generateAccessToken = handleImgurApi.generateAccessToken;
+const uploadImageForImgur = handleImgurApi.uploadImageForImgur;
+
+let access_token = "";
+
+app.get('/imgur-test', async (req, res) => {
+
+  access_token = generateAccessToken(refresh_token, client_id, client_secret);
+
+  const image = fs.readFileSync('/usr/app/src/testdata/test2.png', 'base64');
+
+  uploadImageForImgur(image, access_token);
+
 });
+
 
 //api
 app.get('/api/read', (req, res) => {
@@ -199,58 +224,9 @@ app.delete('/api/delete/:id', (req, res) => {
   );
 });
 
-// imgur api
-
-const refresh_token = process.env.IMGUR_API_REFRESH_TOKEN;
-const client_id = process.env.IMGUR_API_CLIENT_ID;
-const client_secret = process.env.IMGUR_API_CLIENT_SECRET;
-
-//import axios from 'axios';
-const axios = require('axios');
-const fs = require('fs');
 
 
-let access_token = "";
 
-app.get('/imgur-test', async (req, res) => {
-  //console.log(refresh_token);
-  //console.log(client_id);
-  //console.log(client_secret);
-  var params = new URLSearchParams();
-  params.append("refresh_token", refresh_token);
-  params.append("client_id", client_id);
-  params.append("client_secret", client_secret);
-  params.append("grant_type", "refresh_token");
-  await axios.post("https://api.imgur.com/oauth2/token", params)
-  .then((res) => {
-    console.log("get token success");
-    //console.log(res.data);
-    access_token = res.data.access_token;
-  })
-  .catch((error) => {
-    console.log("get token error");
-    console.log(error);
-  })
-  //console.log(access_token);
-  const image = fs.readFileSync('/usr/app/src/testdata/test.png', 'base64');
-  //console.log(image);
-  const upload_url = "https://api.imgur.com/3/upload";
-  const headers = {"Authorization": "Bearer " + access_token};
-  var upload_params = new URLSearchParams();
-  upload_params.append("image", image);
-  upload_params.append("type", "base64");
-  //upload_params.append("name", test.png);
-  await axios.post(upload_url, upload_params, {headers: headers})
-  .then((res) => {
-    console.log("upload success");
-    console.log(res);
-  })
-  .catch((error) => {
-    console.log("upload error");
-    console.log(error);
-  })
-
-});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
