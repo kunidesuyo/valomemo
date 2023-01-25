@@ -45,6 +45,24 @@ export default function Create() {
     //console.log(setupElements);
   }
 
+  const [imageUrl, setImageUrl] = useState();
+
+  const handleFile = (e) => {
+    //console.log("file")
+    if(!e.target.files) return;
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    const target_name = e.target.name;
+    //reader.readAsDataURL(file);
+    reader.onload = () => {
+      //setImageUrl(reader.result);
+      //console.log(setupElements);
+      setSetupElements({...setupElements, [target_name]: reader.result});
+      //console.log(setupElements);
+    }
+    reader.readAsDataURL(file);
+  }
+
   return (
     <>
       <Container maxWidth="xs">
@@ -103,8 +121,37 @@ export default function Create() {
           </Grid>
         </Grid>
         
+        {/* mapで処理したい */}
+        <Box>
+          <p>position_image</p>
+          <Button variant="contained" component="label">
+            ファイルを選択
+            <input name="position_image" type='file' hidden accept="image/*" onChange={handleFile}/>
+          </Button>
+          <img src={setupElements.position_image} width="100%"/>
+        </Box>
+
+        <Box>
+          <p>position_image</p>
+          <Button variant="contained" component="label">
+            ファイルを選択
+            <input name="aim_image" type='file' hidden accept="image/*" onChange={handleFile}/>
+          </Button>
+          <img src={setupElements.aim_image} width="100%"/>
+        </Box>
+
+        <Box>
+          <p>position_image</p>
+          <Button variant="contained" component="label">
+            ファイルを選択
+            <input name="landing_image" type='file' hidden accept="image/*" onChange={handleFile}/>
+          </Button>
+          <img src={setupElements.landing_image} width="100%"/>
+        </Box>
+        
+        
         <Stack sx={{p:1}} spacing={1}>
-          <Box>
+          {/*<Box>
             <FormControl fullWidth>
               <TextField 
                 label="position_image"
@@ -133,7 +180,7 @@ export default function Create() {
                 value={setupElements.landing_image}
               />
             </FormControl>
-          </Box>
+              </Box>*/}
           <Box>
             <FormControl fullWidth>
               <TextField 
