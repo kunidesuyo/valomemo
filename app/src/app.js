@@ -207,27 +207,49 @@ const client_secret = process.env.IMGUR_API_CLIENT_SECRET;
 
 //import axios from 'axios';
 const axios = require('axios');
+const fs = require('fs');
+
 
 let access_token = "";
 
-app.get('/imgur-test', (req, res) => {
-  console.log(refresh_token);
-  console.log(client_id);
-  console.log(client_secret);
+app.get('/imgur-test', async (req, res) => {
+  //console.log(refresh_token);
+  //console.log(client_id);
+  //console.log(client_secret);
   var params = new URLSearchParams();
   params.append("refresh_token", refresh_token);
   params.append("client_id", client_id);
   params.append("client_secret", client_secret);
   params.append("grant_type", "refresh_token");
-  axios.post("https://api.imgur.com/oauth2/token", params)
+  await axios.post("https://api.imgur.com/oauth2/token", params)
   .then((res) => {
-    console.log("success");
-    console.log(res.data);
+    console.log("get token success");
+    //console.log(res.data);
+    access_token = res.data.access_token;
   })
   .catch((error) => {
-    console.log("error");
+    console.log("get token error");
     console.log(error);
   })
+  //console.log(access_token);
+  const image = fs.readFileSync('/usr/app/src/testdata/test.png', 'base64');
+  //console.log(image);
+  const upload_url = "https://api.imgur.com/3/upload";
+  const headers = {"Authorization": "Bearer " + access_token};
+  var upload_params = new URLSearchParams();
+  upload_params.append("image", image);
+  upload_params.append("type", "base64");
+  //upload_params.append("name", test.png);
+  await axios.post(upload_url, upload_params, {headers: headers})
+  .then((res) => {
+    console.log("upload success");
+    console.log(res);
+  })
+  .catch((error) => {
+    console.log("upload error");
+    console.log(error);
+  })
+
 });
 
 app.listen(port, () => {
