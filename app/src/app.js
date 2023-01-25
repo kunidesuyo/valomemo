@@ -59,7 +59,7 @@ app.set('views', '/usr/app/src/views');
 app.use(express.static('/usr/app/src/public'));
 
 //フォームの値を受け取るための文
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({extended: false, limit: '20mb'}));
 
 app.get('/', (req, res) => {
   //res.send('test complete')
@@ -163,24 +163,91 @@ app.get('/api/read', (req, res) => {
   )
 });
 
-app.post('/api/create', (req, res) => {
+app.post('/api/create', async (req, res) => {
   console.log('create connect------------');
-  console.log(req.body);
+  //console.log(req.body.position_image);
   //バリデーションチェック追加予定
   //console.log(req.body.content);
-  connection.query(
-    'INSERT INTO ' + table_name + ' (map, agent, skill, position_image, aim_image, landing_image, content) VALUES (?,?,?,?,?,?,?)',
-    [req.body.map, req.body.agent, req.body.skill, req.body.position_image, req.body.aim_image, req.body.landing_image, req.body.content],
-    (error, results) => {
-      if(error) {
-        console.log(error)
-        res.send(error);
-      } else {
-        console.log('success')
-        res.send(results);
+
+  /*送られてきた画像データの余分な部分を取り除く*/
+  let position_image = req.body.position_image;
+  let aim_image = req.body.aim_image;
+  let landing_image = req.body.landing_image;
+  /*fs.writeFile("file.txt", position_image, (err) => {
+    if(err) throw err;
+    console.log("書き込み完了");
+  });*/
+
+
+  //console.log(position_image);
+  //let test = "data:image/png;base64,abcd"
+  //test = test.replace(/data:.*\/.*;base64,/, '');
+  //console.log(test);
+  //console.log("before: " + position_image.slice(0, 20));
+  position_image = position_image.replace(/data:image\/.*;base64,/, '');
+  //console.log("----------------")
+  //console.log("after: " + position_image.slice(0, 20));
+  //console.log(position_image_base64);
+
+  /*画像をimgurに登録*/
+  access_token = await generateAccessToken(refresh_token, client_id, client_secret);
+  const upload_url = "https://api.imgur.com/3/upload";
+  const headers = {"Authorization": "Bearer " + access_token};
+  var upload_params = new URLSearchParams();
+  upload_params.append("image", position_image);
+  upload_params.append("type", "base64");
+  //upload_params.append("name", test.png);
+  await axios.post(upload_url, upload_params, {headers: headers})
+  .then((r) => {
+    console.log("upload success");
+    //console.log(res.data);
+    //console.log(res.data.data);
+    console.log(r.data.data.link);
+    const position_image_url = r.data.data.link;
+    console.log(position_image_url);
+    connection.query(
+      'INSERT INTO ' + table_name + ' (map, agent, skill, position_image, aim_image, landing_image, content) VALUES (?,?,?,?,?,?,?)',
+      [req.body.map, req.body.agent, req.body.skill, position_image_url, req.body.aim_image, req.body.landing_image, req.body.content],
+      (error, results) => {
+        if(error) {
+          console.log(error)
+          res.send(error);
+        } else {
+          console.log('insert new data success')
+          res.send(results);
+        }
       }
-    }
-  )
+    )
+  })
+  .catch((error) => {
+    console.log("upload error");
+    console.log(error);
+  })
+  // uploadImageForImgurを呼び出すと画像urlを返すのを待ってくれない。なぜ？
+  /*uploadImageForImgur(position_image, access_token).then((position_image_url) => {
+    console.log("処理待てや")
+    console.log(position_image_url);
+    connection.query(
+      'INSERT INTO ' + table_name + ' (map, agent, skill, position_image, aim_image, landing_image, content) VALUES (?,?,?,?,?,?,?)',
+      [req.body.map, req.body.agent, req.body.skill, position_image_url, req.body.aim_image, req.body.landing_image, req.body.content],
+      (error, results) => {
+        if(error) {
+          console.log(error)
+          res.send(error);
+        } else {
+          console.log('insert new data success')
+          res.send(results);
+        }
+      }
+    )
+  });*/
+
+
+
+  //画像のurlをdbに保存
+
+  
+
   //res.send(req.body)
 });
 
@@ -191,7 +258,6 @@ app.post('/api/update', (req, res) => {
   //console.log(Object.values(req.body))
   //console.log(req.body.content);
   connection.query(
-    //queryを変数にしたい
     'UPDATE ' + table_name + 
     ' SET map=?, agent=?, skill=?, position_image=?, aim_image=?, landing_image=?, content=? WHERE id=?',
     [req.body.map, req.body.agent, req.body.skill, req.body.position_image, req.body.aim_image, req.body.landing_image, req.body.content, req.body.id],

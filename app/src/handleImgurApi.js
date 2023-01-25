@@ -29,7 +29,10 @@ const uploadImageForImgur = async (base64_image, access_token) => {
   await axios.post(upload_url, upload_params, {headers: headers})
   .then((res) => {
     console.log("upload success");
-    console.log(res.data);
+    //console.log(res.data);
+    //console.log(res.data.data);
+    console.log(res.data.data.link);
+    return res.data.data.link;
   })
   .catch((error) => {
     console.log("upload error");
