@@ -24,30 +24,6 @@ connection.connect((error) => {
   }
 });
 
-/*
-// table初期化
-connection.query(
-  //?でtable_nameを入れると「'」で囲まれる
-  'CREATE TABLE '+ table_name + ' (id INT AUTO_INCREMENT, content TEXT, PRIMARY KEY (id))',
-  (error, result) => {
-    if(error) {
-      console.log(error);
-    } else {
-      console.log('table created');
-      connection.query(
-        'INSERT INTO ' + table_name + ' (content) VALUES ("test")',
-        (error, result) => {
-          if(error) {
-            console.log(error);
-          } else {
-            console.log('inserted test data');
-          }
-        }
-      );
-    }
-  }
-);
-*/
 
 // なくても動くけど一応
 app.set('view engine', 'ejs');
@@ -66,70 +42,8 @@ app.get('/', (req, res) => {
   res.render('hello.ejs');
 });
 
-/*app.get('/list', (req, res) => {
-  connection.query(
-    'SELECT * FROM ' + table_name,
-    (error, results) => {
-      res.render('list.ejs', {items: results})
-    }
-  );
-});*/
-
-/*app.get('/create', (req, res) => {
-  res.render('create.ejs');
-});*/
-
-/*app.post('/create', (req, res) => {
-  //dbに追加
-  connection.query(
-    'INSERT INTO ' + table_name + ' (content) VALUES (?)',
-    [req.body.content],
-    (error, results) => {
-      //一覧画面を表示
-      res.redirect('/list');
-    }
-  );
-});*/
-
-/*app.post('/delete/:id', (req, res) => {
-  //メモを削除する処理
-  connection.query(
-    'DELETE FROM ' + table_name + ' WHERE id=?',
-    [req.params.id],
-    (error, results) => {
-      res.redirect('/list');
-    }
-  );
-});*/
-
-/*app.get('/edit/:id', (req, res) => {
-  connection.query(
-    'SELECT * FROM ' + table_name + ' WHERE id=?',
-    [req.params.id],
-    (error, results) => {
-      res.render('edit.ejs', {item: results[0]});
-    }
-  );
-});*/
-
-/*app.post('/update/:id', (req, res) => {
-  connection.query(
-    'UPDATE ' + table_name + ' SET content=? WHERE id=?',
-    [req.body.content, req.params.id],
-    (error, results) => {
-      res.redirect('/list');
-    }
-  );
-});*/
-
-/*app.get('/connect', (req, res) => {
-  console.log("connect test");
-  res.json({id: 2, content: "connect test"});
-});*/
-
 
 // imgur api
-const refresh_token = process.env.IMGUR_API_REFRESH_TOKEN;
 const client_id = process.env.IMGUR_API_CLIENT_ID;
 const client_secret = process.env.IMGUR_API_CLIENT_SECRET;
 
@@ -138,16 +52,28 @@ const fs = require('fs');
 const handleImgurApi = require('./handleImgurApi.js');
 const generateAccessToken = handleImgurApi.generateAccessToken;
 const uploadImageForImgur = handleImgurApi.uploadImageForImgur;
+const getNowTokens = handleImgurApi.getNowTokens;
 
-let access_token = "";
+let access_token;
+let refresh_token;
+
+//let access_token = "";
 
 app.get('/imgur-test', async (req, res) => {
 
-  access_token = generateAccessToken(refresh_token, client_id, client_secret);
+  //fs.writeFileSync("./src/test.txt", "bbb");
 
-  const image = fs.readFileSync('/usr/app/src/testdata/test2.png', 'base64');
+  //[access_token, refresh_token] = getNowTokens();
+  //let tokens = getNowTokens();
+  //console.log(tokens);
+  //console.log("access_token: " + access_token);
+  //console.log("refresh_token: " + refresh_token);
+  generateAccessToken(client_id, client_secret);
 
-  uploadImageForImgur(image, access_token);
+  const image = fs.readFileSync('/usr/app/src/testdata/test1-3.png', 'base64');
+  
+
+  uploadImageForImgur(image);
 
 });
 
