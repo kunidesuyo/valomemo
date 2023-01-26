@@ -54,16 +54,28 @@ const generateAccessToken = handleImgurApi.generateAccessToken;
 const uploadImageForImgur = handleImgurApi.uploadImageForImgur;
 const getNowTokens = handleImgurApi.getNowTokens;
 
-let access_token;
-let refresh_token;
+const common_info = JSON.parse(fs.readFileSync("/usr/app/common_info/common_info.json"));
+  
 
 //let access_token = "";
 
-app.get('/json-test', () => {
-  const data = JSON.parse(fs.readFileSync("/usr/app/common_info/common_info.json"));
-  //console.log(data);
-  const setup_list_column_name = data.setup_list_column_name;
-  console.log(setup_list_column_name);
+app.get('/query-test', () => {
+  let createQuery = 'INSERT INTO ' + table_name + ' ';
+  createQuery += '('
+  let len = common_info.setup_list_column_name.length;
+  for(let i = 0; i < len; i++) {
+    if(common_info.setup_list_column_name[i] !== "id") {
+      createQuery += common_info.setup_list_column_name[i];
+      if(i !== len-1) createQuery += ", ";
+    }
+  }
+  createQuery += ') VALUES ('
+  for(let i = 0; i < len-1; i++) {
+    createQuery += '?';
+    if(i !== len-2) createQuery += ',';
+  }
+  createQuery += ')'
+  console.log(createQuery);
 });
 
 app.get('/imgur-test', async (req, res) => {
@@ -97,91 +109,136 @@ app.get('/api/read', (req, res) => {
 });
 
 app.post('/api/create', async (req, res) => {
-  console.log('create connect------------');
-  //console.log(req.body.position_image);
+  console.log('-----------api create start------------');
   //バリデーションチェック追加予定
-  //console.log(req.body.content);
 
   /*送られてきた画像データの余分な部分を取り除く*/
   let position_image = req.body.position_image;
   let aim_image = req.body.aim_image;
   let landing_image = req.body.landing_image;
-  /*fs.writeFile("file.txt", position_image, (err) => {
-    if(err) throw err;
-    console.log("書き込み完了");
-  });*/
 
-
-  //console.log(position_image);
-  //let test = "data:image/png;base64,abcd"
-  //test = test.replace(/data:.*\/.*;base64,/, '');
-  //console.log(test);
-  //console.log("before: " + position_image.slice(0, 20));
-  position_image = position_image.replace(/data:image\/.*;base64,/, '');
-  //console.log("----------------")
-  //console.log("after: " + position_image.slice(0, 20));
-  //console.log(position_image_base64);
+  position_image = await position_image.replace(/data:image\/.*;base64,/, '');
+  aim_image = await aim_image.replace(/data:image\/.*;base64,/, '');
+  landing_image = await landing_image.replace(/data:image\/.*;base64,/, '');
 
   /*画像をimgurに登録*/
-  access_token = await generateAccessToken(refresh_token, client_id, client_secret);
+  await generateAccessToken(client_id, client_secret);
+  /* uploadImageForImgur */
+  //現実(動く)
+  let position_image_url, aim_image_url, landing_image_url;
+  const [access_token, refresh_token] = getNowTokens();
   const upload_url = "https://api.imgur.com/3/upload";
   const headers = {"Authorization": "Bearer " + access_token};
-  var upload_params = new URLSearchParams();
-  upload_params.append("image", position_image);
-  upload_params.append("type", "base64");
-  //upload_params.append("name", test.png);
-  await axios.post(upload_url, upload_params, {headers: headers})
+  var upload_params_position = new URLSearchParams();
+  upload_params_position.append("image", position_image);
+  upload_params_position.append("type", "base64");
+  await axios.post(upload_url, upload_params_position, {headers: headers})
   .then((r) => {
     console.log("upload success");
-    //console.log(res.data);
-    //console.log(res.data.data);
-    console.log(r.data.data.link);
-    const position_image_url = r.data.data.link;
+    position_image_url = r.data.data.link;
     console.log(position_image_url);
-    connection.query(
-      'INSERT INTO ' + table_name + ' (map, agent, skill, position_image, aim_image, landing_image, content) VALUES (?,?,?,?,?,?,?)',
-      [req.body.map, req.body.agent, req.body.skill, position_image_url, req.body.aim_image, req.body.landing_image, req.body.content],
-      (error, results) => {
-        if(error) {
-          console.log(error)
-          res.send(error);
-        } else {
-          console.log('insert new data success')
-          res.send(results);
-        }
-      }
-    )
   })
   .catch((error) => {
     console.log("upload error");
     console.log(error);
   })
-  // uploadImageForImgurを呼び出すと画像urlを返すのを待ってくれない。なぜ？
-  /*uploadImageForImgur(position_image, access_token).then((position_image_url) => {
-    console.log("処理待てや")
-    console.log(position_image_url);
-    connection.query(
-      'INSERT INTO ' + table_name + ' (map, agent, skill, position_image, aim_image, landing_image, content) VALUES (?,?,?,?,?,?,?)',
-      [req.body.map, req.body.agent, req.body.skill, position_image_url, req.body.aim_image, req.body.landing_image, req.body.content],
-      (error, results) => {
-        if(error) {
-          console.log(error)
-          res.send(error);
-        } else {
-          console.log('insert new data success')
-          res.send(results);
-        }
+
+  var upload_params_aim = new URLSearchParams();
+  upload_params_aim.append("image", aim_image);
+  upload_params_aim.append("type", "base64");
+  await axios.post(upload_url, upload_params_aim, {headers: headers})
+  .then((r) => {
+    console.log("upload success");
+    aim_image_url = r.data.data.link;
+    console.log(aim_image_url);
+  })
+  .catch((error) => {
+    console.log("upload error");
+    console.log(error);
+  })
+
+  var upload_params_landing = new URLSearchParams();
+  upload_params_landing.append("image", landing_image);
+  upload_params_landing.append("type", "base64");
+  await axios.post(upload_url, upload_params_landing, {headers: headers})
+  .then((r) => {
+    console.log("upload success");
+    landing_image_url = r.data.data.link;
+    console.log(landing_image_url);
+  })
+  .catch((error) => {
+    console.log("upload error");
+    console.log(error);
+  })
+
+  /* queryを作る */
+  let createQuery = 'INSERT INTO ' + table_name + ' ';
+  createQuery += '('
+  let len = common_info.setup_list_column_name.length;
+  for(let i = 0; i < len; i++) {
+    if(common_info.setup_list_column_name[i] !== "id") {
+      createQuery += common_info.setup_list_column_name[i];
+      if(i !== len-1) createQuery += ", ";
+    }
+  }
+  createQuery += ') VALUES ('
+  for(let i = 0; i < len-1; i++) {
+    createQuery += '?';
+    if(i !== len-2) createQuery += ',';
+  }
+  createQuery += ')'
+  console.log(createQuery);
+
+  let insertData = {};
+
+  common_info.setup_list_column_name.map((key) => {
+    if(key !== "id") {
+      insertData[key] = req.body[key];
+    }
+  });
+
+  /* imageはurlを入れる */
+  insertData["position_image"] = position_image_url;
+  insertData["aim_image"] = aim_image_url;
+  insertData["landing_image"] = landing_image_url;
+
+  console.log(Object.values(insertData));
+
+  connection.query(
+    createQuery,
+    Object.values(insertData),
+    (error, results) => {
+      if(error) {
+        console.log(error)
+        res.send(error);
+      } else {
+        console.log('insert new data success')
+        res.send(results);
       }
-    )
-  });*/
+    }
+  )
 
 
+  /*
+  //理想(~_image_urlがundefinedでconnection.queryが呼び出される)
+  const position_image_url = await uploadImageForImgur(position_image);
+  const aim_image_url = await uploadImageForImgur(aim_image);
+  const landing_image_url = await uploadImageForImgur(landing_image);
 
-  //画像のurlをdbに保存
+  await connection.query(
+    'INSERT INTO ' + table_name + ' (map, agent, skill, position_image, aim_image, landing_image, content) VALUES (?,?,?,?,?,?,?)',
+    [req.body.map, req.body.agent, req.body.skill, position_image_url, aim_image_url, landing_image_url, req.body.content],
+    (error, results) => {
+      if(error) {
+        console.log(error)
+        res.send(error);
+      } else {
+        console.log('insert new data success')
+        res.send(results);
+      }
+    }
+  )*/
 
-  
-
-  //res.send(req.body)
 });
 
 app.post('/api/update', (req, res) => {
