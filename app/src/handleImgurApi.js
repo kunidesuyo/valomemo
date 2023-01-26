@@ -57,7 +57,31 @@ const updateTokens = (access_token, refresh_token) => {
   fs.writeFileSync("/usr/app/data_backups/Imgur_API_tokens/refresh_token.txt", refresh_token);
 }
 
+const deleteImageForImgur = async (image_url) => {
+
+  console.log("delete start " + image_url);
+  const [access_token, refresh_token] = getNowTokens();
+  //urlを画像ハッシュにする
+  let imageHash = image_url.replace('https://i.imgur.com/', '');
+  //console.log(imageHash);
+  //拡張子を取り除く
+  imageHash = imageHash.replace(/\..+$/, '');
+  //console.log(imageHash);
+  const headers = {"Authorization": "Bearer " + access_token};
+  await axios.delete(`https://api.imgur.com/3/image/${imageHash}`, {headers: headers})
+  .then((res) => {
+    console.log("delete success");
+    //console.log(res);
+  })
+  .catch((err) => {
+    console.log("error");
+    console.log(err);
+  })
+
+}
+
 module.exports.generateAccessToken = generateAccessToken;
 module.exports.uploadImageForImgur = uploadImageForImgur;
 module.exports.getNowTokens = getNowTokens;
 module.exports.updateTokens = updateTokens;
+module.exports.deleteImageForImgur = deleteImageForImgur;

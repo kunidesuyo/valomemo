@@ -53,6 +53,7 @@ const handleImgurApi = require('./handleImgurApi.js');
 const generateAccessToken = handleImgurApi.generateAccessToken;
 const uploadImageForImgur = handleImgurApi.uploadImageForImgur;
 const getNowTokens = handleImgurApi.getNowTokens;
+const deleteImageForImgur = handleImgurApi.deleteImageForImgur;
 
 const common_info = JSON.parse(fs.readFileSync("/usr/app/common_info/common_info.json"));
   
@@ -78,23 +79,7 @@ app.get('/query-test', () => {
   console.log(createQuery);
 });
 
-app.get('/imgur-test', async (req, res) => {
 
-  //fs.writeFileSync("./src/test.txt", "bbb");
-
-  //[access_token, refresh_token] = getNowTokens();
-  //let tokens = getNowTokens();
-  //console.log(tokens);
-  //console.log("access_token: " + access_token);
-  //console.log("refresh_token: " + refresh_token);
-  generateAccessToken(client_id, client_secret);
-
-  const image = fs.readFileSync('/usr/app/src/testdata/test1-3.png', 'base64');
-  
-
-  uploadImageForImgur(image);
-
-});
 
 
 //api
@@ -102,6 +87,7 @@ app.get('/api/read', (req, res) => {
   connection.query(
     'SELECT * FROM ' + table_name,
     (error, results) => {
+      console.log("--------read-------")
       console.log(results);
       res.send(results);
     }
@@ -263,10 +249,34 @@ app.post('/api/update', (req, res) => {
   )
 });
 
-app.delete('/api/delete/:id', (req, res) => {
+app.delete('/api/delete/:id', async (req, res) => {
   //メモを削除する処理
   console.log('---------delete--------');
   console.log(req.params.id);
+  // idから対象データを取得
+  await connection.query(
+    'SELECT * FROM ' + table_name + ' WHERE id=?',
+    [req.params.id],
+    async (error, result) => {
+      if(error) {
+        console.log("error");
+        console.log(error);
+      } else {
+        console.log("success");
+        //console.log(result);
+        const setupData = result[0];      
+        //console.log(setupData);
+        //console.log(setupData.position_image);
+        //console.log(setupData.aim_image);
+        //console.log(setupData.landing_image);
+        //apiに削除要請
+        await deleteImageForImgur(setupData.position_image);
+        await deleteImageForImgur(setupData.aim_image);
+        await deleteImageForImgur(setupData.landing_image);
+      }
+    }
+  );
+
   connection.query(
     'DELETE FROM ' + table_name + ' WHERE id=?',
     [req.params.id],
@@ -280,6 +290,27 @@ app.delete('/api/delete/:id', (req, res) => {
   );
 });
 
+
+app.get('/imgur-test', async (req, res) => {
+
+  //fs.writeFileSync("./src/test.txt", "bbb");
+
+  //[access_token, refresh_token] = getNowTokens();
+  //let tokens = getNowTokens();
+  //console.log(tokens);
+  //console.log("access_token: " + access_token);
+  //console.log("refresh_token: " + refresh_token);
+  //generateAccessToken(client_id, client_secret);
+
+
+
+  //const image = fs.readFileSync('/usr/app/src/testdata/test1-3.png', 'base64');
+  //const image_url = "https://i.imgur.com/f3hTO3S.png";
+  //deleteImageForImgur(image_url);
+
+  //uploadImageForImgur(image);
+
+});
 
 
 
