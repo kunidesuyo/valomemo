@@ -1,4 +1,3 @@
-//できれば環境変数で定義して、各コンテナの一貫性を保ちたい。
 export const db_column_name =
 [
   "id",
@@ -11,12 +10,14 @@ export const db_column_name =
   "content"
 ];
 
+
+
 export const init_db_data = 
 {
   "id": "",
   "map": "",
   "agent": "",
-  "skill": "1",
+  "skill": "",
   "position_image": "",
   "aim_image": "",
   "landing_image": "",
