@@ -67,22 +67,12 @@ export default function Read() {
               </Grid>
 
               <Stack sx={{p:1}} spacing={1}>
-                <TextField
-                  InputProps={{readOnly: true}}
-                  value={setup.position_image}
-                  label="position_image"
-                />
+                <p>position_image</p>
                 <img src={setup.position_image} width="100%"/>
-                <TextField
-                  InputProps={{readOnly: true}}
-                  value={setup.aim_image}
-                  label="aim_image"
-                />
-                <TextField
-                  InputProps={{readOnly: true}}
-                  value={setup.landing_image}
-                  label="landing_image"
-                />
+                <p>aim_image</p>
+                <img src={setup.aim_image} width="100%"/>
+                <p>landing_image</p>
+                <img src={setup.landing_image} width="100%"/>
                 <TextField
                   InputProps={{readOnly: true}}
                   value={setup.content}
