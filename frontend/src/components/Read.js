@@ -25,6 +25,7 @@ export default function Read() {
     //console.log('detect delete')
     axios.get('/api/read')
     .then((res) => {
+      console.log(res.data);
       setSetups(res.data);
     })
   }, [detectDelete]);
@@ -41,7 +42,7 @@ export default function Read() {
         </Button>
         {setups.map((setup) => {
           return (
-            <Box key="setup.id" border={1} sx={{m:3}}>
+            <Box key={setups.id} border={1} sx={{m:3}}>
               <Grid container sx={{p:1}} spacing={1}>
                 <Grid item xs={4}>
                   <TextField 

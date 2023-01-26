@@ -17,7 +17,7 @@ export default function Delete(props) {
     await axios.delete(`api/delete/${props.id}`)
     .then((res) => {
       console.log(res);
-      console.log('axios complete')
+      console.log('delete complete')
     });
     console.log('before ' + props.detectDelete);
     props.setDetectDelete((props.detectDelete + 1) % 2);
