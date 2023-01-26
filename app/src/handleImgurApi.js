@@ -1,7 +1,8 @@
 const axios = require('axios');
 const fs = require('fs');
 
-const generateAccessToken = async (refresh_token, client_id, client_secret) => {
+const generateAccessToken = async (client_id, client_secret) => {
+  const [access_token, refresh_token] = getNowTokens();
   var params = new URLSearchParams();
   params.append("refresh_token", refresh_token);
   params.append("client_id", client_id);
@@ -10,8 +11,12 @@ const generateAccessToken = async (refresh_token, client_id, client_secret) => {
   await axios.post("https://api.imgur.com/oauth2/token", params)
   .then((res) => {
     console.log("get token success");
-    //console.log(res.data);
-    return res.data.access_token;
+    console.log("access_token: " + res.data.access_token);
+    console.log("refresh_token: " + res.data.refresh_token);
+    const new_access_token = res.data.access_token;
+    const new_refresh_token = res.data.refresh_token;
+    updateTokens(new_access_token, new_refresh_token);
+    //return [res.data.access_token, res.data.refresh_token];
   })
   .catch((error) => {
     console.log("get token error");
@@ -19,7 +24,8 @@ const generateAccessToken = async (refresh_token, client_id, client_secret) => {
   })
 }
 
-const uploadImageForImgur = async (base64_image, access_token) => {
+const uploadImageForImgur = async (base64_image) => {
+  const [access_token, refresh_token] = getNowTokens();
   const upload_url = "https://api.imgur.com/3/upload";
   const headers = {"Authorization": "Bearer " + access_token};
   var upload_params = new URLSearchParams();
@@ -40,5 +46,18 @@ const uploadImageForImgur = async (base64_image, access_token) => {
   })
 }
 
+const getNowTokens = () => {
+  const access_token = fs.readFileSync("/usr/app/data_backups/Imgur_API_tokens/access_token.txt");
+  const refresh_token = fs.readFileSync("/usr/app/data_backups/Imgur_API_tokens/refresh_token.txt");
+  return [access_token, refresh_token];
+}
+
+const updateTokens = (access_token, refresh_token) => {
+  fs.writeFileSync("/usr/app/data_backups/Imgur_API_tokens/access_token.txt", access_token);
+  fs.writeFileSync("/usr/app/data_backups/Imgur_API_tokens/refresh_token.txt", refresh_token);
+}
+
 module.exports.generateAccessToken = generateAccessToken;
 module.exports.uploadImageForImgur = uploadImageForImgur;
+module.exports.getNowTokens = getNowTokens;
+module.exports.updateTokens = updateTokens;

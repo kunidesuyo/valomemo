@@ -37,7 +37,6 @@ services:
       - MYSQL_DATABASE=${DB_NAME}
       - DB_CONTAINER_NAME=${DB_CONTAINER_NAME}
       - TABLE_NAME=${TABLE_NAME}
-      - IMGUR_API_REFRESH_TOKEN=${IMGUR_API_REFRESH_TOKEN}
       - IMGUR_API_CLIENT_ID=${IMGUR_API_CLIENT_ID}
       - IMGUR_API_CLIENT_SECRET=${IMGUR_API_CLIENT_SECRET}
 
@@ -48,6 +47,9 @@ services:
       - type: bind
         source: ./app/src
         target: /usr/app/src
+      - type: bind
+        source: ./app/data_backups
+        target: /usr/app/data_backups
 
     networks:
       - backend
