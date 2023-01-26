@@ -3,9 +3,17 @@
 - テストをどうするか
 - アカウント機能を実装
 
-- imgur api
-自分の上げた画像がアカウントにない(一番最初にあげたのはあった)
-refresh_tokenで access_tokenを生成すると新しいrefresh_tokenももらえる。
-access_tokenとrefresh_tokenは両方新しいのを使わないといけない？
-疑問を解消する。
+- update機能更新(とりあえず画像はいじれないようにする)(axios.update??にする)
+- 全体的に見た目を整える。
+  - create画面
+  - read画面
+  - update画面(createとほぼ同じ)
+- dbにtitle追加。あとcontentをdescriptionにする。skillをabilityにする。
+- dbデータ永続化
+- ログイン機能をつける。
 
+- readme.mdを作成(人に見せられるもの)
+- コードのリファクタリング
+- search画面
+- mylist機能
+- サイトの使い方
