@@ -59,6 +59,13 @@ let refresh_token;
 
 //let access_token = "";
 
+app.get('/json-test', () => {
+  const data = JSON.parse(fs.readFileSync("/usr/app/common_info/common_info.json"));
+  //console.log(data);
+  const setup_list_column_name = data.setup_list_column_name;
+  console.log(setup_list_column_name);
+});
+
 app.get('/imgur-test', async (req, res) => {
 
   //fs.writeFileSync("./src/test.txt", "bbb");
