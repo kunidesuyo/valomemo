@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,10 +16,27 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button'
 
+import { CommonInfoContext } from '../CommonInfoProvider';
+
 
 export default function Create() {
-  const [setupElements, setSetupElements] = useState(init_db_data);
+  //context
+  const commonInfo = useContext(CommonInfoContext);
+  //console.log(commonInfo);
+
+  let initData = {};
+  commonInfo.setup_list_column_name.map((key) => {
+    //console.log(key);
+    initData[key] = "";
+  });
+  initData["skill"] = 1;
+  //console.log(initData);
+  
+  const [setupElements, setSetupElements] = useState(initData);
   let navigate = useNavigate();
+
+
+
   //デバック
   useEffect(() => {console.log(setupElements)}, [setupElements]);
 
@@ -81,7 +98,7 @@ export default function Create() {
                 onChange={(e) => handleChange(e)}
                 value={setupElements.map}
               >
-                {map_names.map((map) => {
+                {commonInfo.map_names.map((map) => {
                   return (
                     <MenuItem value={map}>{map}</MenuItem>
                   )
@@ -98,7 +115,7 @@ export default function Create() {
                 onChange={(e) => handleChange(e)}
                 value={setupElements.agent}
               >
-                {agent_names.map((agent) => {
+                {commonInfo.agent_names.map((agent) => {
                   return (
                     <MenuItem value={agent}>{agent}</MenuItem>
                   )
@@ -115,7 +132,7 @@ export default function Create() {
                 onChange={(e) => handleChange(e)}
                 value={setupElements.skill}
               >
-                {skills.map((skill) => {
+                {commonInfo.skills.map((skill) => {
                   return (
                     <MenuItem value={skill}>{skill}</MenuItem>
                   )

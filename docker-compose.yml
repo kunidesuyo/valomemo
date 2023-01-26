@@ -50,6 +50,9 @@ services:
       - type: bind
         source: ./app/data_backups
         target: /usr/app/data_backups
+      - type: bind
+        source: ./common_info
+        target: /usr/app/common_info
 
     networks:
       - backend
@@ -73,6 +76,9 @@ services:
       - type: bind
         source: ./frontend/public
         target: /usr/frontend/public
+      - type: bind
+        source: ./common_info
+        target: /usr/frontend/src/common_info
     
     networks:
       - backend

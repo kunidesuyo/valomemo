@@ -9,6 +9,9 @@ import Update from './components/Update'
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import { CommonInfoProvider } from './CommonInfoProvider'
+
+
 //サイト全体のテーマを設定できる
 //とりあえずデフォルトで使う
 const theme = createTheme();
@@ -17,21 +20,22 @@ const theme = createTheme();
 function App() {
   return (
     <>
-      <ThemeProvider theme={theme}>
-        {/* ヘッダー作る */}
-        <Router>
-          <div>
-            <Routes>
-              <Route path='connect' element={<Connect />} />
-              <Route path='read' element={<Read />} />
-              <Route path='create' element={<Create />} />
-              <Route path='update' element={<Update />} />
-            </Routes>
-          </div>
-        </Router>
-        {/* フッター作る */}
-      </ThemeProvider>
-
+      <CommonInfoProvider>
+        <ThemeProvider theme={theme}>
+          {/* ヘッダー作る */}
+          <Router>
+            <div>
+              <Routes>
+                <Route path='connect' element={<Connect />} />
+                <Route path='read' element={<Read />} />
+                <Route path='create' element={<Create />} />
+                <Route path='update' element={<Update />} />
+              </Routes>
+            </div>
+          </Router>
+          {/* フッター作る */}
+        </ThemeProvider>
+      </CommonInfoProvider>
     </>
   );
 
