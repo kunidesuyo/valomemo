@@ -227,7 +227,7 @@ app.post('/api/create', async (req, res) => {
 
 });
 
-app.post('/api/update', (req, res) => {
+app.put('/api/update', (req, res) => {
   console.log('---------connect-----------')
   console.log(req.body);
   console.log('---------connect-----------')

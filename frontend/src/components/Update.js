@@ -26,7 +26,7 @@ export default function Update() {
   //デバッグ
   useEffect(() => {console.log(setupElements)}, [setupElements]);
 
-  const postData = () => {
+  const updateData = () => {
     var params = new URLSearchParams();
     Object.entries(setupElements).map(([key, value]) => {
       params.append([key], value);
@@ -34,7 +34,7 @@ export default function Update() {
     /*params.append("id", id);
     params.append("content", content);*/
     console.log('send');
-    axios.post('api/update', params)
+    axios.put('api/update', params)
     .then((res) => {
       //readにリダイレクト
       //console.log(res);
@@ -51,6 +51,7 @@ export default function Update() {
 
   return (
     <>
+      <h1>Update</h1>
       <Container maxWidth="xs">
         <Grid container sx={{p:1}} spacing={1}>
           <Grid item xs={4}>
@@ -152,22 +153,11 @@ export default function Update() {
           </Box>
           <Box>
             <FormControl fullWidth>
-              <Button variant="contained" onClick={postData}>更新</Button>
+              <Button variant="contained" onClick={updateData}>更新</Button>
             </FormControl>
           </Box>
         </Stack>
       </Container>
-      <h2>update</h2>
-      <form>
-        <span>{id} </span>
-        {Object.entries(setupElements).map(([key, value]) => {
-          if(key==="id") return '';
-          return (
-            <input key={key} id={key} onChange={(e) => {handleChange(e)}} defaultValue={value}/>
-          )
-        })}
-        <input onClick={postData} type="button" value="更新" />
-      </form>
     </>
   )
 
