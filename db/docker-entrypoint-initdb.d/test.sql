@@ -24,13 +24,14 @@ DROP TABLE IF EXISTS `setup_list`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `setup_list` (
   `id` int NOT NULL AUTO_INCREMENT,
+  `title` text,
   `map` text,
   `agent` text,
-  `skill` int,
+  `ability` int,
   `position_image` text,
   `aim_image` text,
   `landing_image` text,
-  `content` text,
+  `description` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -41,7 +42,7 @@ CREATE TABLE `setup_list` (
 
 LOCK TABLES `setup_list` WRITE;
 /*!40000 ALTER TABLE `setup_list` DISABLE KEYS */;
-INSERT INTO `setup_list` VALUES (1,'Ascent','Killjoy',3,'test','test','test','test');
+INSERT INTO `setup_list` VALUES (1,'testtitle','Ascent','Killjoy',3,'test','test','test','test');
 /*!40000 ALTER TABLE `setup_list` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
