@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import Delete from './Delete'
+import Delete from './Delete';
+import SetupCard from './SetupCard';
 
 import { db_column_name, init_db_data, agent_names, map_names, skills } from '../db_info';
 
@@ -15,6 +16,8 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button'
+import Typography from '@mui/material/Typography';
+
 
 
 export default function Read() {
@@ -32,6 +35,16 @@ export default function Read() {
   
   return (
     <>
+      <Container maxWidth="md">
+        <Typography variant="h2">Read</Typography>
+        {setups.map((setup) => {
+          return (
+            <SetupCard setup={setup}/>
+          )
+        })}
+      </Container>
+
+
       <Container maxWidth="md">
         <Button
           variant="contained"
