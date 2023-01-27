@@ -19,6 +19,7 @@ const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
+      //valorantのロゴの色
       main: '#ff4454'
     }
   }
