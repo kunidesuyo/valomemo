@@ -61,8 +61,8 @@ export default function Read() {
                 <Grid item xs={4}>
                   <TextField 
                     InputProps={{readOnly: true}}
-                    value={setup.skill}
-                    label="skill"
+                    value={setup.ability}
+                    label="ability"
                   />
                 </Grid>
               </Grid>

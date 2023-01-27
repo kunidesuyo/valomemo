@@ -14,7 +14,12 @@ import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button'
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 
 import { CommonInfoContext } from '../CommonInfoProvider';
 
@@ -34,8 +39,6 @@ export default function Create() {
   
   const [setupElements, setSetupElements] = useState(initData);
   let navigate = useNavigate();
-
-
 
   //デバック
   useEffect(() => {console.log(setupElements)}, [setupElements]);
@@ -60,164 +63,165 @@ export default function Create() {
   }
 
   const handleChange = (e) => {
-    //console.log(e.target);
-    //console.log(e.target.value);
     setSetupElements({...setupElements, [e.target.name]: e.target.value});
-    //console.log(setupElements);
   }
 
-  const [imageUrl, setImageUrl] = useState();
 
   const handleFile = (e) => {
-    //console.log("file")
     if(!e.target.files) return;
     const file = e.target.files[0];
     const reader = new FileReader();
     const target_name = e.target.name;
-    //reader.readAsDataURL(file);
     reader.onload = () => {
-      //setImageUrl(reader.result);
-      //console.log(setupElements);
       setSetupElements({...setupElements, [target_name]: reader.result});
-      //console.log(setupElements);
     }
     reader.readAsDataURL(file);
   }
 
+  let imageUrls = {};
+
+  commonInfo.agent_names.map((agent_name) => {
+    imageUrls[agent_name] = process.env.PUBLIC_URL + "/images/" + agent_name +".webp";
+  })
+  
   return (
     <>
-      <Container maxWidth="xs">
-        <Grid container sx={{p:1}} spacing={1}>
-          <Grid item xs={4}>
-            <FormControl fullWidth>
-              <InputLabel id="map-select">Map</InputLabel>
-              <Select
-                labelId="map-select"
-                label="Map"
-                name="map"
-                onChange={(e) => handleChange(e)}
-                value={setupElements.map}
+      <Container maxWidth="md">
+        <Typography variant="h3">Create New Setup</Typography>
+        <Box sx={{marginTop:1, marginBottom: 1}}>
+          <Typography variant="h5">Title</Typography>
+          <FormControl fullWidth sx={{marginTop: 1}}>
+            <TextField 
+              name="title"
+              onChange={(e) => handleChange(e)}
+              value={setupElements.title}
+            />
+          </FormControl>
+        </Box>
+        <Box sx={{marginTop:1, marginBottom: 1}}>
+          <Typography variant="h5">Map</Typography>
+          <FormControl sx={{minWidth: 120, marginTop:1}} >
+            <Select
+              labelId="map-select"
+              name="map"
+              onChange={(e) => handleChange(e)}
+              value={setupElements.map}
+            >
+              {commonInfo.map_names.map((map) => {
+                return (
+                  <MenuItem key={map} value={map}>{map}</MenuItem>
+                )
+              })}
+            </Select>
+          </FormControl>
+        </Box>
+        
+        <Box sx={{marginTop:1, marginBottom: 1}}>
+          <Typography variant="h5">Agent</Typography>
+          <FormControl sx={{height: 1}}>
+            <RadioGroup
+              name="agent"
+              value={setupElements.agent}
+              onChange={(e) => handleChange(e)}
+              sx={{height: 1}}
+            >
+              <ImageList
+                variant='woven'
+                cols={10}
+                gap={1}
               >
-                {commonInfo.map_names.map((map) => {
-                  return (
-                    <MenuItem value={map}>{map}</MenuItem>
-                  )
-                })}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={4}>
-            <FormControl fullWidth>
-              <InputLabel id="agent-select">Agent</InputLabel>
-              <Select
-                label="Agent"
-                name="agent"
-                onChange={(e) => handleChange(e)}
-                value={setupElements.agent}
-              >
-                {commonInfo.agent_names.map((agent) => {
-                  return (
-                    <MenuItem value={agent}>{agent}</MenuItem>
-                  )
-                })}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={4}>
-            <FormControl fullWidth>
-              <InputLabel id="skill-select">Skill</InputLabel>
-              <Select
-                label="Skill"
-                name="skill"
-                onChange={(e) => handleChange(e)}
-                value={setupElements.skill}
-              >
-                {commonInfo.skills.map((skill) => {
-                  return (
-                    <MenuItem value={skill}>{skill}</MenuItem>
-                  )
-                })}
-              </Select>
-            </FormControl>
-          </Grid>
-        </Grid>
+                {commonInfo.agent_names.map((agent_name) => (    
+                  <Radio
+                    key={agent_name}
+                    value={agent_name}
+                    icon={
+                      <ImageListItem>
+                        <img
+                          src={`${imageUrls[agent_name]}?w=164&h=164&fit=crop&auto=format`}
+                          srcSet={`${imageUrls[agent_name]}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                          loading='lazy'
+                        />
+                      </ImageListItem>
+                    }
+                    checkedIcon={
+                      <ImageListItem sx={{border: 4}}>
+                        <img
+                          src={`${imageUrls[agent_name]}?w=164&h=164&fit=crop&auto=format`}
+                          srcSet={`${imageUrls[agent_name]}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                          loading='lazy'
+                        />
+                      </ImageListItem>
+                    }
+                  />
+                ))}
+              </ImageList>
+            </RadioGroup>
+          </FormControl>
+        </Box>
+                    
+        <Box sx={{marginTop:1, marginBottom: 1}}>
+          <Typography variant="h5">Ability</Typography>
+          <FormControl sx={{minWidth: 120, marginTop:1}}>
+            <Select
+              name="ability"
+              onChange={(e) => handleChange(e)}
+              value={setupElements.ability}
+            >
+              {commonInfo.abilitys.map((ability) => {
+                return (
+                  <MenuItem key={ability} value={ability}>{ability}</MenuItem>
+                )
+              })}
+            </Select>
+          </FormControl>
+        </Box>
+        
         
         {/* mapで処理したい */}
-        <Box>
-          <p>position_image</p>
-          <Button variant="contained" component="label">
+        <Box sx={{marginTop:1, marginBottom: 1}}>
+          <Typography variant="h5">position_image</Typography>
+          <Button variant="contained" component="label" sx={{marginTop:1}}>
             ファイルを選択
             <input name="position_image" type='file' hidden accept="image/*" onChange={handleFile}/>
           </Button>
-          <img src={setupElements.position_image} width="100%"/>
+          <img src={setupElements.position_image} width="100%" sx={{marginTop:1}}/>
         </Box>
 
-        <Box>
-          <p>aim_image</p>
-          <Button variant="contained" component="label">
+        <Box sx={{marginTop:1, marginBottom: 1}}>
+          <Typography variant="h5">aim_image</Typography>
+          <Button variant="contained" component="label" sx={{marginTop:1}}>
             ファイルを選択
             <input name="aim_image" type='file' hidden accept="image/*" onChange={handleFile}/>
           </Button>
           <img src={setupElements.aim_image} width="100%"/>
         </Box>
 
-        <Box>
-          <p>landing_image</p>
-          <Button variant="contained" component="label">
+        <Box sx={{marginTop:1, marginBottom: 1}}>
+          <Typography variant="h5">landing_image</Typography>
+          <Button variant="contained" component="label" sx={{marginTop:1}}>
             ファイルを選択
             <input name="landing_image" type='file' hidden accept="image/*" onChange={handleFile}/>
           </Button>
           <img src={setupElements.landing_image} width="100%"/>
         </Box>
-        
-        
-        <Stack sx={{p:1}} spacing={1}>
-          {/*<Box>
-            <FormControl fullWidth>
-              <TextField 
-                label="position_image"
-                name="position_image"
-                onChange={(e) => handleChange(e)}
-                value={setupElements.position_image}
-              />
-            </FormControl>
-          </Box>
-          <Box>
-            <FormControl fullWidth>
-              <TextField 
-                label="aim_image"
-                name="aim_image"
-                onChange={(e) => handleChange(e)}
-                value={setupElements.aim_image}
-              />
-            </FormControl>
-          </Box>
-          <Box>
-            <FormControl fullWidth>
-              <TextField 
-                label="landing_image"
-                name="landing_image"
-                onChange={(e) => handleChange(e)}
-                value={setupElements.landing_image}
-              />
-            </FormControl>
-              </Box>*/}
-          <Box>
-            <FormControl fullWidth>
-              <TextField 
-                label="content"
-                name="content"
-                onChange={(e) => handleChange(e)}
-                value={setupElements.content}
-              />
-            </FormControl>
-          </Box>
-          <Box>
-            <FormControl fullWidth>
-              <Button variant="contained" onClick={postData}>作成</Button>
-            </FormControl>
-          </Box>
-        </Stack>
+    
+        <Box sx={{marginTop:1, marginBottom: 1}}>
+          <Typography variant="h5">Description</Typography>
+          <FormControl fullWidth>
+            <TextField 
+              name="description"
+              multiline
+              rows={5}
+              onChange={(e) => handleChange(e)}
+              value={setupElements.description}
+            />
+          </FormControl>
+        </Box>
+        <Box sx={{marginTop:1, marginBottom: 1}}>
+          <FormControl fullWidth>
+            <Button variant="contained" onClick={postData}>作成</Button>
+          </FormControl>
+        </Box>
       </Container>
     </>
   )
