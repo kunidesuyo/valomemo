@@ -32,7 +32,7 @@ export default function Read() {
   
   return (
     <>
-      <Container maxWidth="xs">
+      <Container maxWidth="md">
         <Button
           variant="contained"
           component={Link}
