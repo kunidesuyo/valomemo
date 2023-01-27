@@ -233,13 +233,40 @@ app.put('/api/update', (req, res) => {
   console.log('---------connect-----------')
   //console.log(Object.values(req.body))
   //console.log(req.body.content);
+
+  /* queryを作る */
+  let updateQuery = 'UPDATE ' + table_name + ' SET ';
+  let len = common_info.setup_list_column_name.length;
+  for(let i = 0; i < len; i++) {
+    if(common_info.setup_list_column_name[i] !== "id") {
+      updateQuery += common_info.setup_list_column_name[i];
+      updateQuery += '=?';
+      if(i !== len-1) updateQuery += ',';
+      updateQuery += ' ';
+    }
+  }
+  updateQuery += 'WHERE id=?'
+  console.log(updateQuery);
+
+  let insertData = {};
+
+  common_info.setup_list_column_name.map((key) => {
+    if(key !== "id") {
+      insertData[key] = req.body[key];
+    }
+  });
+  insertData["id"] = req.body["id"];
+
+  console.log(insertData);
+  console.log(Object.values(insertData));
+
   connection.query(
-    'UPDATE ' + table_name + 
-    ' SET map=?, agent=?, skill=?, position_image=?, aim_image=?, landing_image=?, content=? WHERE id=?',
-    [req.body.map, req.body.agent, req.body.skill, req.body.position_image, req.body.aim_image, req.body.landing_image, req.body.content, req.body.id],
+    updateQuery,
+    Object.values(insertData),
     (error, results) => {
       if(error) {
         console.log('error')
+        console.log(error);
         res.send(error);
       } else {
         console.log('success');

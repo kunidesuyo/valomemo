@@ -1,13 +1,14 @@
 {
   "setup_list_column_name": [
     "id",
+    "title",
     "map",
     "agent",
-    "skill",
+    "ability",
     "position_image",
     "aim_image",
     "landing_image",
-    "content"
+    "description"
   ],
 
   "map_names": [

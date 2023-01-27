@@ -144,10 +144,10 @@ export default function Update() {
           <Box>
             <FormControl fullWidth>
               <TextField 
-                label="content"
-                name="content"
+                label="description"
+                name="description"
                 onChange={(e) => handleChange(e)}
-                value={setupElements.content}
+                value={setupElements.description}
               />
             </FormControl>
           </Box>

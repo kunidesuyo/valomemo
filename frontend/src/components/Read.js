@@ -76,8 +76,8 @@ export default function Read() {
                 <img src={setup.landing_image} width="100%"/>
                 <TextField
                   InputProps={{readOnly: true}}
-                  value={setup.content}
-                  label="content"
+                  value={setup.description}
+                  label="description"
                 />
               </Stack>
 
