@@ -8,13 +8,21 @@ import Update from './components/Update'
 
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
 import { CommonInfoProvider } from './CommonInfoProvider'
 
 
 //サイト全体のテーマを設定できる
 //とりあえずデフォルトで使う
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#ff4454'
+    }
+  }
+});
 
 
 function App() {
@@ -22,6 +30,7 @@ function App() {
     <>
       <CommonInfoProvider>
         <ThemeProvider theme={theme}>
+          <CssBaseline />
           {/* ヘッダー作る */}
           <Router>
             <div>
