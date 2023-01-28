@@ -19,7 +19,6 @@ import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography';
 
 
-
 export default function Read() {
   const [setups, setSetups] = useState([]);
   const [detectDelete, setDetectDelete] = useState([0]);
@@ -32,20 +31,11 @@ export default function Read() {
       setSetups(res.data);
     })
   }, [detectDelete]);
-  
+
   return (
     <>
-      <Container maxWidth="md">
+      <Container maxWidth="lg">
         <Typography variant="h2">Read</Typography>
-        {setups.map((setup) => {
-          return (
-            <SetupCard setup={setup}/>
-          )
-        })}
-      </Container>
-
-
-      <Container maxWidth="md">
         <Button
           variant="contained"
           component={Link}
@@ -53,6 +43,16 @@ export default function Read() {
         >
           新規作成
         </Button>
+        {setups.map((setup) => {
+          return (
+            <SetupCard setup={setup} detectDelete={detectDelete} setDetectDelete={setDetectDelete}/>            
+          )
+        })}
+      </Container>
+
+      <Container maxWidth="md">
+        
+        {/*
         {setups.map((setup) => {
           return (
             <Box key={setups.id} border={1} sx={{m:3}}>
@@ -94,14 +94,7 @@ export default function Read() {
                 />
               </Stack>
 
-              {/*<Grid container sx={{p:1}} spacing={1}>
-                <Grid item xs={6}>
-                  <Button variant="contained">編集</Button>
-                </Grid>
-                <Grid item xs={6}>
-                  <Button variant="contained">削除</Button>
-                </Grid>
-              </Grid>*/}
+          
 
               <Button
                 variant="contained"
@@ -115,6 +108,7 @@ export default function Read() {
             </Box>
           )
         })}
+      */}
       </Container>
     </>
   )
