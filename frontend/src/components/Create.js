@@ -64,7 +64,7 @@ export default function Create() {
     let isInvalid = false;
     let updateIsInvalidInput = {};
     commonInfo.setup_list_column_name.map((key) => {
-      if(setupElements[key] === "") {
+      if(key !== "id" && setupElements[key] === "") {
         updateIsInvalidInput[key] = true;
         isInvalid = true;
       } else {
@@ -86,7 +86,7 @@ export default function Create() {
     } else {
       //setIsInvalidInput(false);
       console.log("validate ok !!!")
-      /*var params = new URLSearchParams();
+      var params = new URLSearchParams();
       Object.entries(setupElements).map(([key, value]) => {
         if(key !== "id") {
           params.append([key], value);
@@ -101,7 +101,7 @@ export default function Create() {
       })
       .catch((err) => {
         console.log(err);
-      })*/
+      })
     }
   }
 
@@ -234,10 +234,9 @@ export default function Create() {
               ファイルを選択
               <input name="position_image" type='file' hidden accept="image/*" onChange={handleFile}/>
             </Button>
-            <img src={setupElements.position_image} width="100%" sx={{marginTop:1}}/>
             <FormHelperText>{isInvalidInput.position_image ? "選択してください" : ""}</FormHelperText>
           </FormControl>
-          
+          <img src={setupElements.position_image} width="100%" sx={{marginTop:1}}/>
         </Box>
 
         <Box sx={{marginTop:1, marginBottom: 1}}>
@@ -247,10 +246,9 @@ export default function Create() {
               ファイルを選択
               <input name="aim_image" type='file' hidden accept="image/*" onChange={handleFile}/>
             </Button>
-            <img src={setupElements.aim_image} width="100%"/>
             <FormHelperText>{isInvalidInput.aim_image ? "選択してください" : ""}</FormHelperText>
           </FormControl>
-
+          <img src={setupElements.aim_image} width="100%"/>
         </Box>
 
         <Box sx={{marginTop:1, marginBottom: 1}}>
@@ -260,10 +258,9 @@ export default function Create() {
               ファイルを選択
               <input name="landing_image" type='file' hidden accept="image/*" onChange={handleFile}/>
             </Button>
-            <img src={setupElements.landing_image} width="100%"/>
             <FormHelperText>{isInvalidInput.landing_image ? "選択してください" : ""}</FormHelperText>
           </FormControl>
-          
+          <img src={setupElements.landing_image} width="100%"/>
         </Box>
     
         <Box sx={{marginTop:1, marginBottom: 1}}>
