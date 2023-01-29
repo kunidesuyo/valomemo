@@ -40,6 +40,7 @@ export default function Read() {
           variant="contained"
           component={Link}
           to="/create"
+          state={{createOrUpdate: "create"}}
         >
           新規作成
         </Button>
@@ -48,67 +49,6 @@ export default function Read() {
             <SetupCard setup={setup} detectDelete={detectDelete} setDetectDelete={setDetectDelete}/>            
           )
         })}
-      </Container>
-
-      <Container maxWidth="md">
-        
-        {/*
-        {setups.map((setup) => {
-          return (
-            <Box key={setups.id} border={1} sx={{m:3}}>
-              <Grid container sx={{p:1}} spacing={1}>
-                <Grid item xs={4}>
-                  <TextField 
-                    InputProps={{readOnly: true}}
-                    value={setup.map}
-                    label="map"
-                  />
-                </Grid>
-                <Grid item xs={4}>
-                  <TextField 
-                    InputProps={{readOnly: true}}
-                    value={setup.agent}
-                    label="agent"
-                  />
-                </Grid>
-                <Grid item xs={4}>
-                  <TextField 
-                    InputProps={{readOnly: true}}
-                    value={setup.ability}
-                    label="ability"
-                  />
-                </Grid>
-              </Grid>
-
-              <Stack sx={{p:1}} spacing={1}>
-                <p>position_image</p>
-                <img src={setup.position_image} width="100%"/>
-                <p>aim_image</p>
-                <img src={setup.aim_image} width="100%"/>
-                <p>landing_image</p>
-                <img src={setup.landing_image} width="100%"/>
-                <TextField
-                  InputProps={{readOnly: true}}
-                  value={setup.description}
-                  label="description"
-                />
-              </Stack>
-
-          
-
-              <Button
-                variant="contained"
-                component={Link}
-                to="/update"
-                state={setup}
-              >
-                編集
-              </Button>
-              <Delete id={setup.id} detectDelete={detectDelete} setDetectDelete={setDetectDelete} />
-            </Box>
-          )
-        })}
-      */}
       </Container>
     </>
   )

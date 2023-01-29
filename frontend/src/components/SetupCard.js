@@ -122,7 +122,7 @@ export default function SetupCard(props) {
                   variant="contained"
                   component={Link}
                   to="/update"
-                  state={setup}
+                  state={{setup: setup, createOrUpdate: "update"}}
                   sx={{marginRight: 2}}
                 >
                   編集

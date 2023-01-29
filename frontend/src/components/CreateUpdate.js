@@ -1,6 +1,7 @@
+// createとupdate画面
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { db_column_name } from '../db_info';
 import { init_db_data, agent_names, map_names, skills } from '../db_info';
@@ -27,32 +28,30 @@ import { CommonInfoContext } from '../CommonInfoProvider';
 
 
 export default function Create() {
+  const location = useLocation();
+  //console.log(location);
+
+  console.log(location.state.createOrUpdate);
+  console.log(location.state.setup);
+
+  const displayPage = location.state.createOrUpdate;
   //context
   const commonInfo = useContext(CommonInfoContext);
-  //console.log(commonInfo);
 
   let initData = {};
-  commonInfo.setup_list_column_name.map((key) => {
-    //console.log(key);
-    initData[key] = "";
-  });
-  //console.log(initData);
+  if(displayPage === "create") {
+    commonInfo.setup_list_column_name.map((key) => {
+      initData[key] = "";
+    });
+  } else if (displayPage === "update"){
+    initData = location.state.setup;
+  }
+
   let initIsInvalidInput = {};
   commonInfo.setup_list_column_name.map((key) => {
     initIsInvalidInput[key] = false;
   })
 
-  /*let test = {};
-  commonInfo.setup_list_column_name.map((key) => {
-    test[key] = false;
-  })
-  console.log(test);
-
-  const k = "ability";
-
-  test = {...test, [k]: true};
-  console.log(test);*/
-  
   const [setupElements, setSetupElements] = useState(initData);
   const [isInvalidInput, setIsInvalidInput] = useState(initIsInvalidInput);
   let navigate = useNavigate();
@@ -77,14 +76,10 @@ export default function Create() {
 
   const postData = () => {
     //??? stateを更新したあとstateを参照しても更新前のまま
-    //console.log("validate")
     const isInvalid = validateInputData();
-    //console.log(isInvalidInput)
     if(isInvalid) {
-      //setIsInvalidInput(true);
       console.log("invalid input")
     } else {
-      //setIsInvalidInput(false);
       console.log("validate ok !!!")
       var params = new URLSearchParams();
       Object.entries(setupElements).map(([key, value]) => {
@@ -105,10 +100,25 @@ export default function Create() {
     }
   }
 
+  const updateData = () => {
+    var params = new URLSearchParams();
+    Object.entries(setupElements).map(([key, value]) => {
+      params.append([key], value);
+    })
+    /*params.append("id", id);
+    params.append("content", content);*/
+    console.log('send');
+    axios.put('api/update', params)
+    .then((res) => {
+      //readにリダイレクト
+      //console.log(res);
+      navigate('/read');
+    })
+  }
+
   const handleChange = (e) => {
     setSetupElements({...setupElements, [e.target.name]: e.target.value});
   }
-
 
   const handleFile = (e) => {
     if(!e.target.files) return;
@@ -127,8 +137,73 @@ export default function Create() {
     imageUrls[agent_name] = process.env.PUBLIC_URL + "/images/agents/" + agent_name +".webp";
   })
 
+  const imageList = ["position_image", "aim_image", "landing_image"];
 
-  
+  const uploadImageForm = (props) => {
+    console.log("props: " + props)
+    return (
+      <Box sx={{marginTop:1, marginBottom: 1}}>
+        <Typography variant="h5">{props}</Typography>
+        <FormControl error={isInvalidInput[props]}>
+          <Button variant="contained" component="label" sx={{marginTop:1}}>
+            ファイルを選択
+            <input name={props} type='file' hidden accept="image/*" onChange={handleFile}/>
+          </Button>
+          <FormHelperText>{isInvalidInput[props] ? "選択してください" : ""}</FormHelperText>
+        </FormControl>
+        <img src={setupElements[props]} width="100%" sx={{marginTop:1}}/>
+      </Box>
+    )
+  }
+
+  const uploadImageFormList = () => {
+    return (
+      <>
+        {imageList.map((image) => {
+          return (
+            uploadImageForm(image)
+          )
+        })}
+      </>
+    )
+  }
+
+  const displayImageList = () => {
+    return (
+      <>
+        {imageList.map((image) => {
+          return (
+            <Box sx={{marginTop:1, marginBottom: 1}}>
+              <Typography variant="h5">{image}</Typography>
+              <img src={setupElements[image]} width="100%" sx={{marginTop:1}}/>
+            </Box>
+          )
+        })}
+      </>
+    )
+  }
+
+  const uploadButton = () => {
+    return (
+      <Box sx={{marginTop:1, marginBottom: 1}}>
+        <FormControl fullWidth>
+          <Button variant="contained" onClick={postData}>作成</Button>
+        </FormControl>
+      </Box>
+    )
+  }
+
+  const updateButton = () => {
+    return (
+      <Box sx={{marginTop:1, marginBottom: 1}}>
+        <FormControl fullWidth>
+          <Button variant="contained" onClick={updateData}>更新</Button>
+        </FormControl>
+      </Box>
+    )
+  }
+
+
   return (
     <>
       <Container maxWidth="md">
@@ -226,42 +301,16 @@ export default function Create() {
           </FormControl>
         </Box>
         
-        {/*mapで実装したい */}
-        <Box sx={{marginTop:1, marginBottom: 1}}>
-          <Typography variant="h5">position_image</Typography>
-          <FormControl error={isInvalidInput.position_image}>
-            <Button variant="contained" component="label" sx={{marginTop:1}}>
-              ファイルを選択
-              <input name="position_image" type='file' hidden accept="image/*" onChange={handleFile}/>
-            </Button>
-            <FormHelperText>{isInvalidInput.position_image ? "選択してください" : ""}</FormHelperText>
-          </FormControl>
-          <img src={setupElements.position_image} width="100%" sx={{marginTop:1}}/>
-        </Box>
-
-        <Box sx={{marginTop:1, marginBottom: 1}}>
-          <Typography variant="h5">aim_image</Typography>
-          <FormControl error={isInvalidInput.aim_image}>
-            <Button variant="contained" component="label" sx={{marginTop:1}}>
-              ファイルを選択
-              <input name="aim_image" type='file' hidden accept="image/*" onChange={handleFile}/>
-            </Button>
-            <FormHelperText>{isInvalidInput.aim_image ? "選択してください" : ""}</FormHelperText>
-          </FormControl>
-          <img src={setupElements.aim_image} width="100%"/>
-        </Box>
-
-        <Box sx={{marginTop:1, marginBottom: 1}}>
-          <Typography variant="h5">landing_image</Typography>
-          <FormControl error={isInvalidInput.landing_image}>
-            <Button variant="contained" component="label" sx={{marginTop:1}}>
-              ファイルを選択
-              <input name="landing_image" type='file' hidden accept="image/*" onChange={handleFile}/>
-            </Button>
-            <FormHelperText>{isInvalidInput.landing_image ? "選択してください" : ""}</FormHelperText>
-          </FormControl>
-          <img src={setupElements.landing_image} width="100%"/>
-        </Box>
+        {/* createならアップロードフォーム、updateなら登録されている画像を表示 */}
+        {/*uploadImageFormList()*/}
+        {console.log(displayPage)}
+        {(() => {
+          if(displayPage === "create") {
+            return uploadImageFormList();
+          } else if (displayPage === "update"){
+            return displayImageList();
+          }
+        })()}
     
         <Box sx={{marginTop:1, marginBottom: 1}}>
           <Typography variant="h5">Description</Typography>
@@ -277,11 +326,15 @@ export default function Create() {
             />
           </FormControl>
         </Box>
-        <Box sx={{marginTop:1, marginBottom: 1}}>
-          <FormControl fullWidth>
-            <Button variant="contained" onClick={postData}>作成</Button>
-          </FormControl>
-        </Box>
+        {/* ボタン切り替え */}
+        {(() => {
+          if(displayPage === "create") {
+            return uploadButton();
+          } else if (displayPage === "update"){
+            return updateButton();
+          }
+        })()}
+
       </Container>
     </>
   )
