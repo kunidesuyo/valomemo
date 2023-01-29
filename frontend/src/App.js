@@ -3,8 +3,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Connect from './components/Connect'
 import Read from './components/Read'
-import Create from './components/Create'
-import Update from './components/Update'
+import CreateUpdate from './components/CreateUpdate'
 
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -38,8 +37,8 @@ function App() {
               <Routes>
                 <Route path='connect' element={<Connect />} />
                 <Route path='read' element={<Read />} />
-                <Route path='create' element={<Create />} />
-                <Route path='update' element={<Update />} />
+                <Route path='create' element={<CreateUpdate />} />
+                <Route path='update' element={<CreateUpdate />} />
               </Routes>
             </div>
           </Router>
