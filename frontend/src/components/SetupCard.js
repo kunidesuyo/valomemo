@@ -32,7 +32,7 @@ export default function SetupCard(props) {
   const [displayImageIndex, setDisplayImageIndex] = useState(0);
   //console.log(setup);
 
-  const agentImage = process.env.PUBLIC_URL + "/images/" + setup.agent + ".webp";
+  const agentImage = process.env.PUBLIC_URL + "/images/agents/" + setup.agent + ".webp";
 
   const images = ["position_image", "aim_image", "landing_image"];
   
@@ -81,7 +81,7 @@ export default function SetupCard(props) {
       <Backdrop
         open={open}
       >
-        <Card sx={{maxWidth: 900, p: 2}}>
+        <Card sx={{maxWidth: "50%", p: 2}}>
           <Box>
             <CardMedia
               component="img"
