@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-
 import axios from 'axios';
 
 import Avatar from '@mui/material/Avatar';
@@ -16,11 +15,11 @@ import Container from '@mui/material/Container';
 //muiのテンプレートから
 
 
-export default function Login() {
+
+export default function Register() {
   axios.defaults.withCredentials = true;
 
   let navigate = useNavigate();
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
@@ -37,7 +36,7 @@ export default function Login() {
     var params = new URLSearchParams();
     params.append("username", username);
     params.append("password", password);
-    axios.post('api/login', params)
+    axios.post('api/register', params)
     .then((res) => {
       console.log(res);
       navigate('/read');
@@ -61,7 +60,7 @@ export default function Login() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Login
+          Register
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
@@ -86,7 +85,7 @@ export default function Login() {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Login
+            Register
           </Button>
         </Box>
       </Box>

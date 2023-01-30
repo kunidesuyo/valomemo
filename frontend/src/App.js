@@ -5,6 +5,7 @@ import Connect from './components/Connect';
 import Read from './components/Read';
 import CreateUpdate from './components/CreateUpdate';
 import Login from './components/Login';
+import Register from './components/Register';
 
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -37,6 +38,7 @@ function App() {
             <div>
               <Routes>
                 <Route path='login' element={<Login />} />
+                <Route path='register' element={<Register/>} />
                 <Route path='connect' element={<Connect />} />
                 <Route path='read' element={<Read />} />
                 <Route path='create' element={<CreateUpdate />} />
