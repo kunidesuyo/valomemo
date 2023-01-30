@@ -6,6 +6,12 @@ const mysql = require('mysql');
 
 const table_name = process.env.TABLE_NAME;
 
+const bcrypt = require('bcrypt');
+const JWT = require('jsonwebtoken');
+
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+
 const connection = mysql.createConnection({
   host: process.env.DB_CONTAINER_NAME, 
   //コンテナ名を指定(同ネットワーク内なので名前解決できる？)
@@ -36,6 +42,15 @@ app.use(express.static('/usr/app/src/public'));
 
 //フォームの値を受け取るための文
 app.use(express.urlencoded({extended: false, limit: '20mb'}));
+
+app.use(cors({
+  credentials: true,
+  origin: "http://localhost:3000"
+}))
+
+//リクエストからクッキーを読み取る
+app.use(cookieParser());
+
 
 app.get('/', (req, res) => {
   //res.send('test complete')
@@ -80,10 +95,11 @@ app.get('/query-test', () => {
 });
 
 
+const auth = require("./middleware/AuthByJWT")
 
 
 //api
-app.get('/api/read', (req, res) => {
+app.get('/api/read', auth, (req, res) => {
   connection.query(
     'SELECT * FROM ' + table_name,
     (error, results) => {
@@ -339,7 +355,129 @@ app.get('/imgur-test', async (req, res) => {
 
 });
 
+app.post('/api/login', (req, res) => {
+  console.log(req.body);
+  const username = req.body.username;
+  const password = req.body.password;
+  connection.query(
+    'SELECT * FROM users WHERE username = ?',
+    [username],
+    async (error, results) => {
+      if(error) {
+        console.log("db error");
+        res.status(400).json([
+          {
+            message: "DBエラー"
+          }
+        ])
+      }
+      if(results.length > 0) {
+        console.log("認証処理");
+        //パスワードの複合と照合
+        const isMatchPassword = await bcrypt.compare(password, results[0].password);
+        if(!isMatchPassword) {
+          console.log("パスワードが違います");
+          res.status(400).json([
+            {
+              message: "パスワードが違います"
+            }
+          ])
+        } else {
+          //JWTのtokenを発行
+          console.log("ログイン成功");
+          const token = await JWT.sign({
+            username,
+          },
+          //.envで管理
+          "SECRET_KEY",
+          {
+            expiresIn: "1h",
+          }
+          );
+          //Set-cookieヘッダーにtokenをセットする処理
+          //httpOnlyをtrueにすることでhttp通信するときのみ参照できるようになる
+          console.log(token);
+          res.cookie('token', token, {httpOnly: true});
+          return res.json({ token });
+        }
 
+      } else {
+        console.log("ユーザーが見つかりません");
+        res.status(400).json([
+          {
+            message: "ユーザーが見つかりません"
+          }
+        ])
+      }
+    }
+  )
+});
+
+
+app.post('/api/register', async (req, res) => {
+  console.log("register");
+  console.log(req.body);
+  const username = req.body.username;
+  const password = req.body.password;
+  //バリデーションチェック
+  if(username === "" || password === "") {
+    return res.status(400).json({message: "入力値が無効です"})
+  }
+  //dbにユーザーが存在しているか確認
+  connection.query(
+    'SELECT * FROM users WHERE username = ?',
+    [username],
+    async (error, results) => {
+      if(results.length > 0) {
+        console.log("ユーザーが既に存在している")
+        return res.status(400).json([
+          {
+            message: "すでにそのユーザーは存在しています"
+          }
+        ])
+      }
+      console.log("ユーザーが存在しないので登録が可能です");
+      let hashedPassword = await bcrypt.hash(password, 10);
+      //console.log(hashedPassword)
+//
+      // dbへ保存する
+      connection.query(
+        'INSERT INTO users (username, password) VALUES (?, ?)',
+        [username, hashedPassword],
+        async (error, results) => {
+          if(error) {
+            console.log("db error");
+            console.log(error);
+            res.status(400).json([
+              {
+                message: "DBへの保存に失敗しました"
+              }
+            ])
+          } else {
+            console.log("dbへの保存完了");
+            //token発行
+            const token = await JWT.sign({
+              username,
+            },
+            //.envで管理
+            "SECRET_KEY",
+            {
+              expiresIn: "1h",
+            }
+            );
+            res.cookie('token', token, {httpOnly: true});
+            return res.json({token});
+          }
+        }
+      )
+    }
+  )
+});
+
+
+app.get("/auth-test", auth, (req, res) => {
+  res.json([{message: "auth ok"}]);
+})
 
 
 app.listen(port, () => {
