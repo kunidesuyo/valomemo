@@ -1,9 +1,10 @@
 //import logo from './logo.svg';
 //import './App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import Connect from './components/Connect'
-import Read from './components/Read'
-import CreateUpdate from './components/CreateUpdate'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Connect from './components/Connect';
+import Read from './components/Read';
+import CreateUpdate from './components/CreateUpdate';
+import Login from './components/Login';
 
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -35,6 +36,7 @@ function App() {
           <Router>
             <div>
               <Routes>
+                <Route path='login' element={<Login />} />
                 <Route path='connect' element={<Connect />} />
                 <Route path='read' element={<Read />} />
                 <Route path='create' element={<CreateUpdate />} />
