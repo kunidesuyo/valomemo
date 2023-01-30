@@ -5,7 +5,8 @@
 
 - ログイン機能をつける。
   - ログアウト機能をつける。
-    - JWTの
+    - とりあえずブラウザのクッキーを削除
+  - secretkeyを.envで設定
   - setup_listにcreated_byカラム追加
 
 
