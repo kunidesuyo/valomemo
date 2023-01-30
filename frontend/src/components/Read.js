@@ -18,6 +18,7 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography';
 
+axios.defaults.withCredentials = true;
 
 export default function Read() {
   const [setups, setSetups] = useState([]);
