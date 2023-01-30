@@ -42,7 +42,7 @@ CREATE TABLE `setup_list` (
 
 LOCK TABLES `setup_list` WRITE;
 /*!40000 ALTER TABLE `setup_list` DISABLE KEYS */;
-INSERT INTO `setup_list` VALUES (2,'A攻め','Split','Viper',2,'https://i.imgur.com/hYhyC6m.png','https://i.imgur.com/HYzfbCQ.png','https://i.imgur.com/l40kfS2.png','説明文です'),(3,'A攻め','Split','Viper',3,'https://i.imgur.com/F3m8NyH.png','https://i.imgur.com/Pi2rz0G.png','https://i.imgur.com/gLPoWXI.png','ｆだふぁおあっゔぉｆどｖんどｖ'),(4,'更新します','Bind','Reyna',1,'https://i.imgur.com/8kc5Win.png','https://i.imgur.com/JABElnR.png','https://i.imgur.com/fMPqxUw.png','更新します');
+INSERT INTO `setup_list` VALUES (1,'A攻め','Split','Viper',2,'https://i.imgur.com/hYhyC6m.png','https://i.imgur.com/HYzfbCQ.png','https://i.imgur.com/l40kfS2.png','説明文です'),(3,'A攻め','Split','Viper',3,'https://i.imgur.com/F3m8NyH.png','https://i.imgur.com/Pi2rz0G.png','https://i.imgur.com/gLPoWXI.png','ｆだふぁおあっゔぉｆどｖんどｖ'),(4,'更新します','Bind','Reyna',1,'https://i.imgur.com/8kc5Win.png','https://i.imgur.com/JABElnR.png','https://i.imgur.com/fMPqxUw.png','更新します');
 /*!40000 ALTER TABLE `setup_list` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -58,7 +58,7 @@ CREATE TABLE `users` (
   `username` text,
   `password` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,7 +67,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'kuni','pass');
+INSERT INTO `users` VALUES (1,'admin','$2b$10$LUywVzMmUb5wT9gt1JCKGeDK1T78Gjx1lahx.cfZ340Cet2oNJw0q');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -80,4 +80,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-01-30  6:42:25
+-- Dump completed on 2023-01-30 12:18:09

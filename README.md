@@ -4,11 +4,10 @@
 - アカウント機能を実装
 
 - ログイン機能をつける。
-  - ログイン画面作成
-  - ログイン機能作成(progate見る)
-  - dbを更新
-    - userを管理するdb追加
-    - setup_listにcreated_byカラム追加
+  - ログアウト機能をつける。
+    - JWTの
+  - setup_listにcreated_byカラム追加
+
 
 - dbデータ永続化
 
@@ -26,3 +25,6 @@
   - './db/docker-entrypoint-initdb.d'のsqlファイルを変更
     - (要検証)データが多い場合、composeで立ち上げてdbを直接操作。mysqldumpでできたsqlファイルを用いる。
   - フロントの表示変更
+
+## ログイン管理
+- ログインまたはアカウント登録じにJWTを発行してcookieに保存する。通信に保存したtokenを付与してアクセス制限する。
