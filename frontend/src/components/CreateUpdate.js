@@ -39,12 +39,21 @@ export default function Create() {
   const commonInfo = useContext(CommonInfoContext);
 
   let initData = {};
+  let initAbilityIcons = ["", "", "", ""];
+  const initAbilityIconUrl = process.env.PUBLIC_URL + "/images/abilitys/RP.webp";
   if(displayPage === "create") {
     commonInfo.setup_list_column_name.map((key) => {
       initData[key] = "";
     });
+    
+    for(let i = 0; i < 4; i++) {
+      initAbilityIcons[i] = initAbilityIconUrl;
+    }
   } else if (displayPage === "update"){
     initData = location.state.setup;
+    for(let i = 0; i < 4; i++) {
+      initAbilityIcons[i] = process.env.PUBLIC_URL + "/images/abilitys/" + location.state.setup.agent + "Ability" + (i+1) + ".webp";
+    }
   }
 
   let initIsInvalidInput = {};
@@ -52,8 +61,11 @@ export default function Create() {
     initIsInvalidInput[key] = false;
   })
 
+
+
   const [setupElements, setSetupElements] = useState(initData);
   const [isInvalidInput, setIsInvalidInput] = useState(initIsInvalidInput);
+  const [abilityIcons, setAbilityIcons] = useState(initAbilityIcons);
   let navigate = useNavigate();
 
   //デバック
@@ -116,8 +128,19 @@ export default function Create() {
     })
   }
 
+
+  //const image_base_url = process.env.PUBLIC_URL;
+  //console.log("image url " + image_base_url)
+
   const handleChange = (e) => {
     setSetupElements({...setupElements, [e.target.name]: e.target.value});
+    if(e.target.name === "agent") {
+      let nowAbilityIcons = ["", "", "", ""];
+      for(let i = 0; i < 4; i++) {
+        nowAbilityIcons[i] = process.env.PUBLIC_URL + "/images/abilitys/" + e.target.value + "Ability" + (i+1) + ".webp";
+      }
+      setAbilityIcons(nowAbilityIcons);
+    }
   }
 
   const handleFile = (e) => {
@@ -140,7 +163,7 @@ export default function Create() {
   const imageList = ["position_image", "aim_image", "landing_image"];
 
   const uploadImageForm = (props) => {
-    console.log("props: " + props)
+    //console.log("props: " + props)
     return (
       <Box sx={{marginTop:1, marginBottom: 1}}>
         <Typography variant="h5">{props}</Typography>
@@ -202,6 +225,7 @@ export default function Create() {
       </Box>
     )
   }
+
 
 
   return (
@@ -285,19 +309,45 @@ export default function Create() {
                     
         <Box sx={{marginTop:1, marginBottom: 1}}>
           <Typography variant="h5">Ability</Typography>
-          <FormControl sx={{minWidth: 120, marginTop:1}} error={isInvalidInput.ability}>
-            <Select
+          <FormControl sx={{height: 1}} error={isInvalidInput.ability}>
+            <RadioGroup
               name="ability"
-              onChange={(e) => handleChange(e)}
               value={setupElements.ability}
+              onChange={(e) => handleChange(e)}
+              sx={{height: 1}}
             >
-              {commonInfo.abilitys.map((ability) => {
-                return (
-                  <MenuItem key={ability} value={ability}>{ability}</MenuItem>
-                )
-              })}
-            </Select>
-            <FormHelperText>{isInvalidInput.ability ? "選択してください" : ""}</FormHelperText>
+              <ImageList
+                variant='woven'
+                cols={10}
+                gap={1}
+              >
+                {commonInfo.abilitys.map((ability) => (  
+                  <Radio
+                    key={ability}
+                    value={ability}
+                    icon={
+                      <ImageListItem>
+                        <img
+                          src={`${abilityIcons[ability-1]}?w=164&h=164&fit=crop&auto=format`}
+                          srcSet={`${abilityIcons[ability-1]}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                          loading='lazy'
+                        />
+                      </ImageListItem>
+                    }
+                    checkedIcon={
+                      <ImageListItem sx={{border: 4}}>
+                        <img
+                          src={`${abilityIcons[ability-1]}?w=164&h=164&fit=crop&auto=format`}
+                          srcSet={`${abilityIcons[ability-1]}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                          loading='lazy'
+                        />
+                      </ImageListItem>
+                    }
+                  />
+                ))}
+              </ImageList>
+            </RadioGroup>
+            <FormHelperText>{isInvalidInput.agent ? "選択してください" : ""}</FormHelperText>
           </FormControl>
         </Box>
         
