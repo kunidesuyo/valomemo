@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Delete from './Delete';
 import SetupCard from './SetupCard';
 
@@ -24,13 +24,23 @@ export default function Read() {
   const [setups, setSetups] = useState([]);
   const [detectDelete, setDetectDelete] = useState([0]);
   
+  let navigate = useNavigate();
   useEffect(() => {
     //console.log('detect delete')
-    axios.get('/api/read')
-    .then((res) => {
-      console.log(res.data);
-      setSetups(res.data);
-    })
+    //console.log("ログイン状態確認");
+    const isLogin = localStorage.getItem("isLogin");
+    //console.log("read " + isLogin);
+    if(isLogin === "false") {
+      //console.log("ログインしていません");
+      navigate('/login');
+    } else {
+      //console.log("ログインしています " + isLogin);
+      axios.get('/api/read')
+      .then((res) => {
+        console.log(res.data);
+        setSetups(res.data);
+      })
+    }
   }, [detectDelete]);
 
   return (
@@ -47,7 +57,12 @@ export default function Read() {
         </Button>
         {setups.map((setup) => {
           return (
-            <SetupCard setup={setup} detectDelete={detectDelete} setDetectDelete={setDetectDelete}/>            
+            <SetupCard
+              setup={setup}
+              detectDelete={detectDelete}
+              setDetectDelete={setDetectDelete}
+              key={setup.id}
+            />            
           )
         })}
       </Container>

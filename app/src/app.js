@@ -398,7 +398,11 @@ app.post('/api/login', (req, res) => {
           //httpOnlyをtrueにすることでhttp通信するときのみ参照できるようになる
           console.log(token);
           res.cookie('token', token, {httpOnly: true});
-          return res.json({ token });
+          return res.status(200).json([
+            {
+              message: "ログインに成功しました"
+            }
+          ]);
         }
 
       } else {
@@ -474,10 +478,43 @@ app.post('/api/register', async (req, res) => {
   )
 });
 
+app.post("/api/logout", (req, res) => {
+  console.log("connect");
+  res.clearCookie("token");
+  res.status(200).json([{message: "ログアウトしました。"}])
+});
 
-app.get("/auth-test", auth, (req, res) => {
-  res.json([{message: "auth ok"}]);
-})
+
+/*app.post("/api/is-auth", async (req, res) => {
+  //res.json([{message: "is auth ok"}]);
+  const token = req.cookies.token;
+  if(!token) {
+    console.log("認証されていません(tokenなし)");
+    res.status(200).json([
+      {
+        isAuth: false,
+      }
+    ]);
+  } else {
+    try {
+      let username = await JWT.verify(token, "SECRET_KEY");
+      console.log(username);
+      console.log("認証されています");
+      res.status(200).json([
+        {
+          isAuth: true,
+        }
+      ]);
+    } catch {
+      console.log("認証されていません(tokenあり)");
+      res.status(200).json([
+        {
+          isAuth: false,
+        }
+      ]);
+    }
+  }
+})*/
 
 
 app.listen(port, () => {

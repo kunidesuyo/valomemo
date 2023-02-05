@@ -4,12 +4,16 @@
 - アカウント機能を実装
 
 
-- スキルアイコンをread画面に適用する
-- ログイン機能をつける。
-  - ログアウト機能をつける
-    - とりあえずブラウザのクッキーを削除
-  - secretkeyを.envで設定
-  - setup_listにcreated_byカラム追加
+
+- ログイン状態によって右上のアイコンを切り替える
+  - ログインしたときにheaderが再レンダリングされない
+  - ログイン情報をstateでも管理して、contextでどこからでもアクセスできるようにする。
+  - ログイン時に上記のstateを更新して再レンダリングを促す
+- タイトルを表示しているページによって切り替える
+
+
+- secretkeyを.envで設定
+- setup_listにcreated_byカラム追加
 - registerの制限
 
 
@@ -33,5 +37,16 @@
     - (要検証)データが多い場合、composeで立ち上げてdbを直接操作。mysqldumpでできたsqlファイルを用いる。
   - フロントの表示変更
 
-## ログイン管理
-- ログインまたはアカウント登録じにJWTを発行してcookieに保存する。通信に保存したtokenを付与してアクセス制限する。
+## アカウント管理
+- ログイン時にJWTを発行してcookieに保存する。(有効期限は1h)
+- localStorageにて"isLogin"を"true"(boolean型ではなく文字列なので注意)にする
+
+- 画面へのアクセスの際localStorageの"isLogin"をみてアクセス制御。
+  - trueの場合はそのまま表示。
+    - JWTが有効の場合はapiと通信できる。
+    - JWTが無効の場合はlogin画面に誘導(未実装)
+  - falseの場合はlogin画面へ遷移
+
+- ログアウト時にcookieを削除
+- localStorageの"isLogin"を"false"にする。
+- api側でJWTを無効化(未実装)
