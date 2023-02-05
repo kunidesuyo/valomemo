@@ -8,12 +8,12 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Header from './components/Header';
 
-import { CookiesProvider } from "react-cookie";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
-import { CommonInfoProvider } from './CommonInfoProvider'
+import { CommonInfoProvider } from './CommonInfoProvider';
+import { IsLoginProvider } from './IsLoginProvider';
 
 
 //サイト全体のテーマを設定できる
@@ -32,7 +32,7 @@ const theme = createTheme({
 function App() {
   return (
     <>
-      <CookiesProvider>
+      <IsLoginProvider>
         <CommonInfoProvider>
           <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -50,10 +50,9 @@ function App() {
                 </Routes>
               </div>
             </Router>
-            {/* フッター作る */}
           </ThemeProvider>
         </CommonInfoProvider>
-        </CookiesProvider>
+      </IsLoginProvider>
     </>
   );
 
