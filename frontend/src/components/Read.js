@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Delete from './Delete';
 import SetupCard from './SetupCard';
 
+import { TitleContext } from '../TitleProvider';
 import { db_column_name, init_db_data, agent_names, map_names, skills } from '../db_info';
 
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -23,9 +24,11 @@ axios.defaults.withCredentials = true;
 export default function Read() {
   const [setups, setSetups] = useState([]);
   const [detectDelete, setDetectDelete] = useState([0]);
+  const [title, setTitle] = useContext(TitleContext);
   
   let navigate = useNavigate();
   useEffect(() => {
+    setTitle("Read");
     //console.log('detect delete')
     //console.log("ログイン状態確認");
     const isLogin = localStorage.getItem("isLogin");
@@ -46,7 +49,7 @@ export default function Read() {
   return (
     <>
       <Container maxWidth="lg">
-        <Typography variant="h2">Read</Typography>
+        {/* <Typography variant="h2">Read</Typography> */}
         <Button
           variant="contained"
           component={Link}

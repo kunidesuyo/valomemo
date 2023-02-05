@@ -14,6 +14,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 import { CommonInfoProvider } from './CommonInfoProvider';
 import { IsLoginProvider } from './IsLoginProvider';
+import { TitleProvider } from './TitleProvider';
 
 
 //サイト全体のテーマを設定できる
@@ -32,6 +33,7 @@ const theme = createTheme({
 function App() {
   return (
     <>
+    <TitleProvider>
       <IsLoginProvider>
         <CommonInfoProvider>
           <ThemeProvider theme={theme}>
@@ -53,6 +55,7 @@ function App() {
           </ThemeProvider>
         </CommonInfoProvider>
       </IsLoginProvider>
+      </TitleProvider>
     </>
   );
 

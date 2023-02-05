@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { IsLoginContext } from '../IsLoginProvider';
+import { TitleContext } from '../TitleProvider';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -20,9 +21,20 @@ import Container from '@mui/material/Container';
 
 export default function Login() {
   const [isLogin, setIsLogin] = useContext(IsLoginContext);
+  const [title, setTitle] = useContext(TitleContext);
 
   axios.defaults.withCredentials = true;
   let navigate = useNavigate();
+
+  useEffect(() => {
+    setTitle("Login");
+    const result = localStorage.getItem("isLogin");
+    if(result === "true") {
+      //ログイン済みなのでreadに遷移
+      setIsLogin(true);
+      navigate('/read');
+    }
+  }, [])
 
   const handleSubmit = (e) => {
     e.preventDefault();
