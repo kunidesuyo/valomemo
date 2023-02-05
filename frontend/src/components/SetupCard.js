@@ -32,7 +32,8 @@ export default function SetupCard(props) {
   const [displayImageIndex, setDisplayImageIndex] = useState(0);
   //console.log(setup);
 
-  const agentImage = process.env.PUBLIC_URL + "/images/agents/" + setup.agent + ".webp";
+  const agentIcon = process.env.PUBLIC_URL + "/images/agents/" + setup.agent + ".webp";
+  const abilityIcon = process.env.PUBLIC_URL + "/images/abilitys/" + setup.agent + "Ability" + setup.ability + ".webp";
 
   const images = ["position_image", "aim_image", "landing_image"];
   
@@ -45,7 +46,7 @@ export default function SetupCard(props) {
   }
 
   const handleOpen = () => {
-    console.log("open")
+    //console.log("open")
     setOpen(true);
   }
 
@@ -71,8 +72,8 @@ export default function SetupCard(props) {
         />
         <CardContent>
           <Stack direction="row" spacing={3}>
-            <Avatar src={agentImage} sx={{width: 30, height: 30}}/>
-            <Typography variant="h6">{setup.ability}</Typography>
+            <Avatar src={agentIcon} sx={{width: 30, height: 30}}/>
+            <Avatar src={abilityIcon} sx={{width: 30, height: 30}}/>
           </Stack>
           <Typography variant="h6" sx={{marginTop: 1}}>{setup.title}</Typography>
         </CardContent>
@@ -104,8 +105,8 @@ export default function SetupCard(props) {
           </Box>
           <CardContent>
             <Stack direction="row" spacing={3} sx={{marginBottom: 1}}>
-              <Avatar src={agentImage} sx={{width: 30, height: 30}}/>
-              <Typography variant="subtitle1">{setup.ability}</Typography>
+              <Avatar src={agentIcon} sx={{width: 30, height: 30}}/>
+              <Avatar src={abilityIcon} sx={{width: 30, height: 30}}/>
               <Typography variant="subtitle1">{setup.map}</Typography>
             </Stack>
             <Typography variant="subtitle1">{setup.title}</Typography>
