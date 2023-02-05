@@ -1,6 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 
 import { IsLoginContext } from '../IsLoginProvider';
+import { TitleContext } from '../TitleProvider';
 
 import { Outlet, useNavigate } from 'react-router-dom';
 
@@ -26,6 +27,7 @@ export default function MenuAppBar() {
 
   // const [isLogin, setIsLogin] = React.useState(false);
   const [isLogin, setIsLogin] = useContext(IsLoginContext);
+  const [title, setTitle] = useContext(TitleContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   useEffect(() => {
@@ -79,7 +81,7 @@ export default function MenuAppBar() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Photos
+            {title}
           </Typography>
           {isLogin && (
             <div>
