@@ -1,30 +1,3 @@
-# TODO
-- mysqlの起動が遅いのでなにか良い方法がないか探す
-- テストをどうするか
-
-- タイトルを表示しているページによって切り替える
-
-
-- secretkeyを.envで設定
-- setup_listにcreated_byカラム追加
-- registerの制限
-
-
-- dbデータ永続化
-
-- 本番環境にデプロイ
-
-- 余計なファイルを消す
-- readme.mdを作成(人に見せられるもの)
-- コードのリファクタリング
-- search画面
-- mylist機能
-- サイトの使い方
-
-- 軽タスク
-  - imgタグのsrcSetとは？
-
-
 # DB
 ## DBの更新作業
 - カラムをいじる場合(追加、変更、削除)
@@ -46,3 +19,30 @@
 - ログアウト時にcookieを削除
 - localStorageの"isLogin"を"false"にする。
 - api側でJWTを無効化(未実装)
+
+
+# TODO
+- mysqlの起動が遅いのでなにか良い方法がないか探す
+- テストをどうするか
+
+- read画面の表示を整える
+- cardのレイアウトを整える
+
+- secretkeyを.envで設定
+- setup_listにcreated_byカラム追加
+- registerの制限
+
+
+- dbデータ永続化
+
+- 本番環境にデプロイ
+
+- 余計なファイルを消す
+- readme.mdを作成(人に見せられるもの)
+- コードのリファクタリング
+- search画面
+- mylist機能
+- サイトの使い方
+
+- 軽タスク
+  - imgタグのsrcSetとは？
