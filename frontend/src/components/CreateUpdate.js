@@ -3,6 +3,7 @@ import React, { useEffect, useState, useContext, useRef } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { TitleContext } from '../TitleProvider';
 import { db_column_name } from '../db_info';
 import { init_db_data, agent_names, map_names, skills } from '../db_info';
 
@@ -28,23 +29,7 @@ import { CommonInfoContext } from '../CommonInfoProvider';
 
 
 export default function Create() {
-  let navigate = useNavigate();
-  useEffect(() => {
-    console.log("ログイン状態確認");
-    const isLogin = localStorage.getItem("isLogin");
-    if(isLogin === "false") {
-      console.log("ログインしていません");
-      navigate('/login');
-    }
-    console.log("ログインしています");
-  },[]);
-
   const location = useLocation();
-  //console.log(location);
-
-  //console.log(location.state.createOrUpdate);
-  //console.log(location.state.setup);
-
   const displayPage = location.state.createOrUpdate;
   //context
   const commonInfo = useContext(CommonInfoContext);
@@ -52,6 +37,7 @@ export default function Create() {
   let initData = {};
   let initAbilityIcons = ["", "", "", ""];
   const initAbilityIconUrl = process.env.PUBLIC_URL + "/images/abilitys/RP.webp";
+  /* ↓ useEffectの中に入れる？ */
   if(displayPage === "create") {
     commonInfo.setup_list_column_name.map((key) => {
       initData[key] = "";
@@ -66,20 +52,40 @@ export default function Create() {
       initAbilityIcons[i] = process.env.PUBLIC_URL + "/images/abilitys/" + location.state.setup.agent + "Ability" + (i+1) + ".webp";
     }
   }
+  
 
   let initIsInvalidInput = {};
   commonInfo.setup_list_column_name.map((key) => {
     initIsInvalidInput[key] = false;
   })
-
+  /* ↑ useEffectの中に入れる？ */
 
 
   const [setupElements, setSetupElements] = useState(initData);
   const [isInvalidInput, setIsInvalidInput] = useState(initIsInvalidInput);
   const [abilityIcons, setAbilityIcons] = useState(initAbilityIcons);
+  const [title, setTitle] = useContext(TitleContext);
+
+  if(displayPage === "create") {
+    setTitle("create");
+  } else if(displayPage === "update"){
+    setTitle("update");
+  }
+
 
   //デバック
   //useEffect(() => {console.log(setupElements)}, [setupElements]);
+
+  let navigate = useNavigate();
+  useEffect(() => {
+    console.log("ログイン状態確認");
+    const isLogin = localStorage.getItem("isLogin");
+    if(isLogin === "false") {
+      console.log("ログインしていません");
+      navigate('/login');
+    }
+    console.log("ログインしています");
+  },[]);
 
   const validateInputData = () => {
     let isInvalid = false;
