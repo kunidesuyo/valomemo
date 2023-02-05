@@ -1,5 +1,7 @@
 import React, { useContext } from 'react';
 
+import { IsLoginContext } from '../IsLoginProvider';
+
 import { useNavigate } from 'react-router-dom';
 
 
@@ -17,6 +19,8 @@ import Container from '@mui/material/Container';
 
 
 export default function Login() {
+  const [isLogin, setIsLogin] = useContext(IsLoginContext);
+
   axios.defaults.withCredentials = true;
   let navigate = useNavigate();
 
@@ -41,6 +45,7 @@ export default function Login() {
       console.log(res);
       //ローカルストレージにログイン状態を保存
       localStorage.setItem("isLogin", "true");
+      setIsLogin(true);
       navigate('/read');
     })
     .catch((err) => {

@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
+
+import { IsLoginContext } from '../IsLoginProvider';
 
 import { Outlet, useNavigate } from 'react-router-dom';
 
-import { useCookies } from 'react-cookie';
 
 import axios from 'axios';
 
@@ -21,9 +22,11 @@ import Menu from '@mui/material/Menu';
 
 export default function MenuAppBar() {
   //MUI公式の例をそのまま使用
-  const [isLogin, setIsLogin] = React.useState(false);
+
+
+  // const [isLogin, setIsLogin] = React.useState(false);
+  const [isLogin, setIsLogin] = useContext(IsLoginContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [cookies, setCookie, removeCookie] = useCookies();
 
   useEffect(() => {
     const result = localStorage.getItem("isLogin");
@@ -47,7 +50,6 @@ export default function MenuAppBar() {
   const handleLogout = () => {
     setAnchorEl(null);
     //cookieのtokenを削除
-    //removeCookie("token", {path: '/'}, {httpOnly: true});
     axios.post('api/logout')
     .then((res) => {
       localStorage.setItem("isLogin", "false");
