@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -18,7 +18,6 @@ import Container from '@mui/material/Container';
 
 export default function Login() {
   axios.defaults.withCredentials = true;
-
   let navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -40,6 +39,8 @@ export default function Login() {
     axios.post('api/login', params)
     .then((res) => {
       console.log(res);
+      //ローカルストレージにログイン状態を保存
+      localStorage.setItem("isLogin", "true");
       navigate('/read');
     })
     .catch((err) => {

@@ -28,11 +28,22 @@ import { CommonInfoContext } from '../CommonInfoProvider';
 
 
 export default function Create() {
+  let navigate = useNavigate();
+  useEffect(() => {
+    console.log("ログイン状態確認");
+    const isLogin = localStorage.getItem("isLogin");
+    if(isLogin === "false") {
+      console.log("ログインしていません");
+      navigate('/login');
+    }
+    console.log("ログインしています");
+  },[]);
+
   const location = useLocation();
   //console.log(location);
 
-  console.log(location.state.createOrUpdate);
-  console.log(location.state.setup);
+  //console.log(location.state.createOrUpdate);
+  //console.log(location.state.setup);
 
   const displayPage = location.state.createOrUpdate;
   //context
@@ -66,10 +77,9 @@ export default function Create() {
   const [setupElements, setSetupElements] = useState(initData);
   const [isInvalidInput, setIsInvalidInput] = useState(initIsInvalidInput);
   const [abilityIcons, setAbilityIcons] = useState(initAbilityIcons);
-  let navigate = useNavigate();
 
   //デバック
-  useEffect(() => {console.log(setupElements)}, [setupElements]);
+  //useEffect(() => {console.log(setupElements)}, [setupElements]);
 
   const validateInputData = () => {
     let isInvalid = false;
