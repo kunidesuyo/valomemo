@@ -65,7 +65,7 @@ export default function SetupCard(props) {
 
   return (
     <Box>
-      <Card sx={{maxWidth: 300}} onClick={handleToggle}>
+      <Card sx={{maxWidth: "100%"}} onClick={handleToggle}>
         <CardMedia
           component="img"
           image={setup.landing_image}
@@ -81,28 +81,30 @@ export default function SetupCard(props) {
 
       <Backdrop
         open={open}
+        sx={{zIndex: (theme) => theme.zIndex.drawer + 1}}
       >
         <Card sx={{maxWidth: "50%", p: 2}}>
-          <Box>
-            <CardMedia
-              component="img"
-              image={setup[images[displayImageIndex]]}
-            />
-            <Grid container>
-              <Grid item xs={4}></Grid>
-              <Grid item xs={2}>
-                <Container sx={{textAlign: "center"}}>
-                  <Button onClick={displayPreviousImage}> {"<"} </Button>
-                </Container>
-              </Grid>
-              <Grid item xs={2}>
-                <Container sx={{textAlign: "center"}}>
-                  <Button onClick={displayNextImage}>{">"}</Button>
-                </Container>
-              </Grid>
-              <Grid item xs={4}></Grid>
+          <CardMedia
+            component="img"
+            image={setup[images[displayImageIndex]]}
+          />
+          <CardActions>
+          <Grid container>
+            <Grid item xs={4}></Grid>
+            <Grid item xs={2}>
+              <Box sx={{textAlign: "center", maxWidth: "100%"}}>
+                <Button onClick={displayPreviousImage}> {"<"} </Button>
+              </Box>
             </Grid>
-          </Box>
+            <Grid item xs={2}>
+              <Box sx={{textAlign: "center", maxWidth: "100%"}}>
+                <Button onClick={displayNextImage}>{">"}</Button>
+              </Box>
+            </Grid>
+            <Grid item xs={4}></Grid>
+          </Grid>
+          </CardActions>
+          
           <CardContent>
             <Stack direction="row" spacing={3} sx={{marginBottom: 1}}>
               <Avatar src={agentIcon} sx={{width: 30, height: 30}}/>
@@ -114,11 +116,11 @@ export default function SetupCard(props) {
           </CardContent>
           <CardActions>
             <Grid container>
-              <Grid item xs={3}>
+              <Grid item xs={4}>
                 <Button onClick={handleClose} variant="contained">閉じる</Button>
               </Grid>
-              <Grid item xs={5}></Grid>
-              <Grid item xs={4} sx={{textAlign: "right"}}>
+              <Grid item xs={0}></Grid>
+              <Grid item xs={8} sx={{textAlign: "right"}}>
                 <Button
                   variant="contained"
                   component={Link}
