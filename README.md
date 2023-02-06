@@ -24,6 +24,8 @@
 # TODO
 
 
+- create画面でデータを送信後くるくる回すやつ追加
+- login画面　login弾かれたときに通知
 - cardのbackdropで高さをレスポンシブに対応
 - setup_listにcreated_byカラム追加
 - registerの制限
@@ -38,6 +40,9 @@
 - 余計なファイルを消す
 - readme.mdを作成(人に見せられるもの)
 - コードのリファクタリング
+- mypage作成
+  - 投稿したセットアップの表示
+  - 作成したmylistの表示
 - search画面
 - mylist機能
 - サイトの使い方
