@@ -18,7 +18,7 @@ services:
       - ./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
 
     networks:
-      - backend
+      - valomemo_network
 
     healthcheck:
       test: ["CMD", "mysql", "-uroot", "-p${DB_PASSWORD}"]
@@ -27,9 +27,11 @@ services:
       retries: 5
       start_period: 30s
 
-  app:
+  api:
+    container_name: ${API_CONTAINER_NAME}
+
     build:
-      context: ./app
+      context: ./api
       dockerfile: Dockerfile
 
     environment:
@@ -46,23 +48,25 @@ services:
 
     volumes:
       - type: bind
-        source: ./app/src
-        target: /usr/app/src
+        source: ./api/src
+        target: /usr/api/src
       - type: bind
-        source: ./app/data_backups
-        target: /usr/app/data_backups
+        source: ./api/data_backups
+        target: /usr/api/data_backups
       - type: bind
         source: ./common_info
-        target: /usr/app/common_info
+        target: /usr/api/common_info
 
     networks:
-      - backend
+      - valomemo_network
 
     depends_on:
       db:
         condition: service_healthy
 
   frontend:
+    container_name: ${FRONTEND_CONTAINER_NAME}
+
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -82,8 +86,8 @@ services:
         target: /usr/frontend/src/common_info
     
     networks:
-      - backend
+      - valomemo_network
 
 
 networks:
-  backend:
+  valomemo_network:
