@@ -25,7 +25,6 @@
 
 
 - create画面でデータを送信後くるくる回すやつ追加
-- login画面　login弾かれたときに通知
 - cardのbackdropで高さをレスポンシブに対応
 - setup_listにcreated_byカラム追加
 - registerの制限
