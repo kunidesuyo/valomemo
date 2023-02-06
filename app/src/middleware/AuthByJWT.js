@@ -1,5 +1,7 @@
 const JWT = require("jsonwebtoken");
 
+const JWTSecretKey = process.env.JWT_SECRET_KEY
+
 module.exports = async (req, res, next) => {
   const auth = false;
 
@@ -16,7 +18,7 @@ module.exports = async (req, res, next) => {
     ]);
   } else {
     try {
-      let username = await JWT.verify(token, "SECRET_KEY");
+      let username = await JWT.verify(token, JWTSecretKey);
       console.log(username);
       console.log("token認証成功")
       next();

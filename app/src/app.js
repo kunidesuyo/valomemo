@@ -355,8 +355,11 @@ app.get('/imgur-test', async (req, res) => {
 
 });
 
+const JWTSecretKey = process.env.JWT_SECRET_KEY
+
 app.post('/api/login', (req, res) => {
   console.log(req.body);
+  //console.log("secret key", JWTSecretKey);
   const username = req.body.username;
   const password = req.body.password;
   connection.query(
@@ -389,7 +392,7 @@ app.post('/api/login', (req, res) => {
             username,
           },
           //.envで管理
-          "SECRET_KEY",
+          JWTSecretKey,
           {
             expiresIn: "1h",
           }
@@ -464,7 +467,7 @@ app.post('/api/register', async (req, res) => {
               username,
             },
             //.envで管理
-            "SECRET_KEY",
+            JWTSecretKey,
             {
               expiresIn: "1h",
             }
@@ -497,7 +500,7 @@ app.post("/api/logout", (req, res) => {
     ]);
   } else {
     try {
-      let username = await JWT.verify(token, "SECRET_KEY");
+      let username = await JWT.verify(token, JWTSecretKey);
       console.log(username);
       console.log("認証されています");
       res.status(200).json([
