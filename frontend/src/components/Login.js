@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { IsLoginContext } from '../IsLoginProvider';
 import { TitleContext } from '../TitleProvider';
@@ -15,6 +15,11 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Collapse from '@mui/material/Collapse';
+
+
 
 //muiのテンプレートから
 
@@ -22,6 +27,8 @@ import Container from '@mui/material/Container';
 export default function Login() {
   const [isLogin, setIsLogin] = useContext(IsLoginContext);
   const [title, setTitle] = useContext(TitleContext);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   axios.defaults.withCredentials = true;
   let navigate = useNavigate();
@@ -61,11 +68,20 @@ export default function Login() {
       navigate('/read');
     })
     .catch((err) => {
-      console.log(err);
+      console.log(err.response.data[0].message);
+      setErrorMessage(err.response.data[0].message);
+      setOpenAlert(true);
     })
   };
 
   return (
+    <>
+    <Collapse in={openAlert}>
+    <Alert severity="error" sx={{mt: 2, ml: 1, mr: 1}}>
+      <AlertTitle>Error</AlertTitle>
+      {errorMessage}
+    </Alert>
+    </Collapse>
     <Container maxWidth="md">
       <Box
         sx={{
@@ -109,5 +125,6 @@ export default function Login() {
         </Box>
       </Box>
     </Container>
+    </>
   );
 }
