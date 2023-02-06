@@ -48,26 +48,37 @@ export default function Read() {
 
   return (
     <>
-      <Container maxWidth="lg">
-        {/* <Typography variant="h2">Read</Typography> */}
-        <Button
-          variant="contained"
-          component={Link}
-          to="/create"
-          state={{createOrUpdate: "create"}}
+      <Button
+        variant="contained"
+        component={Link}
+        to="/create"
+        state={{createOrUpdate: "create"}}
+      >
+        新規作成
+      </Button>
+      <Container maxWidth="lg" sx={{mt: 5, mb: 5}}>
+        <Grid
+          container
+          alignItems="center"
+          justify="center"
+          spacing={{ xs: 2, md: 3 }}
         >
-          新規作成
-        </Button>
-        {setups.map((setup) => {
-          return (
-            <SetupCard
-              setup={setup}
-              detectDelete={detectDelete}
-              setDetectDelete={setDetectDelete}
-              key={setup.id}
-            />            
-          )
-        })}
+          {setups.map((setup) => {
+            return (
+              <Grid
+                item
+                xs={12} sm={6} md={4} lg={3} xl={2}
+                key={setup.id}
+              >
+                <SetupCard
+                  setup={setup}
+                  detectDelete={detectDelete}
+                  setDetectDelete={setDetectDelete}
+                />
+              </Grid>   
+            )
+          })}
+        </Grid>
       </Container>
     </>
   )

@@ -25,8 +25,7 @@
 - mysqlの起動が遅いのでなにか良い方法がないか探す
 - テストをどうするか
 
-- read画面の表示を整える
-- cardのレイアウトを整える
+- cardのbackdrop
 
 - secretkeyを.envで設定
 - setup_listにcreated_byカラム追加
