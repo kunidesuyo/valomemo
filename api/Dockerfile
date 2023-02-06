@@ -2,7 +2,7 @@
 From node:19.3.0-alpine
 # コードを置くディレクトリに移動
 # 移動しないとnpm install でエラーになる
-WORKDIR /usr/app
+WORKDIR /usr/api
 COPY package*.json ./
 RUN npm install
 COPY ./src ./src

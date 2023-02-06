@@ -35,10 +35,10 @@ connection.connect((error) => {
 app.set('view engine', 'ejs');
 
 // viewsの参照先を変更
-app.set('views', '/usr/app/src/views');
+app.set('views', '/usr/api/src/views');
 
 //cssとimageを使用可能にする
-app.use(express.static('/usr/app/src/public'));
+app.use(express.static('/usr/api/src/public'));
 
 //フォームの値を受け取るための文
 app.use(express.urlencoded({extended: false, limit: '20mb'}));
@@ -70,7 +70,7 @@ const uploadImageForImgur = handleImgurApi.uploadImageForImgur;
 const getNowTokens = handleImgurApi.getNowTokens;
 const deleteImageForImgur = handleImgurApi.deleteImageForImgur;
 
-const common_info = JSON.parse(fs.readFileSync("/usr/app/common_info/common_info.json"));
+const common_info = JSON.parse(fs.readFileSync("/usr/api/common_info/common_info.json"));
   
 
 //let access_token = "";
@@ -347,7 +347,7 @@ app.get('/imgur-test', async (req, res) => {
 
 
 
-  //const image = fs.readFileSync('/usr/app/src/testdata/test1-3.png', 'base64');
+  //const image = fs.readFileSync('/usr/api/src/testdata/test1-3.png', 'base64');
   //const image_url = "https://i.imgur.com/f3hTO3S.png";
   //deleteImageForImgur(image_url);
 
