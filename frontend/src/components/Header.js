@@ -3,7 +3,7 @@ import React, { useEffect, useContext } from 'react';
 import { IsLoginContext } from '../IsLoginProvider';
 import { TitleContext } from '../TitleProvider';
 
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, Link } from 'react-router-dom';
 
 
 import axios from 'axios';
@@ -20,6 +20,10 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
+import Button from '@mui/material/Button'
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+
+
 
 export default function MenuAppBar() {
   //MUI公式の例をそのまま使用
@@ -86,6 +90,16 @@ export default function MenuAppBar() {
           {isLogin && (
             <div>
               <IconButton
+                variant="contained"
+                component={Link}
+                to="/create"
+                state={{createOrUpdate: "create"}}
+                size="large"
+                sx={{mr: 1}}
+              >
+                <AddCircleOutlineIcon />
+              </IconButton>
+              <IconButton
                 size="large"
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
@@ -99,17 +113,18 @@ export default function MenuAppBar() {
                 id="menu-appbar"
                 anchorEl={anchorEl}
                 anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
+                  vertical: 'bottom',
+                  horizontal: 'center',
                 }}
                 keepMounted
                 transformOrigin={{
                   vertical: 'top',
-                  horizontal: 'right',
+                  horizontal: 'center',
                 }}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
+                <MenuItem onClick={handleClose}>My Page</MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>
