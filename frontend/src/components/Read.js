@@ -48,14 +48,6 @@ export default function Read() {
 
   return (
     <>
-      <Button
-        variant="contained"
-        component={Link}
-        to="/create"
-        state={{createOrUpdate: "create"}}
-      >
-        新規作成
-      </Button>
       <Container maxWidth="lg" sx={{mt: 5, mb: 5}}>
         <Grid
           container
