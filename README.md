@@ -25,9 +25,8 @@
 - mysqlの起動が遅いのでなにか良い方法がないか探す
 - テストをどうするか
 
-- cardのbackdrop
+- cardのbackdropで高さをレスポンシブに対応
 
-- secretkeyを.envで設定
 - setup_listにcreated_byカラム追加
 - registerの制限
 
