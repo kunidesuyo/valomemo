@@ -131,6 +131,7 @@ export default function Create() {
         console.log(err);
         //エラーアラート表示
         //リダイレクト
+        navigate('/login');
       })
     }
   }
@@ -154,6 +155,10 @@ export default function Create() {
         //readにリダイレクト
         //console.log(res);
         navigate('/read');
+      })
+      .catch((error) => {
+        console.log(error);
+        navigate('/login');
       })
     }
   }

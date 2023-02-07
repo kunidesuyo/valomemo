@@ -110,7 +110,7 @@ app.get('/api/read', auth, (req, res) => {
   )
 });
 
-app.post('/api/create', async (req, res) => {
+app.post('/api/create', auth, async (req, res) => {
   console.log('-----------api create start------------');
   //バリデーションチェック追加予定
 
@@ -243,7 +243,7 @@ app.post('/api/create', async (req, res) => {
 
 });
 
-app.put('/api/update', (req, res) => {
+app.put('/api/update', auth, (req, res) => {
   console.log('---------connect-----------')
   console.log(req.body);
   console.log('---------connect-----------')
@@ -292,7 +292,7 @@ app.put('/api/update', (req, res) => {
   )
 });
 
-app.delete('/api/delete/:id', async (req, res) => {
+app.delete('/api/delete/:id', auth, async (req, res) => {
   //メモを削除する処理
   console.log('---------delete--------');
   console.log(req.params.id);

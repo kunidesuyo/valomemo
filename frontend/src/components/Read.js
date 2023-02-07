@@ -43,6 +43,10 @@ export default function Read() {
         console.log(res.data);
         setSetups(res.data);
       })
+      .catch((error) => {
+        console.log(error);
+        navigate('/login');
+      })
     }
   }, [detectDelete]);
 

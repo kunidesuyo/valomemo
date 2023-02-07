@@ -18,7 +18,11 @@ export default function Delete(props) {
     .then((res) => {
       console.log(res);
       console.log('delete complete')
-    });
+    })
+    .catch((error) => {
+      console.log(error);
+      navigate('/login');
+    })
     console.log('before ' + props.detectDelete);
     props.setDetectDelete((props.detectDelete + 1) % 2);
     console.log('after ' + props.detectDelete);
