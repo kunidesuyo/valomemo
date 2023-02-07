@@ -23,6 +23,9 @@ import ImageListItem from '@mui/material/ImageListItem';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormHelperText from '@mui/material/FormHelperText';
+import LoadingButton from '@mui/lab/LoadingButton';
+import AddIcon from '@mui/icons-material/Add';
+
 
 
 import { CommonInfoContext } from '../CommonInfoProvider';
@@ -65,6 +68,7 @@ export default function Create() {
   const [isInvalidInput, setIsInvalidInput] = useState(initIsInvalidInput);
   const [abilityIcons, setAbilityIcons] = useState(initAbilityIcons);
   const [title, setTitle] = useContext(TitleContext);
+  const [loading, setLoading] = useState(false);
 
   if(displayPage === "create") {
     setTitle("create");
@@ -106,9 +110,10 @@ export default function Create() {
     //??? stateを更新したあとstateを参照しても更新前のまま
     const isInvalid = validateInputData();
     if(isInvalid) {
-      console.log("invalid input")
+      console.log("invalid input");
     } else {
-      console.log("validate ok !!!")
+      console.log("validate ok !!!");
+      setLoading(true);
       var params = new URLSearchParams();
       Object.entries(setupElements).map(([key, value]) => {
         if(key !== "id") {
@@ -124,24 +129,33 @@ export default function Create() {
       })
       .catch((err) => {
         console.log(err);
+        //エラーアラート表示
+        //リダイレクト
       })
     }
   }
 
   const updateData = () => {
-    var params = new URLSearchParams();
-    Object.entries(setupElements).map(([key, value]) => {
-      params.append([key], value);
-    })
-    /*params.append("id", id);
-    params.append("content", content);*/
-    console.log('send');
-    axios.put('api/update', params)
-    .then((res) => {
-      //readにリダイレクト
-      //console.log(res);
-      navigate('/read');
-    })
+    const isInvalid = validateInputData();
+    if(isInvalid) {
+      console.log("invalid input");
+    } else {
+      console.log("validate ok !!!");
+      setLoading(true);
+      var params = new URLSearchParams();
+      Object.entries(setupElements).map(([key, value]) => {
+        params.append([key], value);
+      })
+      /*params.append("id", id);
+      params.append("content", content);*/
+      console.log('send');
+      axios.put('api/update', params)
+      .then((res) => {
+        //readにリダイレクト
+        //console.log(res);
+        navigate('/read');
+      })
+    }
   }
 
 
@@ -226,7 +240,14 @@ export default function Create() {
     return (
       <Box sx={{marginTop:1, marginBottom: 1}}>
         <FormControl fullWidth>
-          <Button variant="contained" onClick={postData}>作成</Button>
+          <LoadingButton
+            variant="contained"
+            onClick={postData}
+            loading={loading}
+            loadingIndicator="作成中…"
+          >
+            作成
+          </LoadingButton>
         </FormControl>
       </Box>
     )
@@ -236,7 +257,14 @@ export default function Create() {
     return (
       <Box sx={{marginTop:1, marginBottom: 1}}>
         <FormControl fullWidth>
-          <Button variant="contained" onClick={updateData}>更新</Button>
+          <LoadingButton
+          variant="contained"
+          onClick={updateData}
+          loading={loading}
+          loadingIndicator="更新中…"
+        >
+          更新
+        </LoadingButton>
         </FormControl>
       </Box>
     )
@@ -369,7 +397,6 @@ export default function Create() {
         
         {/* createならアップロードフォーム、updateなら登録されている画像を表示 */}
         {/*uploadImageFormList()*/}
-        {console.log(displayPage)}
         {(() => {
           if(displayPage === "create") {
             return uploadImageFormList();
