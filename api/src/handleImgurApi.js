@@ -47,14 +47,14 @@ const uploadImageForImgur = async (base64_image) => {
 }
 
 const getNowTokens = () => {
-  const access_token = fs.readFileSync("/usr/app/data_backups/Imgur_API_tokens/access_token.txt");
-  const refresh_token = fs.readFileSync("/usr/app/data_backups/Imgur_API_tokens/refresh_token.txt");
+  const access_token = fs.readFileSync("/usr/api/data_backups/Imgur_API_tokens/access_token.txt");
+  const refresh_token = fs.readFileSync("/usr/api/data_backups/Imgur_API_tokens/refresh_token.txt");
   return [access_token, refresh_token];
 }
 
 const updateTokens = (access_token, refresh_token) => {
-  fs.writeFileSync("/usr/app/data_backups/Imgur_API_tokens/access_token.txt", access_token);
-  fs.writeFileSync("/usr/app/data_backups/Imgur_API_tokens/refresh_token.txt", refresh_token);
+  fs.writeFileSync("/usr/api/data_backups/Imgur_API_tokens/access_token.txt", access_token);
+  fs.writeFileSync("/usr/api/data_backups/Imgur_API_tokens/refresh_token.txt", refresh_token);
 }
 
 const deleteImageForImgur = async (image_url) => {
