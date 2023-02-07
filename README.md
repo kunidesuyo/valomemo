@@ -24,7 +24,6 @@
 # TODO
 
 
-- create画面でデータを送信後くるくる回すやつ追加
 - cardのbackdropで高さをレスポンシブに対応
 - setup_listにcreated_byカラム追加
 - registerの制限
