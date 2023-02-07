@@ -473,7 +473,7 @@ app.post('/api/register', async (req, res) => {
             }
             );
             res.cookie('token', token, {httpOnly: true});
-            return res.json({token});
+            return res.status(200).json([{message: "アカウントの登録が完了しました"}]);
           }
         }
       )
