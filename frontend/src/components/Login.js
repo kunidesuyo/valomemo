@@ -74,6 +74,10 @@ export default function Login() {
     })
   };
 
+  const goRegister = () => {
+    navigate('/register');
+  }
+
   return (
     <>
     <Collapse in={openAlert}>
@@ -123,6 +127,7 @@ export default function Login() {
             Login
           </Button>
         </Box>
+        <Button onClick={goRegister}>register</Button>
       </Box>
     </Container>
     </>

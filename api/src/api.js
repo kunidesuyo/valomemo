@@ -420,6 +420,9 @@ app.post('/api/login', (req, res) => {
   )
 });
 
+//環境変数で管理
+const max_num_of_user = process.env.MAX_NUM_OF_USER
+
 
 app.post('/api/register', async (req, res) => {
   console.log("register");
@@ -437,46 +440,49 @@ app.post('/api/register', async (req, res) => {
     async (error, results) => {
       if(results.length > 0) {
         console.log("ユーザーが既に存在している")
-        return res.status(400).json([
-          {
-            message: "すでにそのユーザーは存在しています"
-          }
-        ])
+        return res.status(400).json([{message: "すでにその名前のユーザーは存在します"}]);
       }
-      console.log("ユーザーが存在しないので登録が可能です");
-      let hashedPassword = await bcrypt.hash(password, 10);
-      //console.log(hashedPassword)
-//
-      // dbへ保存する
+      console.log("同じ名前のユーザーは存在しない");
       connection.query(
-        'INSERT INTO users (username, password) VALUES (?, ?)',
-        [username, hashedPassword],
+        'SELECT * FROM users',
         async (error, results) => {
-          if(error) {
-            console.log("db error");
-            console.log(error);
-            res.status(400).json([
-              {
-                message: "DBへの保存に失敗しました"
-              }
-            ])
-          } else {
-            console.log("dbへの保存完了");
-            //token発行
-            const token = await JWT.sign({
-              username,
-            },
-            //.envで管理
-            JWTSecretKey,
-            {
-              expiresIn: "1h",
-            }
-            );
-            res.cookie('token', token, {httpOnly: true});
-            return res.status(200).json([{message: "アカウントの登録が完了しました"}]);
+          console.log("result");
+          console.log(results);
+          console.log(results.length);
+          if(results.length >= max_num_of_user) {
+            return res.status(400).json([{message: "これ以上ユーザーを作れません"}]);
           }
+          let hashedPassword = await bcrypt.hash(password, 10);
+          //console.log(hashedPassword)
+          // dbへ保存する
+          connection.query(
+            'INSERT INTO users (username, password) VALUES (?, ?)',
+            [username, hashedPassword],
+            async (error, results) => {
+              if(error) {
+                console.log("db error");
+                console.log(error);
+                return res.status(400).json([{message: "DBへの保存に失敗しました"}]);
+              } else {
+                console.log("dbへの保存完了");
+                //token発行
+                const token = await JWT.sign({
+                  username,
+                },
+                //.envで管理
+                JWTSecretKey,
+                {
+                  expiresIn: "1h",
+                }
+                );
+                res.cookie('token', token, {httpOnly: true});
+                return res.status(200).json([{message: "アカウントの登録が完了しました"}]);
+              }
+            }
+          )
         }
       )
+      
     }
   )
 });

@@ -13,7 +13,7 @@
 - 画面へのアクセスの際localStorageの"isLogin"をみてアクセス制御。
   - trueの場合はそのまま表示。
     - JWTが有効の場合はapiと通信できる。
-    - JWTが無効の場合はlogin画面に誘導(未実装)
+    - JWTが無効の場合はlogin画面に誘導
   - falseの場合はlogin画面へ遷移
 
 - ログアウト時にcookieを削除

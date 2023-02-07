@@ -1,4 +1,7 @@
-import * as React from 'react';
+import React, { useContext, useState } from 'react';
+
+import { IsLoginContext } from '../IsLoginProvider';
+
 
 import { useNavigate } from 'react-router-dom';
 
@@ -11,12 +14,19 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Collapse from '@mui/material/Collapse';
 
 //muiのテンプレートから
 
 
 
 export default function Register() {
+  const [isLogin, setIsLogin] = useContext(IsLoginContext);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   axios.defaults.withCredentials = true;
 
   let navigate = useNavigate();
@@ -38,15 +48,27 @@ export default function Register() {
     params.append("password", password);
     axios.post('api/register', params)
     .then((res) => {
+      console.log("登録完了 readにリダイレクトします")
       console.log(res);
+      localStorage.setItem("isLogin", "true");
+      setIsLogin(true);
       navigate('/read');
     })
     .catch((err) => {
       console.log(err);
+      setErrorMessage(err.response.data[0].message);
+      setOpenAlert(true);
     })
   };
 
   return (
+    <>
+    <Collapse in={openAlert}>
+    <Alert severity="error" sx={{mt: 2, ml: 1, mr: 1}}>
+      <AlertTitle>Error</AlertTitle>
+      {errorMessage}
+    </Alert>
+    </Collapse>
     <Container maxWidth="md">
       <Box
         sx={{
@@ -90,5 +112,6 @@ export default function Register() {
         </Box>
       </Box>
     </Container>
+    </>
   );
 }
