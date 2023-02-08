@@ -31,7 +31,7 @@ export default function Read() {
   
   let navigate = useNavigate();
   useEffect(() => {
-    console.log("login username: " + loginUsername);
+    //console.log("login username: " + loginUsername);
     setTitle("Read");
 
     //ページリロードをするとstateが消えるのでlocalStorageから持ってくる

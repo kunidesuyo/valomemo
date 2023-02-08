@@ -14,7 +14,12 @@ export default function Delete(props) {
     //console.log(props.id);
     /*var params = new URLSearchParams();
     params.append("id", props.id);*/
-    await axios.delete(`api/delete/${props.id}`)
+    //ログインしているユーザーとセットアップの作成者が違ったら弾く
+    if(props.setup.created_by !== localStorage.getItem("username")) {
+      console.log("作成したユーザーではないため削除できません");
+      navigate('/read');
+    }
+    await axios.delete(`api/delete/${props.setup.id}`)
     .then((res) => {
       console.log(res);
       console.log('delete complete')

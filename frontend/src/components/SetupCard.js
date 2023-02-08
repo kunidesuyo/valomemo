@@ -130,7 +130,7 @@ export default function SetupCard(props) {
                 >
                   編集
                 </Button>
-                <Delete id={setup.id} detectDelete={props.detectDelete} setDetectDelete={props.setDetectDelete}/>
+                <Delete setup={setup} detectDelete={props.detectDelete} setDetectDelete={props.setDetectDelete}/>
               </Grid>
             </Grid>
             

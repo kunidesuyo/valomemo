@@ -8,7 +8,8 @@
     "position_image",
     "aim_image",
     "landing_image",
-    "description"
+    "description",
+    "created_by"
   ],
 
   "map_names": [

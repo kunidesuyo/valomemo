@@ -88,6 +88,15 @@ export default function CreateUpdate() {
       navigate('/login');
     }
     console.log("ログインしています");
+    //updateで編集するsetupのcreated_byとログインしているユーザーが違ったら弾く
+    if(displayPage === "update") {
+      console.log("setup created by: " + setupElements.created_by);
+      console.log("login username: " + localStorage.getItem("username"));
+      if(setupElements.created_by !== localStorage.getItem("username")) {
+        console.log("作成したユーザーではないため編集できません");
+        navigate('/read');
+      }
+    }
     //title設定
     if(displayPage === "create") {
       setTitle("Create");
@@ -100,7 +109,7 @@ export default function CreateUpdate() {
     let isInvalid = false;
     let updateIsInvalidInput = {};
     commonInfo.setup_list_column_name.map((key) => {
-      if(key !== "id" && setupElements[key] === "") {
+      if((key !== "id" && key !== "created_by") && setupElements[key] === "") {
         updateIsInvalidInput[key] = true;
         isInvalid = true;
       } else {
@@ -111,6 +120,7 @@ export default function CreateUpdate() {
     return isInvalid;
   }
 
+  //処理がほぼ一緒なのでupdateDataとまとめる
   const postData = () => {
     //??? stateを更新したあとstateを参照しても更新前のまま
     const isInvalid = validateInputData();
@@ -121,7 +131,7 @@ export default function CreateUpdate() {
       setLoading(true);
       var params = new URLSearchParams();
       Object.entries(setupElements).map(([key, value]) => {
-        if(key !== "id") {
+        if(key !== "id" || key !== "created_by") {
           params.append([key], value);
         }
       })
@@ -163,6 +173,7 @@ export default function CreateUpdate() {
       })
       .catch((error) => {
         console.log(error);
+        //ログアウト処理
         navigate('/login');
       })
     }

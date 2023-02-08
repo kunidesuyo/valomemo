@@ -189,7 +189,7 @@ app.post('/api/create', auth, async (req, res) => {
     if(i !== len-2) createQuery += ',';
   }
   createQuery += ')'
-  console.log(createQuery);
+  //console.log(createQuery);
 
   let insertData = {};
 
@@ -204,21 +204,34 @@ app.post('/api/create', auth, async (req, res) => {
   insertData["aim_image"] = aim_image_url;
   insertData["landing_image"] = landing_image_url;
 
-  console.log(Object.values(insertData));
 
-  connection.query(
-    createQuery,
-    Object.values(insertData),
-    (error, results) => {
-      if(error) {
-        console.log(error)
-        res.send(error);
-      } else {
-        console.log('insert new data success')
-        res.send(results);
-      }
+  JWT.verify(req.cookies.token, JWTSecretKey, (error, decode) => {
+    if(error) {
+      console.log("token認証失敗")
+      return res.status(400).json([{message: "tokenが一致しません",},]);
     }
-  )
+    insertData["created_by"] = decode.username;
+    //console.log(Object.values(insertData));
+    console.log("createQuery: " + createQuery);
+    console.log("insertData: ");
+    console.log(insertData);
+    connection.query(
+      createQuery,
+      Object.values(insertData),
+      (error, results) => {
+        if(error) {
+          console.log(error)
+          res.send(error);
+        } else {
+          console.log('insert new data success')
+          res.send(results);
+        }
+      }
+    )
+  })
+  
+
+
 
 
   /*
@@ -243,53 +256,82 @@ app.post('/api/create', auth, async (req, res) => {
 
 });
 
-app.put('/api/update', auth, (req, res) => {
-  console.log('---------connect-----------')
-  console.log(req.body);
-  console.log('---------connect-----------')
+app.put('/api/update', auth, async (req, res) => {
+  console.log('---------update-----------')
+  //console.log(req.body);
   //console.log(Object.values(req.body))
   //console.log(req.body.content);
 
-  /* queryを作る */
-  let updateQuery = 'UPDATE ' + table_name + ' SET ';
-  let len = common_info.setup_list_column_name.length;
-  for(let i = 0; i < len; i++) {
-    if(common_info.setup_list_column_name[i] !== "id") {
-      updateQuery += common_info.setup_list_column_name[i];
-      updateQuery += '=?';
-      if(i !== len-1) updateQuery += ',';
-      updateQuery += ' ';
+  /* requestしたユーザーと更新するセットアップのcreated_byが一致するか検証 */
+  await JWT.verify(req.cookies.token, JWTSecretKey, (error, decode) => {
+    if(error) {
+      console.log("token認証失敗")
+      return res.status(400).json([{message: "tokenが一致しません",},]);
     }
-  }
-  updateQuery += 'WHERE id=?'
-  console.log(updateQuery);
+    connection.query(
+      'SELECT * from ' + table_name + ' where id=?',
+      [req.body.id],
+      (db_error, result) => {
+        if(db_error) {
+          console.log("dbエラー");
+          console.log(db_error);
+          return res.status(400).json([{message: "dbエラー",},]);
+        }
+        console.log("db createdby--------------------------")
+        console.log(result[0].created_by);
+        console.log("decode username------------------")
+        console.log(decode.username);
+        if(result[0].created_by !== decode.username){
+          console.log("作成したユーザーではないため更新できません")
+          return res.status(400).json([{message: "作成したユーザーではないため更新できません",},]);
+        } else {
+          /* queryを作る */
+          let updateQuery = 'UPDATE ' + table_name + ' SET ';
+          let len = common_info.setup_list_column_name.length;
+          for(let i = 0; i < len; i++) {
+            if(common_info.setup_list_column_name[i] !== "id") {
+              updateQuery += common_info.setup_list_column_name[i];
+              updateQuery += '=?';
+              if(i !== len-1) updateQuery += ',';
+              updateQuery += ' ';
+            }
+          }
+          updateQuery += 'WHERE id=?'
+          console.log(updateQuery);
 
-  let insertData = {};
+          let insertData = {};
 
-  common_info.setup_list_column_name.map((key) => {
-    if(key !== "id") {
-      insertData[key] = req.body[key];
-    }
-  });
-  insertData["id"] = req.body["id"];
+          common_info.setup_list_column_name.map((key) => {
+            if(key !== "id") {
+              insertData[key] = req.body[key];
+            }
+          });
+          insertData["id"] = req.body["id"];
 
-  console.log(insertData);
-  console.log(Object.values(insertData));
+          console.log(insertData);
+          console.log(Object.values(insertData));
 
-  connection.query(
-    updateQuery,
-    Object.values(insertData),
-    (error, results) => {
-      if(error) {
-        console.log('error')
-        console.log(error);
-        res.send(error);
-      } else {
-        console.log('success');
-        res.send(results);
+          connection.query(
+            updateQuery,
+            Object.values(insertData),
+            (error, results) => {
+              if(error) {
+                console.log('error')
+                console.log(error);
+                res.send(error);
+              } else {
+                console.log('success');
+                res.send(results);
+              }
+            }
+          )
+        }
       }
-    }
-  )
+    )
+
+  })
+
+  
 });
 
 app.delete('/api/delete/:id', auth, async (req, res) => {
@@ -300,37 +342,51 @@ app.delete('/api/delete/:id', auth, async (req, res) => {
   await connection.query(
     'SELECT * FROM ' + table_name + ' WHERE id=?',
     [req.params.id],
-    async (error, result) => {
-      if(error) {
-        console.log("error");
-        console.log(error);
+    async (db_error, result) => {
+      if(db_error) {
+        console.log("db error");
+        console.log(db_error);
       } else {
-        console.log("success");
-        //console.log(result);
-        const setupData = result[0];      
-        //console.log(setupData);
-        //console.log(setupData.position_image);
-        //console.log(setupData.aim_image);
-        //console.log(setupData.landing_image);
-        //apiに削除要請
-        await deleteImageForImgur(setupData.position_image);
-        await deleteImageForImgur(setupData.aim_image);
-        await deleteImageForImgur(setupData.landing_image);
+        console.log("query success");
+        const setupData = result[0];
+        
+        await JWT.verify(req.cookies.token, JWTSecretKey, async (error, decode) => {
+          if(error) {
+            console.log("token認証失敗")
+            return res.status(400).json([{message: "tokenが一致しません",},]);
+          }
+          //削除するセットアップのcreated_byとリクエストしたユーザーが一致するか判定
+          if(setupData.created_by !== decode.username) {
+            console.log("作成したユーザーではないため削除できません。");
+            return res.status(400).json([{message: "作成したユーザーではないため削除できません。",},]);
+          } else {
+            console.log("作成したユーザーなので対象のデータを削除します");
+            //apiに削除要請
+            await deleteImageForImgur(setupData.position_image);
+            await deleteImageForImgur(setupData.aim_image);
+            await deleteImageForImgur(setupData.landing_image);
+            //dbから削除
+            connection.query(
+              'DELETE FROM ' + table_name + ' WHERE id=?',
+              [req.params.id],
+              (error, results) => {
+                if(error) {
+                  res.send(error);
+                } else {
+                  console.log("削除成功");
+                  res.send(results);
+                }
+              }
+            );
+          }
+          
+        })
+        
       }
     }
   );
 
-  connection.query(
-    'DELETE FROM ' + table_name + ' WHERE id=?',
-    [req.params.id],
-    (error, results) => {
-      if(error) {
-        res.send(error);
-      } else {
-        res.send(results);
-      }
-    }
-  );
+
 });
 
 
