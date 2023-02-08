@@ -8,23 +8,20 @@
 
 ## アカウント管理
 - ログイン時にJWTを発行してcookieに保存する。(有効期限は1h)
-- localStorageにて"isLogin"を"true"(boolean型ではなく文字列なので注意)にする
+- localStorageの"username"にユーザー名を入れる
 
-- 画面へのアクセスの際localStorageの"isLogin"をみてアクセス制御。
-  - trueの場合はそのまま表示。
+- 画面へのアクセスの際localStorageの"username"をみてアクセス制御。
+  - 入っていた場合はそのまま表示。
     - JWTが有効の場合はapiと通信できる。
     - JWTが無効の場合はlogin画面に誘導
-  - falseの場合はlogin画面へ遷移
+  - 空の場合はlogin画面へ遷移
 
 - ログアウト時にcookieを削除
-- localStorageの"isLogin"を"false"にする。
+- localStorageの"username"を""(空)にする。
 - api側でJWTを無効化(未実装)
 
 
 # TODO
-
-- localStorageで管理しているログイン状態をstateで管理するように変更してみる。
-  - ログイン状態はbooleanではなくユーザー名にする
 
 - setup_listにcreated_byカラム追加
   - api
@@ -63,5 +60,6 @@
   - 作成したmylistの表示
 - search画面
 - mylist機能
+- userの権限を実装
 - サイトの使い方
 
