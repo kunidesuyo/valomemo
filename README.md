@@ -20,9 +20,6 @@
 - localStorageの"isLogin"を"false"にする。
 - api側でJWTを無効化(未実装)
 
-### 修正案
-- localStorageではなくstateで管理。contextでコンポーネントからアクセスできるようにする。
-
 
 # TODO
 
@@ -31,10 +28,18 @@
 
 - setup_listにcreated_byカラム追加
   - api
+    - create作成時にcreated_byに書き込むように変更
+    - readでcreated_byも読み込むようにする。
     - updateでユーザー名が一致しなかったら弾く
     - deleteでユーザー名が一致しなかったら弾く
   - frontend
-    - ユーザー名が一致しないセットアップでは編集、削除ボタンを表示しないようにする
+    - read画面
+      - created_byを受け取る
+      - ユーザー名が一致しないセットアップでは編集、削除ボタンを表示しないようにする
+    - create画面(ユーザー名はapi側でやるので特に編集する必要なし？)
+    - update画面　ユーザー名が一致しない場合は弾く(read画面に遷移)
+    - delete機能　ユーザー名が一致しない場合は弾く(read画面に遷移)
+
 
 - dbデータ永続化
   - dbデータを定期的にバックアップ(cron)
