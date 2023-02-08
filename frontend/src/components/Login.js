@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-import { IsLoginContext } from '../IsLoginProvider';
+import { LoginUsernameContext } from '../LoginUsernameProvider';
 import { TitleContext } from '../TitleProvider';
 
 import { useNavigate } from 'react-router-dom';
@@ -25,7 +25,7 @@ import Collapse from '@mui/material/Collapse';
 
 
 export default function Login() {
-  const [isLogin, setIsLogin] = useContext(IsLoginContext);
+  const [loginUsername, setLoginUsername] = useContext(LoginUsernameContext)
   const [title, setTitle] = useContext(TitleContext);
   const [openAlert, setOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -35,10 +35,11 @@ export default function Login() {
 
   useEffect(() => {
     setTitle("Login");
-    const result = localStorage.getItem("isLogin");
-    if(result === "true") {
+    //const result = localStorage.getItem("isLogin");
+    console.log("localStorage: " + localStorage.getItem("username"));
+    if(loginUsername) {
       //ログイン済みなのでreadに遷移
-      setIsLogin(true);
+      //setIsLogin(true);
       navigate('/read');
     }
   }, [])
@@ -61,10 +62,13 @@ export default function Login() {
     params.append("password", password);
     axios.post('api/login', params)
     .then((res) => {
-      console.log(res);
+      console.log(res.data[0].username);
       //ローカルストレージにログイン状態を保存
-      localStorage.setItem("isLogin", "true");
-      setIsLogin(true);
+      localStorage.setItem("username", res.data[0].username);
+      //setIsLogin(true);
+
+      //resに入っているusernameを入れる
+      setLoginUsername(res.data[0].username);
       navigate('/read');
     })
     .catch((err) => {

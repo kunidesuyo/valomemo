@@ -403,7 +403,8 @@ app.post('/api/login', (req, res) => {
           res.cookie('token', token, {httpOnly: true});
           return res.status(200).json([
             {
-              message: "ログインに成功しました"
+              message: "ログインに成功しました",
+              username: username,
             }
           ]);
         }
@@ -421,7 +422,8 @@ app.post('/api/login', (req, res) => {
 });
 
 //環境変数で管理
-const max_num_of_user = process.env.MAX_NUM_OF_USER
+const max_num_of_user = process.env.MAX_NUM_OF_USER;
+//const max_num_of_user = 100;
 
 
 app.post('/api/register', async (req, res) => {
@@ -476,7 +478,7 @@ app.post('/api/register', async (req, res) => {
                 }
                 );
                 res.cookie('token', token, {httpOnly: true});
-                return res.status(200).json([{message: "アカウントの登録が完了しました"}]);
+                return res.status(200).json([{message: "アカウントの登録が完了しました", username: username}]);
               }
             }
           )

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 
-import { IsLoginContext } from '../IsLoginProvider';
+import { LoginUsernameContext } from '../LoginUsernameProvider';
 
 
 import { useNavigate } from 'react-router-dom';
@@ -23,7 +23,7 @@ import Collapse from '@mui/material/Collapse';
 
 
 export default function Register() {
-  const [isLogin, setIsLogin] = useContext(IsLoginContext);
+  const [loginUsername, setLoginUsername] = useContext(LoginUsernameContext);
   const [openAlert, setOpenAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -50,8 +50,11 @@ export default function Register() {
     .then((res) => {
       console.log("登録完了 readにリダイレクトします")
       console.log(res);
-      localStorage.setItem("isLogin", "true");
-      setIsLogin(true);
+      //localStorage.setItem("isLogin", "true");
+      //setIsLogin(true);
+      //resに入っているusernameを格納
+      localStorage.setItem("username", res.data[0].username);
+      setLoginUsername(res.data[0].username);
       navigate('/read');
     })
     .catch((err) => {

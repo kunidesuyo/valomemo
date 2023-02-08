@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 
-import { IsLoginContext } from '../IsLoginProvider';
+import { LoginUsernameContext } from '../LoginUsernameProvider';
 import { TitleContext } from '../TitleProvider';
 
 import { Outlet, useNavigate, Link } from 'react-router-dom';
@@ -30,17 +30,19 @@ export default function MenuAppBar() {
 
 
   // const [isLogin, setIsLogin] = React.useState(false);
-  const [isLogin, setIsLogin] = useContext(IsLoginContext);
   const [title, setTitle] = useContext(TitleContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [loginUsername, setLoginUsername] = useContext(LoginUsernameContext)
+
 
   useEffect(() => {
-    const result = localStorage.getItem("isLogin");
+    setLoginUsername(localStorage.getItem("username"));
+    /*const result = localStorage.getItem("isLogin");
     if(result === "true") {
       setIsLogin(true);
     } else if (result === "false") {
       setIsLogin(false);
-    }  
+    }*/
   },[])
 
 
@@ -58,8 +60,8 @@ export default function MenuAppBar() {
     //cookieのtokenを削除
     axios.post('api/logout')
     .then((res) => {
-      localStorage.setItem("isLogin", "false");
-      setIsLogin(false);
+      localStorage.setItem("username", "");
+      setLoginUsername("");
       console.log("ログアウトしました");
       console.log(res);
       navigate('/login');
@@ -87,7 +89,7 @@ export default function MenuAppBar() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {title}
           </Typography>
-          {isLogin && (
+          {loginUsername && (
             <div>
               <IconButton
                 variant="contained"

@@ -29,9 +29,10 @@ import AddIcon from '@mui/icons-material/Add';
 
 
 import { CommonInfoContext } from '../CommonInfoProvider';
+import { LoginUsernameContext } from '../LoginUsernameProvider';
 
 
-export default function Create() {
+export default function CreateUpdate() {
   const location = useLocation();
   const displayPage = location.state.createOrUpdate;
   //context
@@ -69,12 +70,9 @@ export default function Create() {
   const [abilityIcons, setAbilityIcons] = useState(initAbilityIcons);
   const [title, setTitle] = useContext(TitleContext);
   const [loading, setLoading] = useState(false);
+  const [loginUsername, setLoginUsername] = useContext(LoginUsernameContext)
 
-  if(displayPage === "create") {
-    setTitle("create");
-  } else if(displayPage === "update"){
-    setTitle("update");
-  }
+
 
 
   //デバック
@@ -83,12 +81,19 @@ export default function Create() {
   let navigate = useNavigate();
   useEffect(() => {
     console.log("ログイン状態確認");
-    const isLogin = localStorage.getItem("isLogin");
-    if(isLogin === "false") {
+    //const isLogin = localStorage.getItem("isLogin");
+    setLoginUsername(localStorage.getItem("username"));
+    if(localStorage.getItem("username") === "") {
       console.log("ログインしていません");
       navigate('/login');
     }
     console.log("ログインしています");
+    //title設定
+    if(displayPage === "create") {
+      setTitle("Create");
+    } else if(displayPage === "update"){
+      setTitle("Update");
+    }
   },[]);
 
   const validateInputData = () => {
@@ -200,7 +205,7 @@ export default function Create() {
   const uploadImageForm = (props) => {
     //console.log("props: " + props)
     return (
-      <Box sx={{marginTop:1, marginBottom: 1}}>
+      <Box sx={{marginTop:1, marginBottom: 1}} key={props}>
         <Typography variant="h5">{props}</Typography>
         <FormControl error={isInvalidInput[props]}>
           <Button variant="contained" component="label" sx={{marginTop:1}}>
@@ -231,7 +236,7 @@ export default function Create() {
       <>
         {imageList.map((image) => {
           return (
-            <Box sx={{marginTop:1, marginBottom: 1}}>
+            <Box sx={{marginTop:1, marginBottom: 1}} key={image}>
               <Typography variant="h5">{image}</Typography>
               <img src={setupElements[image]} width="100%" sx={{marginTop:1}}/>
             </Box>

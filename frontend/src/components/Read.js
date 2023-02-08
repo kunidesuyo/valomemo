@@ -5,6 +5,7 @@ import Delete from './Delete';
 import SetupCard from './SetupCard';
 
 import { TitleContext } from '../TitleProvider';
+import { LoginUsernameContext } from '../LoginUsernameProvider';
 import { db_column_name, init_db_data, agent_names, map_names, skills } from '../db_info';
 
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -25,19 +26,22 @@ export default function Read() {
   const [setups, setSetups] = useState([]);
   const [detectDelete, setDetectDelete] = useState([0]);
   const [title, setTitle] = useContext(TitleContext);
+  const [loginUsername, setLoginUsername] = useContext(LoginUsernameContext)
+
   
   let navigate = useNavigate();
   useEffect(() => {
+    console.log("login username: " + loginUsername);
     setTitle("Read");
-    //console.log('detect delete')
-    //console.log("ログイン状態確認");
-    const isLogin = localStorage.getItem("isLogin");
-    //console.log("read " + isLogin);
-    if(isLogin === "false") {
-      //console.log("ログインしていません");
+
+    //ページリロードをするとstateが消えるのでlocalStorageから持ってくる
+    setLoginUsername(localStorage.getItem("username"));
+    
+    if(localStorage.getItem("username") === "") {
+      console.log("ログインしていません");
       navigate('/login');
     } else {
-      //console.log("ログインしています " + isLogin);
+      console.log("ログインしています " + loginUsername);
       axios.get('/api/read')
       .then((res) => {
         console.log(res.data);
@@ -48,6 +52,8 @@ export default function Read() {
         navigate('/login');
       })
     }
+
+    
   }, [detectDelete]);
 
   return (

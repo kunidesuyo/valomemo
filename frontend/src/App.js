@@ -13,7 +13,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
 import { CommonInfoProvider } from './CommonInfoProvider';
-import { IsLoginProvider } from './IsLoginProvider';
+import { LoginUsernameProvider } from './LoginUsernameProvider';
 import { TitleProvider } from './TitleProvider';
 
 
@@ -34,7 +34,7 @@ function App() {
   return (
     <>
     <TitleProvider>
-      <IsLoginProvider>
+      <LoginUsernameProvider>
         <CommonInfoProvider>
           <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -54,7 +54,7 @@ function App() {
             </Router>
           </ThemeProvider>
         </CommonInfoProvider>
-      </IsLoginProvider>
+      </LoginUsernameProvider>
       </TitleProvider>
     </>
   );
