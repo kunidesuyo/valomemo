@@ -20,14 +20,21 @@
 - localStorageの"isLogin"を"false"にする。
 - api側でJWTを無効化(未実装)
 
+### 修正案
+- localStorageではなくstateで管理。contextでコンポーネントからアクセスできるようにする。
+
 
 # TODO
 
+- localStorageで管理しているログイン状態をstateで管理するように変更してみる。
+  - ログイン状態はbooleanではなくユーザー名にする
 
 - setup_listにcreated_byカラム追加
-  - 自分が作ったセットアップしか操作できないようにする
-- login画面からregister画面に遷移できるようにする
-- registerの制限
+  - api
+    - updateでユーザー名が一致しなかったら弾く
+    - deleteでユーザー名が一致しなかったら弾く
+  - frontend
+    - ユーザー名が一致しないセットアップでは編集、削除ボタンを表示しないようにする
 
 - dbデータ永続化
   - dbデータを定期的にバックアップ(cron)
