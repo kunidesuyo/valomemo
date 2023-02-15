@@ -114,7 +114,7 @@ app.get('/api/read', auth, (req, res) => {
   Setup.findAll()
   .then((result) => {
     console.log("read success");
-    console.log(result);
+    //console.log(result);
     res.send(result);
   })
   .catch((error) => {
@@ -291,80 +291,56 @@ app.post('/api/create', auth, async (req, res) => {
 
 app.put('/api/update', auth, async (req, res) => {
   console.log('---------update-----------')
-  //console.log(req.body);
-  //console.log(Object.values(req.body))
-  //console.log(req.body.content);
 
-  /* requestしたユーザーと更新するセットアップのcreated_byが一致するか検証 */
+  // requestしたユーザーと更新するセットアップのcreated_byが一致するか検証
   await JWT.verify(req.cookies.token, JWTSecretKey, (error, decode) => {
     if(error) {
       console.log("token認証失敗")
       return res.status(400).json([{message: "tokenが一致しません",},]);
     }
-    connection.query(
-      'SELECT * from ' + table_name + ' where id=?',
-      [req.body.id],
-      (db_error, result) => {
-        if(db_error) {
-          console.log("dbエラー");
-          console.log(db_error);
-          return res.status(400).json([{message: "dbエラー",},]);
-        }
-        console.log("db createdby--------------------------")
-        console.log(result[0].created_by);
-        console.log("decode username------------------")
-        console.log(decode.username);
-        if(result[0].created_by !== decode.username){
-          console.log("作成したユーザーではないため更新できません")
-          return res.status(400).json([{message: "作成したユーザーではないため更新できません",},]);
-        } else {
-          /* queryを作る */
-          let updateQuery = 'UPDATE ' + table_name + ' SET ';
-          let len = common_info.setup_list_column_name.length;
-          for(let i = 0; i < len; i++) {
-            if(common_info.setup_list_column_name[i] !== "id") {
-              updateQuery += common_info.setup_list_column_name[i];
-              updateQuery += '=?';
-              if(i !== len-1) updateQuery += ',';
-              updateQuery += ' ';
-            }
-          }
-          updateQuery += 'WHERE id=?'
-          console.log(updateQuery);
 
-          let insertData = {};
-
-          common_info.setup_list_column_name.map((key) => {
-            if(key !== "id") {
-              insertData[key] = req.body[key];
-            }
-          });
-          insertData["id"] = req.body["id"];
-
-          console.log(insertData);
-          console.log(Object.values(insertData));
-
-          connection.query(
-            updateQuery,
-            Object.values(insertData),
-            (error, results) => {
-              if(error) {
-                console.log('error')
-                console.log(error);
-                res.send(error);
-              } else {
-                console.log('success');
-                res.send(results);
-              }
-            }
-          )
-        }
+    Setup.findOne({where: {id: req.body.id}})
+    .then((result) => {
+      //console.log(result);
+      if(result === null) {
+        console.log("データが存在しません")
+        return res.status(400).json([{message: "データが存在しません"}])
       }
-    )
+      console.log("db data's createdby: ")
+      console.log(result.created_by);
+      console.log("decode's username: ")
+      console.log(decode.username);
+      if(result.created_by !== decode.username){
+        console.log("作成したユーザーではないため更新できません")
+        return res.status(400).json([{message: "作成したユーザーではないため更新できません",},]);
+      } else {
+        let insertData = {};
+        common_info.setup_list_column_name.map((key) => {
+          if(key !== "id") {
+            insertData[key] = req.body[key];
+          }
+        });
+        insertData["id"] = req.body["id"];
+        console.log(insertData);
 
+        Setup.update(insertData, {where: {id: req.body.id}})
+        .then((result) => {
+          console.log("update success");
+          //console.log(result);
+          res.status(200).json([{message: "セットアップの更新が成功しました"}])
+        })
+        .catch((error) => {
+          console.log("db error2");
+          console.log(error);
+          res.status(400).json([{message: "db error"}]);
+        })
+      }
+    })
+    .catch((error) => {
+      console.log("db error1");
+      return res.status(400).json([{message: "db error"}])
+    })
   })
-
-  
 });
 
 app.delete('/api/delete/:id', auth, async (req, res) => {
