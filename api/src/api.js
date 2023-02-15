@@ -111,14 +111,25 @@ const auth = require("./middleware/AuthByJWT")
 
 //api
 app.get('/api/read', auth, (req, res) => {
-  connection.query(
+  Setup.findAll()
+  .then((result) => {
+    console.log("read success");
+    console.log(result);
+    res.send(result);
+  })
+  .catch((error) => {
+    console.log("read error");
+    console.log(error);
+    res.status(200).json({message: "DBエラー"});
+  });
+  /*connection.query(
     'SELECT * FROM ' + table_name,
     (error, results) => {
       console.log("--------read-------")
       console.log(results);
       res.send(results);
     }
-  )
+  )*/
 });
 
 app.post('/api/create', auth, async (req, res) => {
