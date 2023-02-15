@@ -120,7 +120,7 @@ app.get('/api/read', auth, (req, res) => {
   .catch((error) => {
     console.log("read error");
     console.log(error);
-    res.status(200).json({message: "DBエラー"});
+    res.status(400).json({message: "DBエラー"});
   });
   /*connection.query(
     'SELECT * FROM ' + table_name,
@@ -196,7 +196,7 @@ app.post('/api/create', auth, async (req, res) => {
   })
 
   /* queryを作る */
-  let createQuery = 'INSERT INTO ' + table_name + ' ';
+  /*let createQuery = 'INSERT INTO ' + table_name + ' ';
   createQuery += '('
   let len = common_info.setup_list_column_name.length;
   for(let i = 0; i < len; i++) {
@@ -210,7 +210,7 @@ app.post('/api/create', auth, async (req, res) => {
     createQuery += '?';
     if(i !== len-2) createQuery += ',';
   }
-  createQuery += ')'
+  createQuery += ')'*/
   //console.log(createQuery);
 
   let insertData = {};
@@ -234,10 +234,21 @@ app.post('/api/create', auth, async (req, res) => {
     }
     insertData["created_by"] = decode.username;
     //console.log(Object.values(insertData));
-    console.log("createQuery: " + createQuery);
+    //console.log("createQuery: " + createQuery);
     console.log("insertData: ");
     console.log(insertData);
-    connection.query(
+    Setup.create(insertData)
+    .then((result) => {
+      console.log("create success");
+      //console.log(result);
+      res.status(200).json([{message: "新しいセットアップ作成成功"}]);
+    })
+    .catch((error) => {
+      console.log("create error");
+      console.log(error);
+      res.status(400).json([{message: "セットアップ作成失敗"}]);
+    })
+    /*connection.query(
       createQuery,
       Object.values(insertData),
       (error, results) => {
@@ -249,7 +260,7 @@ app.post('/api/create', auth, async (req, res) => {
           res.send(results);
         }
       }
-    )
+    )*/
   })
   
 
