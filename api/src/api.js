@@ -348,54 +348,47 @@ app.delete('/api/delete/:id', auth, async (req, res) => {
   console.log('---------delete--------');
   console.log(req.params.id);
   // idから対象データを取得
-  await connection.query(
-    'SELECT * FROM ' + table_name + ' WHERE id=?',
-    [req.params.id],
-    async (db_error, result) => {
-      if(db_error) {
-        console.log("db error");
-        console.log(db_error);
-      } else {
-        console.log("query success");
-        const setupData = result[0];
-        
-        await JWT.verify(req.cookies.token, JWTSecretKey, async (error, decode) => {
-          if(error) {
-            console.log("token認証失敗")
-            return res.status(400).json([{message: "tokenが一致しません",},]);
-          }
-          //削除するセットアップのcreated_byとリクエストしたユーザーが一致するか判定
-          if(setupData.created_by !== decode.username) {
-            console.log("作成したユーザーではないため削除できません。");
-            return res.status(400).json([{message: "作成したユーザーではないため削除できません。",},]);
-          } else {
-            console.log("作成したユーザーなので対象のデータを削除します");
-            //apiに削除要請
-            await deleteImageForImgur(setupData.position_image);
-            await deleteImageForImgur(setupData.aim_image);
-            await deleteImageForImgur(setupData.landing_image);
-            //dbから削除
-            connection.query(
-              'DELETE FROM ' + table_name + ' WHERE id=?',
-              [req.params.id],
-              (error, results) => {
-                if(error) {
-                  res.send(error);
-                } else {
-                  console.log("削除成功");
-                  res.send(results);
-                }
-              }
-            );
-          }
-          
-        })
-        
-      }
+
+  await JWT.verify(req.cookies.token, JWTSecretKey, async (error, decode) => {
+    if(error) {
+      console.log("token認証失敗")
+      return res.status(400).json([{message: "tokenが一致しません",},]);
     }
-  );
-
-
+    Setup.findOne({where: {id: req.params.id}})
+    .then(async (result) => {
+      //console.log(result);
+      if(result === null) {
+        console.log("データが存在しません")
+        return res.status(400).json([{message: "データが存在しません"}])
+      }
+      console.log("db data's createdby: ")
+      console.log(result.created_by);
+      console.log("decode's username: ")
+      console.log(decode.username);
+      if(result.created_by !== decode.username){
+        console.log("作成したユーザーではないため削除できません")
+        return res.status(400).json([{message: "作成したユーザーではないため削除できません",},]);
+      } else {
+        console.log("作成したユーザーなので対象のデータを削除します");
+        //apiに削除要請
+        await deleteImageForImgur(result.position_image);
+        await deleteImageForImgur(result.aim_image);
+        await deleteImageForImgur(result.landing_image);
+        //dbから削除
+        Setup.destroy({where: {id: req.params.id}})
+        .then((result) => {
+          console.log("delete success");
+          console.log(result);
+          return res.status(200).json([{message: "セットアップの削除に成功しました"}]);
+        })
+        .catch((error) => {
+          console.log("delete error (db)");
+          console.log(error);
+          return res.status(400).json([{message: "dbエラー"}]);
+        })
+      }
+    })
+  })
 });
 
 
