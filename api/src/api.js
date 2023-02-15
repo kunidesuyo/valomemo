@@ -22,6 +22,7 @@ const connection = mysql.createConnection({
 });
 
 const Setup = require('./db/models/Setup');
+const User = require('./db/models/User');
 /*Setup.sync({alter: true})
 .then((result) => {
   console.log("migration db success");
@@ -420,69 +421,53 @@ app.post('/api/login', (req, res) => {
   //console.log("secret key", JWTSecretKey);
   const username = req.body.username;
   const password = req.body.password;
-  connection.query(
-    'SELECT * FROM users WHERE username = ?',
-    [username],
-    async (error, results) => {
-      if(error) {
-        console.log("db error");
-        res.status(400).json([
-          {
-            message: "DBエラー"
-          }
-        ])
-      }
-      if(results.length > 0) {
-        console.log("認証処理");
-        //パスワードの複合と照合
-        const isMatchPassword = await bcrypt.compare(password, results[0].password);
-        if(!isMatchPassword) {
-          console.log("パスワードが違います");
-          res.status(400).json([
-            {
-              message: "パスワードが違います"
-            }
-          ])
-        } else {
-          //JWTのtokenを発行
-          console.log("ログイン成功");
-          const token = await JWT.sign({
-            username,
-          },
-          //.envで管理
-          JWTSecretKey,
-          {
-            expiresIn: "1h",
-          }
-          );
-          //Set-cookieヘッダーにtokenをセットする処理
-          //httpOnlyをtrueにすることでhttp通信するときのみ参照できるようになる
-          console.log(token);
-          res.cookie('token', token, {httpOnly: true});
-          return res.status(200).json([
-            {
-              message: "ログインに成功しました",
-              username: username,
-            }
-          ]);
-        }
 
-      } else {
-        console.log("ユーザーが見つかりません");
-        res.status(400).json([
-          {
-            message: "ユーザーが見つかりません"
-          }
-        ])
-      }
+  User.findOne({where: {username: username}})
+  .then(async (result) => {
+    console.log(result.username);
+    if(result === null) {
+      console.log("ユーザーが存在しません")
+      return res.status(400).json([{message: "ユーザーが見つかりません"}]);
     }
-  )
+    console.log("認証処理");
+    //パスワードの複合と照合
+    const isMatchPassword = await bcrypt.compare(password, result.password);
+    if(!isMatchPassword) {
+      console.log("パスワードが違います");
+      return res.status(400).json([{message: "パスワードが違います"}]);
+    } else {
+      //JWTのtokenを発行
+      console.log("ログイン成功");
+      const token = await JWT.sign({
+        username,
+      },
+      //.envで管理
+      JWTSecretKey,
+      {
+        expiresIn: "1h",
+      }
+      );
+      //Set-cookieヘッダーにtokenをセットする処理
+      //httpOnlyをtrueにすることでhttp通信するときのみ参照できるようになる
+      console.log(token);
+      res.cookie('token', token, {httpOnly: true});
+      return res.status(200).json([
+        {
+          message: "ログインに成功しました",
+          username: username,
+        }
+      ]);
+    }
+  })
+  .catch((error) => {
+    console.log("ユーザーが存在しません");
+    return res.status(400).json([{message: "ユーザーが見つかりません"}]);
+  })
 });
 
 //環境変数で管理
 const max_num_of_user = process.env.MAX_NUM_OF_USER;
 //const max_num_of_user = 100;
-
 
 app.post('/api/register', async (req, res) => {
   console.log("register");
