@@ -22,17 +22,6 @@
 
 
 # TODO
-
-- db
-  - sequelizeでdb管理
-    本番環境でdbの種類が変わっても書き直す必要がなくなる(?)
-  - 今までのdb操作をsequilizeに置き換える
-
-- apiのtokenをdbに入れる
-- docker compose downするときにdbのバックアップを作成するようにする
-  - docker compose down し忘れたとき(バックアップがされなかったとき)の復元
-    - apiのtoken系は再発行手順を書いておく
-
 - 本番環境にデプロイ
   - 開発環境と本番環境で変わること
     - package.json?
@@ -45,6 +34,9 @@
       - 維持費
 
 
+- docker compose downするときにdbのバックアップを作成するようにする
+  - docker compose down し忘れたとき(バックアップがされなかったとき)の復元
+    - apiのtoken系は再発行手順を書いておく
 - (setupcardコンポーネント)ユーザー名が一致しないセットアップでは編集、削除ボタンを表示しないようにする
 - readme.mdを作成(人に見せられるもの)
 - apiのレスポンスを整える(messageに内容を入れ、frontendでその内容を表示するようにする)

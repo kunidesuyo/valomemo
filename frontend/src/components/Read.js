@@ -44,6 +44,7 @@ export default function Read() {
       console.log("ログインしています " + loginUsername);
       axios.get('/api/read')
       .then((res) => {
+        //console.log(res);
         console.log(res.data);
         setSetups(res.data);
       })

@@ -21,6 +21,18 @@ const connection = mysql.createConnection({
   database: process.env.MYSQL_DATABASE
 });
 
+const Setup = require('./db/models/Setup');
+const User = require('./db/models/User');
+/*Setup.sync({alter: true})
+.then((result) => {
+  console.log("migration db success");
+  console.log(result);
+})
+.catch((error) => {
+  console.log("migration db error");
+  console.log(error);
+})*/
+
 
 connection.connect((error) => {
   if (error) {
@@ -100,14 +112,25 @@ const auth = require("./middleware/AuthByJWT")
 
 //api
 app.get('/api/read', auth, (req, res) => {
-  connection.query(
+  Setup.findAll()
+  .then((result) => {
+    console.log("read success");
+    //console.log(result);
+    res.send(result);
+  })
+  .catch((error) => {
+    console.log("read error");
+    console.log(error);
+    res.status(400).json({message: "DBエラー"});
+  });
+  /*connection.query(
     'SELECT * FROM ' + table_name,
     (error, results) => {
       console.log("--------read-------")
       console.log(results);
       res.send(results);
     }
-  )
+  )*/
 });
 
 app.post('/api/create', auth, async (req, res) => {
@@ -174,7 +197,7 @@ app.post('/api/create', auth, async (req, res) => {
   })
 
   /* queryを作る */
-  let createQuery = 'INSERT INTO ' + table_name + ' ';
+  /*let createQuery = 'INSERT INTO ' + table_name + ' ';
   createQuery += '('
   let len = common_info.setup_list_column_name.length;
   for(let i = 0; i < len; i++) {
@@ -188,7 +211,7 @@ app.post('/api/create', auth, async (req, res) => {
     createQuery += '?';
     if(i !== len-2) createQuery += ',';
   }
-  createQuery += ')'
+  createQuery += ')'*/
   //console.log(createQuery);
 
   let insertData = {};
@@ -212,10 +235,21 @@ app.post('/api/create', auth, async (req, res) => {
     }
     insertData["created_by"] = decode.username;
     //console.log(Object.values(insertData));
-    console.log("createQuery: " + createQuery);
+    //console.log("createQuery: " + createQuery);
     console.log("insertData: ");
     console.log(insertData);
-    connection.query(
+    Setup.create(insertData)
+    .then((result) => {
+      console.log("create success");
+      //console.log(result);
+      res.status(200).json([{message: "新しいセットアップ作成成功"}]);
+    })
+    .catch((error) => {
+      console.log("create error");
+      console.log(error);
+      res.status(400).json([{message: "セットアップ作成失敗"}]);
+    })
+    /*connection.query(
       createQuery,
       Object.values(insertData),
       (error, results) => {
@@ -227,7 +261,7 @@ app.post('/api/create', auth, async (req, res) => {
           res.send(results);
         }
       }
-    )
+    )*/
   })
   
 
@@ -258,80 +292,56 @@ app.post('/api/create', auth, async (req, res) => {
 
 app.put('/api/update', auth, async (req, res) => {
   console.log('---------update-----------')
-  //console.log(req.body);
-  //console.log(Object.values(req.body))
-  //console.log(req.body.content);
 
-  /* requestしたユーザーと更新するセットアップのcreated_byが一致するか検証 */
+  // requestしたユーザーと更新するセットアップのcreated_byが一致するか検証
   await JWT.verify(req.cookies.token, JWTSecretKey, (error, decode) => {
     if(error) {
       console.log("token認証失敗")
       return res.status(400).json([{message: "tokenが一致しません",},]);
     }
-    connection.query(
-      'SELECT * from ' + table_name + ' where id=?',
-      [req.body.id],
-      (db_error, result) => {
-        if(db_error) {
-          console.log("dbエラー");
-          console.log(db_error);
-          return res.status(400).json([{message: "dbエラー",},]);
-        }
-        console.log("db createdby--------------------------")
-        console.log(result[0].created_by);
-        console.log("decode username------------------")
-        console.log(decode.username);
-        if(result[0].created_by !== decode.username){
-          console.log("作成したユーザーではないため更新できません")
-          return res.status(400).json([{message: "作成したユーザーではないため更新できません",},]);
-        } else {
-          /* queryを作る */
-          let updateQuery = 'UPDATE ' + table_name + ' SET ';
-          let len = common_info.setup_list_column_name.length;
-          for(let i = 0; i < len; i++) {
-            if(common_info.setup_list_column_name[i] !== "id") {
-              updateQuery += common_info.setup_list_column_name[i];
-              updateQuery += '=?';
-              if(i !== len-1) updateQuery += ',';
-              updateQuery += ' ';
-            }
-          }
-          updateQuery += 'WHERE id=?'
-          console.log(updateQuery);
 
-          let insertData = {};
-
-          common_info.setup_list_column_name.map((key) => {
-            if(key !== "id") {
-              insertData[key] = req.body[key];
-            }
-          });
-          insertData["id"] = req.body["id"];
-
-          console.log(insertData);
-          console.log(Object.values(insertData));
-
-          connection.query(
-            updateQuery,
-            Object.values(insertData),
-            (error, results) => {
-              if(error) {
-                console.log('error')
-                console.log(error);
-                res.send(error);
-              } else {
-                console.log('success');
-                res.send(results);
-              }
-            }
-          )
-        }
+    Setup.findOne({where: {id: req.body.id}})
+    .then((result) => {
+      //console.log(result);
+      if(result === null) {
+        console.log("データが存在しません")
+        return res.status(400).json([{message: "データが存在しません"}])
       }
-    )
+      console.log("db data's createdby: ")
+      console.log(result.created_by);
+      console.log("decode's username: ")
+      console.log(decode.username);
+      if(result.created_by !== decode.username){
+        console.log("作成したユーザーではないため更新できません")
+        return res.status(400).json([{message: "作成したユーザーではないため更新できません",},]);
+      } else {
+        let insertData = {};
+        common_info.setup_list_column_name.map((key) => {
+          if(key !== "id") {
+            insertData[key] = req.body[key];
+          }
+        });
+        insertData["id"] = req.body["id"];
+        console.log(insertData);
 
+        Setup.update(insertData, {where: {id: req.body.id}})
+        .then((result) => {
+          console.log("update success");
+          //console.log(result);
+          res.status(200).json([{message: "セットアップの更新が成功しました"}])
+        })
+        .catch((error) => {
+          console.log("db error2");
+          console.log(error);
+          res.status(400).json([{message: "db error"}]);
+        })
+      }
+    })
+    .catch((error) => {
+      console.log("db error1");
+      return res.status(400).json([{message: "db error"}])
+    })
   })
-
-  
 });
 
 app.delete('/api/delete/:id', auth, async (req, res) => {
@@ -339,54 +349,47 @@ app.delete('/api/delete/:id', auth, async (req, res) => {
   console.log('---------delete--------');
   console.log(req.params.id);
   // idから対象データを取得
-  await connection.query(
-    'SELECT * FROM ' + table_name + ' WHERE id=?',
-    [req.params.id],
-    async (db_error, result) => {
-      if(db_error) {
-        console.log("db error");
-        console.log(db_error);
-      } else {
-        console.log("query success");
-        const setupData = result[0];
-        
-        await JWT.verify(req.cookies.token, JWTSecretKey, async (error, decode) => {
-          if(error) {
-            console.log("token認証失敗")
-            return res.status(400).json([{message: "tokenが一致しません",},]);
-          }
-          //削除するセットアップのcreated_byとリクエストしたユーザーが一致するか判定
-          if(setupData.created_by !== decode.username) {
-            console.log("作成したユーザーではないため削除できません。");
-            return res.status(400).json([{message: "作成したユーザーではないため削除できません。",},]);
-          } else {
-            console.log("作成したユーザーなので対象のデータを削除します");
-            //apiに削除要請
-            await deleteImageForImgur(setupData.position_image);
-            await deleteImageForImgur(setupData.aim_image);
-            await deleteImageForImgur(setupData.landing_image);
-            //dbから削除
-            connection.query(
-              'DELETE FROM ' + table_name + ' WHERE id=?',
-              [req.params.id],
-              (error, results) => {
-                if(error) {
-                  res.send(error);
-                } else {
-                  console.log("削除成功");
-                  res.send(results);
-                }
-              }
-            );
-          }
-          
-        })
-        
-      }
+
+  await JWT.verify(req.cookies.token, JWTSecretKey, async (error, decode) => {
+    if(error) {
+      console.log("token認証失敗")
+      return res.status(400).json([{message: "tokenが一致しません",},]);
     }
-  );
-
-
+    Setup.findOne({where: {id: req.params.id}})
+    .then(async (result) => {
+      //console.log(result);
+      if(result === null) {
+        console.log("データが存在しません")
+        return res.status(400).json([{message: "データが存在しません"}])
+      }
+      console.log("db data's createdby: ")
+      console.log(result.created_by);
+      console.log("decode's username: ")
+      console.log(decode.username);
+      if(result.created_by !== decode.username){
+        console.log("作成したユーザーではないため削除できません")
+        return res.status(400).json([{message: "作成したユーザーではないため削除できません",},]);
+      } else {
+        console.log("作成したユーザーなので対象のデータを削除します");
+        //apiに削除要請
+        await deleteImageForImgur(result.position_image);
+        await deleteImageForImgur(result.aim_image);
+        await deleteImageForImgur(result.landing_image);
+        //dbから削除
+        Setup.destroy({where: {id: req.params.id}})
+        .then((result) => {
+          console.log("delete success");
+          console.log(result);
+          return res.status(200).json([{message: "セットアップの削除に成功しました"}]);
+        })
+        .catch((error) => {
+          console.log("delete error (db)");
+          console.log(error);
+          return res.status(400).json([{message: "dbエラー"}]);
+        })
+      }
+    })
+  })
 });
 
 
@@ -418,69 +421,53 @@ app.post('/api/login', (req, res) => {
   //console.log("secret key", JWTSecretKey);
   const username = req.body.username;
   const password = req.body.password;
-  connection.query(
-    'SELECT * FROM users WHERE username = ?',
-    [username],
-    async (error, results) => {
-      if(error) {
-        console.log("db error");
-        res.status(400).json([
-          {
-            message: "DBエラー"
-          }
-        ])
-      }
-      if(results.length > 0) {
-        console.log("認証処理");
-        //パスワードの複合と照合
-        const isMatchPassword = await bcrypt.compare(password, results[0].password);
-        if(!isMatchPassword) {
-          console.log("パスワードが違います");
-          res.status(400).json([
-            {
-              message: "パスワードが違います"
-            }
-          ])
-        } else {
-          //JWTのtokenを発行
-          console.log("ログイン成功");
-          const token = await JWT.sign({
-            username,
-          },
-          //.envで管理
-          JWTSecretKey,
-          {
-            expiresIn: "1h",
-          }
-          );
-          //Set-cookieヘッダーにtokenをセットする処理
-          //httpOnlyをtrueにすることでhttp通信するときのみ参照できるようになる
-          console.log(token);
-          res.cookie('token', token, {httpOnly: true});
-          return res.status(200).json([
-            {
-              message: "ログインに成功しました",
-              username: username,
-            }
-          ]);
-        }
 
-      } else {
-        console.log("ユーザーが見つかりません");
-        res.status(400).json([
-          {
-            message: "ユーザーが見つかりません"
-          }
-        ])
-      }
+  User.findOne({where: {username: username}})
+  .then(async (result) => {
+    console.log(result.username);
+    if(result === null) {
+      console.log("ユーザーが存在しません")
+      return res.status(400).json([{message: "ユーザーが見つかりません"}]);
     }
-  )
+    console.log("認証処理");
+    //パスワードの複合と照合
+    const isMatchPassword = await bcrypt.compare(password, result.password);
+    if(!isMatchPassword) {
+      console.log("パスワードが違います");
+      return res.status(400).json([{message: "パスワードが違います"}]);
+    } else {
+      //JWTのtokenを発行
+      console.log("ログイン成功");
+      const token = await JWT.sign({
+        username,
+      },
+      //.envで管理
+      JWTSecretKey,
+      {
+        expiresIn: "1h",
+      }
+      );
+      //Set-cookieヘッダーにtokenをセットする処理
+      //httpOnlyをtrueにすることでhttp通信するときのみ参照できるようになる
+      console.log(token);
+      res.cookie('token', token, {httpOnly: true});
+      return res.status(200).json([
+        {
+          message: "ログインに成功しました",
+          username: username,
+        }
+      ]);
+    }
+  })
+  .catch((error) => {
+    console.log("ユーザーが存在しません");
+    return res.status(400).json([{message: "ユーザーが見つかりません"}]);
+  })
 });
 
 //環境変数で管理
 const max_num_of_user = process.env.MAX_NUM_OF_USER;
 //const max_num_of_user = 100;
-
 
 app.post('/api/register', async (req, res) => {
   console.log("register");
@@ -492,57 +479,48 @@ app.post('/api/register', async (req, res) => {
     return res.status(400).json({message: "入力値が無効です"})
   }
   //dbにユーザーが存在しているか確認
-  connection.query(
-    'SELECT * FROM users WHERE username = ?',
-    [username],
-    async (error, results) => {
-      if(results.length > 0) {
-        console.log("ユーザーが既に存在している")
-        return res.status(400).json([{message: "すでにその名前のユーザーは存在します"}]);
-      }
-      console.log("同じ名前のユーザーは存在しない");
-      connection.query(
-        'SELECT * FROM users',
-        async (error, results) => {
-          console.log("result");
-          console.log(results);
-          console.log(results.length);
-          if(results.length >= max_num_of_user) {
-            return res.status(400).json([{message: "これ以上ユーザーを作れません"}]);
-          }
-          let hashedPassword = await bcrypt.hash(password, 10);
-          //console.log(hashedPassword)
-          // dbへ保存する
-          connection.query(
-            'INSERT INTO users (username, password) VALUES (?, ?)',
-            [username, hashedPassword],
-            async (error, results) => {
-              if(error) {
-                console.log("db error");
-                console.log(error);
-                return res.status(400).json([{message: "DBへの保存に失敗しました"}]);
-              } else {
-                console.log("dbへの保存完了");
-                //token発行
-                const token = await JWT.sign({
-                  username,
-                },
-                //.envで管理
-                JWTSecretKey,
-                {
-                  expiresIn: "1h",
-                }
-                );
-                res.cookie('token', token, {httpOnly: true});
-                return res.status(200).json([{message: "アカウントの登録が完了しました", username: username}]);
-              }
-            }
-          )
+
+  User.findOne({where: {username: username}})
+  .then((result) => {
+    console.log(result);
+    if(result === null) {
+      console.log("同じ名前のユーザーが存在しない");
+      //ユーザー数が制限を超えていないか調べる
+      User.findAll()
+      .then(async (allUsers) => {
+        //console.log(allUsers.length);
+        if(allUsers.length >= max_num_of_user) {
+          return res.status(400).json([{message: "これ以上ユーザーを作れません"}]);
         }
-      )
-      
+        let hashedPassword = await bcrypt.hash(password, 10);
+        //dbへ新しいユーザーを保存する
+        const newUser = {username: username, password: hashedPassword};
+        User.create(newUser)
+        .then(async (r)=> {
+          console.log("ユーザー作成完了");
+          console.log(r);
+          //token発行
+          const token = await JWT.sign({
+            username,
+          },
+          JWTSecretKey,
+          {
+            expiresIn: "1h",
+          }
+          );
+          res.cookie('token', token, {httpOnly: true});
+          return res.status(200).json([{message: "アカウントの登録が完了しました", username: username}]);
+        })
+      })
+    } else {
+      console.log("同じ名前のユーザーが既に存在しています");
+      return res.status(400).json([{message: "同じ名前のユーザーが既に存在しています"}]);
     }
-  )
+  })
+  .catch((error) => {
+    console.log("error")
+  })
+
 });
 
 app.post("/api/logout", (req, res) => {
