@@ -479,57 +479,48 @@ app.post('/api/register', async (req, res) => {
     return res.status(400).json({message: "入力値が無効です"})
   }
   //dbにユーザーが存在しているか確認
-  connection.query(
-    'SELECT * FROM users WHERE username = ?',
-    [username],
-    async (error, results) => {
-      if(results.length > 0) {
-        console.log("ユーザーが既に存在している")
-        return res.status(400).json([{message: "すでにその名前のユーザーは存在します"}]);
-      }
-      console.log("同じ名前のユーザーは存在しない");
-      connection.query(
-        'SELECT * FROM users',
-        async (error, results) => {
-          console.log("result");
-          console.log(results);
-          console.log(results.length);
-          if(results.length >= max_num_of_user) {
-            return res.status(400).json([{message: "これ以上ユーザーを作れません"}]);
-          }
-          let hashedPassword = await bcrypt.hash(password, 10);
-          //console.log(hashedPassword)
-          // dbへ保存する
-          connection.query(
-            'INSERT INTO users (username, password) VALUES (?, ?)',
-            [username, hashedPassword],
-            async (error, results) => {
-              if(error) {
-                console.log("db error");
-                console.log(error);
-                return res.status(400).json([{message: "DBへの保存に失敗しました"}]);
-              } else {
-                console.log("dbへの保存完了");
-                //token発行
-                const token = await JWT.sign({
-                  username,
-                },
-                //.envで管理
-                JWTSecretKey,
-                {
-                  expiresIn: "1h",
-                }
-                );
-                res.cookie('token', token, {httpOnly: true});
-                return res.status(200).json([{message: "アカウントの登録が完了しました", username: username}]);
-              }
-            }
-          )
+
+  User.findOne({where: {username: username}})
+  .then((result) => {
+    console.log(result);
+    if(result === null) {
+      console.log("同じ名前のユーザーが存在しない");
+      //ユーザー数が制限を超えていないか調べる
+      User.findAll()
+      .then(async (allUsers) => {
+        //console.log(allUsers.length);
+        if(allUsers.length >= max_num_of_user) {
+          return res.status(400).json([{message: "これ以上ユーザーを作れません"}]);
         }
-      )
-      
+        let hashedPassword = await bcrypt.hash(password, 10);
+        //dbへ新しいユーザーを保存する
+        const newUser = {username: username, password: hashedPassword};
+        User.create(newUser)
+        .then(async (r)=> {
+          console.log("ユーザー作成完了");
+          console.log(r);
+          //token発行
+          const token = await JWT.sign({
+            username,
+          },
+          JWTSecretKey,
+          {
+            expiresIn: "1h",
+          }
+          );
+          res.cookie('token', token, {httpOnly: true});
+          return res.status(200).json([{message: "アカウントの登録が完了しました", username: username}]);
+        })
+      })
+    } else {
+      console.log("同じ名前のユーザーが既に存在しています");
+      return res.status(400).json([{message: "同じ名前のユーザーが既に存在しています"}]);
     }
-  )
+  })
+  .catch((error) => {
+    console.log("error")
+  })
+
 });
 
 app.post("/api/logout", (req, res) => {
