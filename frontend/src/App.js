@@ -1,6 +1,6 @@
 //import logo from './logo.svg';
 //import './App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Connect from './components/Connect';
 import Read from './components/Read';
 import CreateUpdate from './components/CreateUpdate';
@@ -38,7 +38,7 @@ function App() {
         <CommonInfoProvider>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <Router>
+            <BrowserRouter>
               <div>
                 <Routes>
                   <Route path='/' element={<Header />}>
@@ -51,7 +51,7 @@ function App() {
                   </Route>
                 </Routes>
               </div>
-            </Router>
+            </BrowserRouter>
           </ThemeProvider>
         </CommonInfoProvider>
       </LoginUsernameProvider>

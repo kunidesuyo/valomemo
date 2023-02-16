@@ -64,11 +64,39 @@ app.use(cors({
 app.use(cookieParser());
 
 
-app.get('/', (req, res) => {
+/*app.get('/', (req, res) => {
   //res.send('test complete')
   res.render('hello.ejs');
+});*/
+
+const path = require("path");
+app.use("/static", express.static(path.join(__dirname, "build", "static")));
+app.use("/images", express.static(path.join(__dirname, "build", "images")));
+
+
+app.all('/', (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
+app.all('/read', (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
+app.all('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
+app.all('/register', (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
+app.all('/create', (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
+app.all('/update', (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 // imgur api
 const client_id = process.env.IMGUR_API_CLIENT_ID;

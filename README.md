@@ -34,6 +34,7 @@
       - 維持費
 
 
+- not found画面作る
 - docker compose downするときにdbのバックアップを作成するようにする
   - docker compose down し忘れたとき(バックアップがされなかったとき)の復元
     - apiのtoken系は再発行手順を書いておく
@@ -54,4 +55,9 @@
 - テストをどうするか
 
 
-
+## 本番環境にデプロイ
+- frontendコンテナ内でreactをbuild
+`npm run build`
+- 作成されたbuildディレクトリを./api/src/に配置
+`docker container cp valomemo_frontend:/usr/frontend/build ./api/src`
+- localhost:8080/でアクセス可能に

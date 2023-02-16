@@ -71,6 +71,7 @@ export default function MenuAppBar() {
       console.log(err);
     })
   }
+  console.log(title);
 
   return (
     <>
@@ -89,48 +90,65 @@ export default function MenuAppBar() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {title}
           </Typography>
-          {loginUsername && (
-            <div>
-              <IconButton
-                variant="contained"
-                component={Link}
-                to="/create"
-                state={{createOrUpdate: "create"}}
-                size="large"
-                sx={{mr: 1}}
-              >
-                <AddCircleOutlineIcon />
-              </IconButton>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'center',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'center',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>My Page</MenuItem>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-              </Menu>
-            </div>
-          )}
+          {(() => {
+            if(loginUsername === "") {
+              if(title === "Login") {
+                return;
+              } else {
+                return (
+                  <Button
+                    component={Link}
+                    to="/login"
+                  >
+                    Login
+                  </Button>
+                );
+              }
+            } else {
+              return (
+                <div>
+                  <IconButton
+                    variant="contained"
+                    component={Link}
+                    to="/create"
+                    state={{createOrUpdate: "create"}}
+                    size="large"
+                    sx={{mr: 1}}
+                  >
+                    <AddCircleOutlineIcon />
+                  </IconButton>
+                  <IconButton
+                    size="large"
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={handleMenu}
+                    color="inherit"
+                  >
+                    <AccountCircle />
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'center',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'center',
+                    }}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                  >
+                    <MenuItem onClick={handleClose}>My Page</MenuItem>
+                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                  </Menu>
+                </div>
+              )
+            }
+          })()}
         </Toolbar>
       </AppBar>
     </Box>
