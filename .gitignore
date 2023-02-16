@@ -5,3 +5,5 @@ imgur_api_keys.txt
 /api/src/testdata
 /api/data_backups/Imgur_API_tokens
 /db/docker-entrypoint-initdb.d
+dev.sql
+pro.sql

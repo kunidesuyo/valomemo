@@ -99,8 +99,8 @@ app.all('/update', (req, res) => {
 });
 
 // imgur api
-const client_id = process.env.IMGUR_API_CLIENT_ID;
-const client_secret = process.env.IMGUR_API_CLIENT_SECRET;
+//const client_id = process.env.DEV_IMGUR_API_CLIENT_ID;
+//const client_secret = process.env.DEV_IMGUR_API_CLIENT_SECRET;
 
 const axios = require('axios');
 const fs = require('fs');
@@ -175,11 +175,11 @@ app.post('/api/create', auth, async (req, res) => {
   landing_image = await landing_image.replace(/data:image\/.*;base64,/, '');
 
   /*画像をimgurに登録*/
-  await generateAccessToken(client_id, client_secret);
+  await generateAccessToken();
   /* uploadImageForImgur */
   //現実(動く)
   let position_image_url, aim_image_url, landing_image_url;
-  const [access_token, refresh_token] = getNowTokens();
+  const [access_token, refresh_token] = await getNowTokens();
   const upload_url = "https://api.imgur.com/3/upload";
   const headers = {"Authorization": "Bearer " + access_token};
   var upload_params_position = new URLSearchParams();
