@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 
 const sequelize = new Sequelize(process.env.MYSQL_DATABASE, 'root', process.env.MYSQL_ROOT_PASSWORD, {
-  host: process.env.DB_CONTAINER_NAME,
+  host: process.env.DB_HOST_NAME,
   dialect: 'mysql',
   // logging: false
 });

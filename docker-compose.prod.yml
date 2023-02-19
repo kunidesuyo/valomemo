@@ -3,11 +3,12 @@ services:
 
   db:
     # image: mysql:8.0.31
-    build: 
-      context: ./db
-      dockerfile: Dockerfile
+
+    build: ./db
+    image: 354837177298.dkr.ecr.ap-northeast-1.amazonaws.com/valomemo-db:latest
 
     container_name: ${DB_CONTAINER_NAME}
+
 
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
@@ -16,9 +17,7 @@ services:
     ports:
       - '3306:3306'
 
-    volumes:
-      - ./db/conf:/etc/mysql/conf.d/:ro
-      - ./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+
 
     networks:
       - valomemo_network
@@ -33,9 +32,10 @@ services:
   api:
     container_name: ${API_CONTAINER_NAME}
 
-    build:
-      context: ./api
-      dockerfile: Dockerfile
+
+    build: ./api
+    image: 354837177298.dkr.ecr.ap-northeast-1.amazonaws.com/valomemo-api:latest
+
 
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
@@ -49,21 +49,10 @@ services:
       - PRO_IMGUR_API_CLIENT_SECRET=${PRO_IMGUR_API_CLIENT_SECRET}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - DEV_OR_PRO=${DEV_OR_PRO}
-      - DB_HOST_NAME=${DB_CONTAINER_NAME}
+      - DB_HOST_NAME=127.0.0.1
 
     ports:
       - 8080:8080
-
-    volumes:
-      - type: bind
-        source: ./api/src
-        target: /usr/api/src
-      - type: bind
-        source: ./api/data_backups
-        target: /usr/api/data_backups
-      - type: bind
-        source: ./common_info
-        target: /usr/api/common_info
 
     networks:
       - valomemo_network
@@ -75,23 +64,13 @@ services:
   frontend:
     container_name: ${FRONTEND_CONTAINER_NAME}
 
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    build: ./frontend
+    image: 354837177298.dkr.ecr.ap-northeast-1.amazonaws.com/valomemo-frontend:latest
 
     ports:
     - 3000:3000
 
-    volumes:
-      - type: bind
-        source: ./frontend/src
-        target: /usr/frontend/src
-      - type: bind
-        source: ./frontend/public
-        target: /usr/frontend/public
-      - type: bind
-        source: ./common_info
-        target: /usr/frontend/src/common_info
+
     
     networks:
       - valomemo_network

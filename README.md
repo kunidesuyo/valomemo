@@ -22,16 +22,11 @@
 
 
 # TODO
-- 本番環境にデプロイ
-  - 開発環境と本番環境で変わること
-    - package.json?
-    - docker compose.yml
-  - AWS?GCP?
-    - 知りたいこと
-      - docker composeをそのまま使えるか
-      - 維持費
 
 
+- home画面を作る
+  - login画面へのリンク
+  - register画面へのリンク
 - not found画面作る
 - docker compose downするときにdbのバックアップを作成するようにする
   - docker compose down し忘れたとき(バックアップがされなかったとき)の復元
@@ -78,3 +73,20 @@
 2. ホスト側にコピー
 `docker container cp valomemo_db:/docker-entrypoint-initdb.d/pro.sql ./db/docker-entrypoint-initdb.d/`
 3. もしバックアップを取らなかったらaccess_tokenとrefresh_tokenを発行する。
+
+
+### AWSへのデプロイ
+1. ビルド
+2. imageにタグ付け、ECRにpush
+3. context変更
+4. docker compose up
+
+
+ECS上でコンテナ間通信時に名前解決ができない
+
+対処法
+- エラーが出ない状態(db接続をしない状態)でデプロイ、入力に応じてdb接続テストできるようにする
+- webで調べる
+- docker compose convertでcloudFormationを作成。ここから設定を見る
+- host名をvalomemo-db, 127.0.0.1, localhostで実行して、ログを比べる
+- コンテナを別々にデプロイして接続設定を行う(docker composeを使わない)

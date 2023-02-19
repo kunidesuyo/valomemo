@@ -1,0 +1,56 @@
+{
+  "setup_list_column_name": [
+    "id",
+    "title",
+    "map",
+    "agent",
+    "ability",
+    "position_image",
+    "aim_image",
+    "landing_image",
+    "description",
+    "created_by"
+  ],
+
+  "map_names": [
+    "Haven",
+    "Bind",
+    "Split",
+    "Ascent",
+    "Icebox",
+    "Breeze",
+    "Fracture",
+    "Pearl",
+    "Lotus"
+  ],
+
+  "agent_names": [
+    "Brimstone",
+    "Viper",
+    "Omen",
+    "Cypher",
+    "Sova",
+    "Sage",
+    "Phoenix",
+    "Jett",
+    "Raze",
+    "Breach",
+    "Reyna",
+    "Killjoy",
+    "Skye",
+    "Yoru",
+    "Astra",
+    "KAYO",
+    "Chamber",
+    "Neon",
+    "Fade",
+    "Harbor"
+  ],
+
+  "abilitys": [
+    1,
+    2,
+    3,
+    4
+  ]
+}

@@ -12,14 +12,14 @@ const JWT = require('jsonwebtoken');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
-const connection = mysql.createConnection({
-  host: process.env.DB_CONTAINER_NAME, 
-  //コンテナ名を指定(同ネットワーク内なので名前解決できる？)
-  user: 'root',
-  //password: 'password',
-  password: process.env.MYSQL_ROOT_PASSWORD,
-  database: process.env.MYSQL_DATABASE
-});
+// const connection = mysql.createConnection({
+//   host: process.env.DB_CONTAINER_NAME, 
+//   //コンテナ名を指定(同ネットワーク内なので名前解決できる？)
+//   user: 'root',
+//   //password: 'password',
+//   password: process.env.MYSQL_ROOT_PASSWORD,
+//   database: process.env.MYSQL_DATABASE
+// });
 
 const Setup = require('./db/models/Setup');
 const User = require('./db/models/User');
@@ -34,13 +34,13 @@ const User = require('./db/models/User');
 })*/
 
 
-connection.connect((error) => {
-  if (error) {
-    console.log(error);
-  } else {
-    console.log('db connected');
-  }
-});
+// connection.connect((error) => {
+//   if (error) {
+//     console.log(error);
+//   } else {
+//     console.log('db connected');
+//   }
+// });
 
 
 // なくても動くけど一応
