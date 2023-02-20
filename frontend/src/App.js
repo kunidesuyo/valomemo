@@ -7,6 +7,7 @@ import CreateUpdate from './components/CreateUpdate';
 import Login from './components/Login';
 import Register from './components/Register';
 import Header from './components/Header';
+import Home from './components/Home';
 
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -42,6 +43,7 @@ function App() {
               <div>
                 <Routes>
                   <Route path='/' element={<Header />}>
+                    <Route path='/' element={<Home />} />
                     <Route path='login' element={<Login />} />
                     <Route path='register' element={<Register/>} />
                     <Route path='connect' element={<Connect />} />

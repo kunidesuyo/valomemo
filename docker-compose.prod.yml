@@ -4,7 +4,6 @@ services:
   db:
     # image: mysql:8.0.31
 
-    build: ./db
     image: 354837177298.dkr.ecr.ap-northeast-1.amazonaws.com/valomemo-db:latest
 
     container_name: ${DB_CONTAINER_NAME}
@@ -33,7 +32,6 @@ services:
     container_name: ${API_CONTAINER_NAME}
 
 
-    build: ./api
     image: 354837177298.dkr.ecr.ap-northeast-1.amazonaws.com/valomemo-api:latest
 
 
@@ -64,7 +62,6 @@ services:
   frontend:
     container_name: ${FRONTEND_CONTAINER_NAME}
 
-    build: ./frontend
     image: 354837177298.dkr.ecr.ap-northeast-1.amazonaws.com/valomemo-frontend:latest
 
     ports:

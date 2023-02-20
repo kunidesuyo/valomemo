@@ -1,24 +1,13 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import Delete from './Delete';
 import SetupCard from './SetupCard';
 
 import { TitleContext } from '../TitleProvider';
 import { LoginUsernameContext } from '../LoginUsernameProvider';
-import { db_column_name, init_db_data, agent_names, map_names, skills } from '../db_info';
 
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
 import Container from '@mui/material/Container';
-import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography';
 
 axios.defaults.withCredentials = true;
 
@@ -42,7 +31,7 @@ export default function Read() {
       navigate('/login');
     } else {
       console.log("ログインしています " + loginUsername);
-      axios.get('/api/read')
+      axios.get('api/read')
       .then((res) => {
         //console.log(res);
         console.log(res.data);
