@@ -21,8 +21,11 @@ const cookieParser = require('cookie-parser');
 //   database: process.env.MYSQL_DATABASE
 // });
 
-const Setup = require('./db/models/Setup');
-const User = require('./db/models/User');
+// const Setup = require('./db/models/Setup');
+// const User = require('./db/models/User');
+
+let Setup;
+let User;
 /*Setup.sync({alter: true})
 .then((result) => {
   console.log("migration db success");
@@ -74,8 +77,13 @@ app.use("/static", express.static(path.join(__dirname, "build", "static")));
 app.use("/images", express.static(path.join(__dirname, "build", "images")));
 
 
+app.get('/health', (req, res) => {
+  console.log("healthy")
+  res.status(200);
+});
+
 app.all('/', (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
+  res.status(200).sendFile(path.join(__dirname, "build", "index.html"));
 });
 
 app.all('/read', (req, res) => {

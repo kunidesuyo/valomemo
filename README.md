@@ -25,8 +25,7 @@
 
 
 - home画面を作る
-  - login画面へのリンク
-  - register画面へのリンク
+  - 画像とか入れていい感じにする
 - not found画面作る
 - docker compose downするときにdbのバックアップを作成するようにする
   - docker compose down し忘れたとき(バックアップがされなかったとき)の復元
@@ -56,7 +55,7 @@
 - frontendコンテナ内でreactをbuild
 `npm run build`
 - 作成されたbuildディレクトリを./api/src/に配置
-`docker container cp valomemo_frontend:/usr/frontend/build ./api/src`
+`docker container cp valomemo-frontend:/usr/frontend/build ./api/src`
 - localhost:8080/でアクセス可能に
 
 ### ImgurAPIのセットアップ
@@ -73,6 +72,11 @@
 2. ホスト側にコピー
 `docker container cp valomemo_db:/docker-entrypoint-initdb.d/pro.sql ./db/docker-entrypoint-initdb.d/`
 3. もしバックアップを取らなかったらaccess_tokenとrefresh_tokenを発行する。
+
+### 動作確認
+- apiコンテナにbuildしたreactファイルを配置。ルートにアクセスしてそのファイルを返すようにする
+- 表示されたwebページからapiコンテナに通信できるか
+- apiコンテナからdbに接続できるか
 
 
 ### AWSへのデプロイ
