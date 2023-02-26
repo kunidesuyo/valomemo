@@ -5,3 +5,9 @@ imgur_api_keys.txt
 /api/src/testdata
 /api/data_backups/Imgur_API_tokens
 /db/docker-entrypoint-initdb.d
+dev.sql
+pro.sql
+error_127.0.0.1.txt
+error_localhost.txt
+error_valomemo-db.txt
+cloudFormation.txt

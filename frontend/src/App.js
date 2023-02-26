@@ -1,12 +1,13 @@
 //import logo from './logo.svg';
 //import './App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Connect from './components/Connect';
 import Read from './components/Read';
 import CreateUpdate from './components/CreateUpdate';
 import Login from './components/Login';
 import Register from './components/Register';
 import Header from './components/Header';
+import Home from './components/Home';
 
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -38,10 +39,11 @@ function App() {
         <CommonInfoProvider>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <Router>
+            <BrowserRouter>
               <div>
                 <Routes>
                   <Route path='/' element={<Header />}>
+                    <Route path='/' element={<Home />} />
                     <Route path='login' element={<Login />} />
                     <Route path='register' element={<Register/>} />
                     <Route path='connect' element={<Connect />} />
@@ -51,7 +53,7 @@ function App() {
                   </Route>
                 </Routes>
               </div>
-            </Router>
+            </BrowserRouter>
           </ThemeProvider>
         </CommonInfoProvider>
       </LoginUsernameProvider>

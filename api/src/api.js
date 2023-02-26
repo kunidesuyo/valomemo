@@ -12,35 +12,13 @@ const JWT = require('jsonwebtoken');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
-const connection = mysql.createConnection({
-  host: process.env.DB_CONTAINER_NAME, 
-  //コンテナ名を指定(同ネットワーク内なので名前解決できる？)
-  user: 'root',
-  //password: 'password',
-  password: process.env.MYSQL_ROOT_PASSWORD,
-  database: process.env.MYSQL_DATABASE
-});
-
 const Setup = require('./db/models/Setup');
 const User = require('./db/models/User');
-/*Setup.sync({alter: true})
-.then((result) => {
-  console.log("migration db success");
-  console.log(result);
-})
-.catch((error) => {
-  console.log("migration db error");
-  console.log(error);
-})*/
 
+//dbマイグレーション
+//const migration_db = require('./db/migration_db');
+//migration_db();
 
-connection.connect((error) => {
-  if (error) {
-    console.log(error);
-  } else {
-    console.log('db connected');
-  }
-});
 
 
 // なくても動くけど一応
@@ -64,15 +42,48 @@ app.use(cors({
 app.use(cookieParser());
 
 
-app.get('/', (req, res) => {
+/*app.get('/', (req, res) => {
   //res.send('test complete')
   res.render('hello.ejs');
+});*/
+
+const path = require("path");
+app.use("/static", express.static(path.join(__dirname, "build", "static")));
+app.use("/images", express.static(path.join(__dirname, "build", "images")));
+
+
+app.get('/health', (req, res) => {
+  console.log("healthy")
+  res.status(200);
 });
 
+app.all('/', (req, res) => {
+  res.status(200).sendFile(path.join(__dirname, "build", "index.html"));
+});
+
+app.all('/read', (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
+app.all('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
+app.all('/register', (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
+app.all('/create', (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
+app.all('/update', (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 // imgur api
-const client_id = process.env.IMGUR_API_CLIENT_ID;
-const client_secret = process.env.IMGUR_API_CLIENT_SECRET;
+//const client_id = process.env.DEV_IMGUR_API_CLIENT_ID;
+//const client_secret = process.env.DEV_IMGUR_API_CLIENT_SECRET;
 
 const axios = require('axios');
 const fs = require('fs');
@@ -147,11 +158,11 @@ app.post('/api/create', auth, async (req, res) => {
   landing_image = await landing_image.replace(/data:image\/.*;base64,/, '');
 
   /*画像をimgurに登録*/
-  await generateAccessToken(client_id, client_secret);
+  await generateAccessToken();
   /* uploadImageForImgur */
   //現実(動く)
   let position_image_url, aim_image_url, landing_image_url;
-  const [access_token, refresh_token] = getNowTokens();
+  const [access_token, refresh_token] = await getNowTokens();
   const upload_url = "https://api.imgur.com/3/upload";
   const headers = {"Authorization": "Bearer " + access_token};
   var upload_params_position = new URLSearchParams();
@@ -518,7 +529,9 @@ app.post('/api/register', async (req, res) => {
     }
   })
   .catch((error) => {
-    console.log("error")
+    console.log("error");
+    console.log(error);
+    return res.status(400).json([{message: "dbエラー"}])
   })
 
 });

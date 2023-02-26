@@ -22,18 +22,12 @@
 
 
 # TODO
-- 本番環境にデプロイ
-  - 開発環境と本番環境で変わること
-    - package.json?
-    - docker compose.yml
-  - imgurは本番環境用のアカウントを作る
-    - apiを使えるようにする手順を書く
-  - AWS?GCP?
-    - 知りたいこと
-      - docker composeをそのまま使えるか
-      - 維持費
+- サイトのタイトル変更(react appのママになってる)
 
 
+- home画面を作る
+  - 画像とか入れていい感じにする
+- not found画面作る
 - docker compose downするときにdbのバックアップを作成するようにする
   - docker compose down し忘れたとき(バックアップがされなかったとき)の復元
     - apiのtoken系は再発行手順を書いておく
@@ -50,8 +44,40 @@
 - mylist機能
 - userの権限を実装
 - サイトの使い方
+- dbのバックアップを取れるようにする
 - mysqlの起動が遅いのでなにか良い方法がないか探す
 - テストをどうするか
 
 
+## 本番環境にデプロイ
+### 環境変数の設定
+.envの"DEV_OR_PRO"を"PRO"にする
 
+### Reactのbuild
+- frontendコンテナ内でreactをbuild
+`npm run build`
+- 作成されたbuildディレクトリを./api/src/に配置
+`docker container cp valomemo-frontend:/usr/frontend/build ./api/src`
+- localhost:8080/でアクセス可能に
+
+### ImgurAPIのセットアップ
+- access_tokenとrefresh_tokenの発行
+1. (https://api.imgur.com/oauth2/authorize?client_id=<client_id>&response_type=token&state=hoge)
+にアクセス(<client_id>をおきかえて)
+2. chromeでF12→Network
+3. webページのallowを押す
+4. response headersのlocationにaccess_tokenとrefresh_tokenがある
+
+- docker compose downするときにdbのバックアップ(自動化したい)
+1. dbコンテナでmysqldumpを実行
+`mysqldump -uroot -p<password> valomemo_db > ./docker-entrypoint-initdb.d/pro.sql`
+2. ホスト側にコピー
+`docker container cp valomemo_db:/docker-entrypoint-initdb.d/pro.sql ./db/docker-entrypoint-initdb.d/`
+3. もしバックアップを取らなかったらaccess_tokenとrefresh_tokenを発行する。
+
+### 動作確認
+- apiコンテナにbuildしたreactファイルを配置。ルートにアクセスしてそのファイルを返すようにする
+- 表示されたwebページからapiコンテナに通信できるか
+- apiコンテナからdbに接続できるか
+
+### render.comにデプロイ

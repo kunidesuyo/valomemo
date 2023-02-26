@@ -1,0 +1,77 @@
+version: '3.7'
+services:
+
+  db:
+    # image: mysql:8.0.31
+
+    image: 354837177298.dkr.ecr.ap-northeast-1.amazonaws.com/valomemo-db:latest
+
+    container_name: ${DB_CONTAINER_NAME}
+
+
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+
+    ports:
+      - '3306:3306'
+
+
+
+    networks:
+      - valomemo_network
+
+    healthcheck:
+      test: ["CMD", "mysql", "-uroot", "-p${DB_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  api:
+    container_name: ${API_CONTAINER_NAME}
+
+
+    image: 354837177298.dkr.ecr.ap-northeast-1.amazonaws.com/valomemo-api:latest
+
+
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - DB_CONTAINER_NAME=${DB_CONTAINER_NAME}
+      - MAX_NUM_OF_USER=${MAX_NUM_OF_USER}
+      - TABLE_NAME=${TABLE_NAME}
+      - DEV_IMGUR_API_CLIENT_ID=${DEV_IMGUR_API_CLIENT_ID}
+      - DEV_IMGUR_API_CLIENT_SECRET=${DEV_IMGUR_API_CLIENT_SECRET}
+      - PRO_IMGUR_API_CLIENT_ID=${PRO_IMGUR_API_CLIENT_ID}
+      - PRO_IMGUR_API_CLIENT_SECRET=${PRO_IMGUR_API_CLIENT_SECRET}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - DEV_OR_PRO=${DEV_OR_PRO}
+      - DB_HOST_NAME=127.0.0.1
+
+    ports:
+      - 8080:8080
+
+    networks:
+      - valomemo_network
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    container_name: ${FRONTEND_CONTAINER_NAME}
+
+    image: 354837177298.dkr.ecr.ap-northeast-1.amazonaws.com/valomemo-frontend:latest
+
+    ports:
+    - 3000:3000
+
+
+    
+    networks:
+      - valomemo_network
+
+
+networks:
+  valomemo_network:

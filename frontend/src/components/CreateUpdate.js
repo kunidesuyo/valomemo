@@ -1,21 +1,16 @@
 // createとupdate画面
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { TitleContext } from '../TitleProvider';
-import { db_column_name } from '../db_info';
-import { init_db_data, agent_names, map_names, skills } from '../db_info';
 
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
 import Container from '@mui/material/Container';
-import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import ImageList from '@mui/material/ImageList';
@@ -24,7 +19,6 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormHelperText from '@mui/material/FormHelperText';
 import LoadingButton from '@mui/lab/LoadingButton';
-import AddIcon from '@mui/icons-material/Add';
 
 
 
