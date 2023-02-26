@@ -3,7 +3,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 let db_name, db_username, db_host, db_dialect, db_port;
 
 
-console.log(process.env.DB_PORT);
+//console.log(process.env.DB_PORT);
 if(process.env.DEV_OR_PRO === "DEV") {
   db_name = process.env.MYSQL_DATABASE;
   db_username = process.env.DB_USERNAME;

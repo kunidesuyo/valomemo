@@ -23,6 +23,9 @@ const cookieParser = require('cookie-parser');
 
 const Setup = require('./db/models/Setup');
 const User = require('./db/models/User');
+
+const migration_db = require('./db/migration_db');
+migration_db();
 //
 // let Setup;
 // let User;
@@ -554,7 +557,9 @@ app.post('/api/register', async (req, res) => {
     }
   })
   .catch((error) => {
-    console.log("error")
+    console.log("error");
+    console.log(error);
+    return res.status(400).json([{message: "dbエラー"}])
   })
 
 });
