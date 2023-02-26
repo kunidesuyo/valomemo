@@ -38,9 +38,12 @@ services:
       dockerfile: Dockerfile
 
     environment:
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - DB_PASSWORD=${DB_PASSWORD}
       - MYSQL_DATABASE=${DB_NAME}
       - DB_CONTAINER_NAME=${DB_CONTAINER_NAME}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_DIALECT=${DB_DIALECT}
+      - DB_PORT=${DB_PORT}
       - MAX_NUM_OF_USER=${MAX_NUM_OF_USER}
       - TABLE_NAME=${TABLE_NAME}
       - DEV_IMGUR_API_CLIENT_ID=${DEV_IMGUR_API_CLIENT_ID}

@@ -21,11 +21,11 @@ const cookieParser = require('cookie-parser');
 //   database: process.env.MYSQL_DATABASE
 // });
 
-// const Setup = require('./db/models/Setup');
-// const User = require('./db/models/User');
-
-let Setup;
-let User;
+const Setup = require('./db/models/Setup');
+const User = require('./db/models/User');
+//
+// let Setup;
+// let User;
 /*Setup.sync({alter: true})
 .then((result) => {
   console.log("migration db success");

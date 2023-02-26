@@ -1,7 +1,7 @@
 const axios = require('axios');
 const fs = require('fs');
-// const ImgurApiTokens = require('./db/models/ImgurApiTokens');
-let ImgurApiTokens;
+const ImgurApiTokens = require('./db/models/ImgurApiTokens');
+// let ImgurApiTokens;
 
 const generateAccessToken = async () => {
   let client_id;

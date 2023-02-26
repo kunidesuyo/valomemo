@@ -23,6 +23,9 @@
 
 # TODO
 
+- apiコンテナからdbのマイグレーションをできるようにする
+- dbのバックアップを取れるようにする
+
 
 - home画面を作る
   - 画像とか入れていい感じにする
@@ -78,19 +81,4 @@
 - 表示されたwebページからapiコンテナに通信できるか
 - apiコンテナからdbに接続できるか
 
-
-### AWSへのデプロイ
-1. ビルド
-2. imageにタグ付け、ECRにpush
-3. context変更
-4. docker compose up
-
-
-ECS上でコンテナ間通信時に名前解決ができない
-
-対処法
-- エラーが出ない状態(db接続をしない状態)でデプロイ、入力に応じてdb接続テストできるようにする
-- webで調べる
-- docker compose convertでcloudFormationを作成。ここから設定を見る
-- host名をvalomemo-db, 127.0.0.1, localhostで実行して、ログを比べる
-- コンテナを別々にデプロイして接続設定を行う(docker composeを使わない)
+### render.comにデプロイ
