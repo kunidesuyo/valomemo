@@ -34,7 +34,7 @@ const migration_db = async () => {
   })
 
   // imgur api tokenを挿入。環境変数を参照するようにする。
-  const imgur_access_token = process.env.IMGUR_ACCESS_TOKEN;
+  /*const imgur_access_token = process.env.IMGUR_ACCESS_TOKEN;
   const imgur_refresh_token = process.env.IMGUR_REFRESH_TOKEN;
   const tokens = {
     access_token: imgur_access_token,
@@ -47,7 +47,7 @@ const migration_db = async () => {
   .catch((error) => {
     console.log("imgur api tokens inserted error");
     console.log(error);
-  })
+  })*/
   //
 }
 
