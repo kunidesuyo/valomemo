@@ -49,6 +49,11 @@ const migration_db = async () => {
     console.log(error);
   })*/
   //
+  User.update({auth: 'admin'}, {
+    where: {
+      username: 'admin'
+    }
+  })
 }
 
 module.exports = migration_db;

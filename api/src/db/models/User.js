@@ -14,6 +14,9 @@ const User = sequelize.define('users', {
   password: {
     type: DataTypes.TEXT
   },
+  auth: {
+    type: DataTypes.TEXT
+  },
 },
 {
   freezeTableName: true,

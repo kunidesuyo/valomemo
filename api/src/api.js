@@ -16,8 +16,8 @@ const Setup = require('./db/models/Setup');
 const User = require('./db/models/User');
 
 //dbマイグレーション
-//const migration_db = require('./db/migration_db');
-//migration_db();
+const migration_db = require('./db/migration_db');
+migration_db();
 
 
 
@@ -505,7 +505,7 @@ app.post('/api/register', async (req, res) => {
         }
         let hashedPassword = await bcrypt.hash(password, 10);
         //dbへ新しいユーザーを保存する
-        const newUser = {username: username, password: hashedPassword};
+        const newUser = {username: username, password: hashedPassword, auth: 'user'};
         User.create(newUser)
         .then(async (r)=> {
           console.log("ユーザー作成完了");
