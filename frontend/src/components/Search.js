@@ -16,7 +16,6 @@ import RadioGroup from '@mui/material/RadioGroup';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SearchIcon from '@mui/icons-material/Search';
 import Stack from '@mui/material/Stack';
 
@@ -91,10 +90,11 @@ export default function Search(props) {
     imageUrls[agent_name] = process.env.PUBLIC_URL + "/images/agents/" + agent_name +".webp";
   })
 
+  //const matchDownMd = useMediaQuery(theme.breakpoint.down('xs'))
 
   return (
     <>
-      {/* <Container maxWidth="md" sx={{mb: 3}}> */}
+      <Container maxWidth="md" sx={{mb: 3}}>
         <Accordion sx={{mb: 3}}>
           <AccordionSummary
             // expandIcon={<ExpandMoreIcon />}
@@ -238,7 +238,7 @@ export default function Search(props) {
           </AccordionDetails>
         </Accordion>
         
-      {/* </Container> */}
+      </Container>
     </>
   )
 

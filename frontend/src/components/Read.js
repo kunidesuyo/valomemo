@@ -10,6 +10,8 @@ import { LoginUsernameContext } from '../LoginUsernameProvider';
 
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+
 
 
 axios.defaults.withCredentials = true;
@@ -57,6 +59,7 @@ export default function Read() {
           setups={setups}
           setSetups={setSetups}
         />
+        <Typography variant="h5">Results</Typography>
         <Grid
           container
           alignItems="center"

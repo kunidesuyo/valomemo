@@ -52,35 +52,6 @@ app.use("/static", express.static(path.join(__dirname, "build", "static")));
 app.use("/images", express.static(path.join(__dirname, "build", "images")));
 
 
-app.get('/health', (req, res) => {
-  console.log("healthy")
-  res.status(200);
-});
-
-app.all('/', (req, res) => {
-  res.status(200).sendFile(path.join(__dirname, "build", "index.html"));
-});
-
-app.all('/read', (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
-
-app.all('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
-
-app.all('/register', (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
-
-app.all('/create', (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
-
-app.all('/update', (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
-
 // imgur api
 //const client_id = process.env.DEV_IMGUR_API_CLIENT_ID;
 //const client_secret = process.env.DEV_IMGUR_API_CLIENT_SECRET;
@@ -274,10 +245,6 @@ app.post('/api/create', auth, async (req, res) => {
       }
     )*/
   })
-  
-
-
-
 
   /*
   //理想(~_image_urlがundefinedでconnection.queryが呼び出される)
@@ -574,6 +541,9 @@ app.post("/api/logout", (req, res) => {
   }
 })*/
 
+app.all('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
