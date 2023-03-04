@@ -31,7 +31,7 @@ app.set('views', '/usr/api/src/views');
 app.use(express.static('/usr/api/src/public'));
 
 //フォームの値を受け取るための文
-app.use(express.urlencoded({extended: false, limit: '20mb'}));
+app.use(express.urlencoded({extended: false, limit: '0mb'}));
 
 app.use(cors({
   credentials: true,
