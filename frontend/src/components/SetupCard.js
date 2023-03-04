@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -13,6 +13,12 @@ import Stack from '@mui/material/Stack';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import Dialog from '@mui/material/Dialog';
+import Modal from '@mui/material/Modal';
+
+
+import ClickAwayListener from '@mui/base/ClickAwayListener';
+
 
 
 import Delete from './Delete';
@@ -34,7 +40,7 @@ export default function SetupCard(props) {
   const abilityIcon = process.env.PUBLIC_URL + "/images/abilitys/" + setup.agent + "Ability" + setup.ability + ".webp";
 
   const images = ["position_image", "aim_image", "landing_image"];
-  
+
   const handleToggle = () => {
     setOpen(!open);
   };
@@ -63,78 +69,87 @@ export default function SetupCard(props) {
 
   return (
     <Box>
-      <Card sx={{maxWidth: "100%"}} onClick={handleToggle}>
+      <Card sx={{ maxWidth: "100%" }} onClick={handleToggle}>
         <CardMedia
           component="img"
           image={setup.landing_image}
         />
         <CardContent>
           <Stack direction="row" spacing={3}>
-            <Avatar src={agentIcon} sx={{width: 30, height: 30}}/>
-            <Avatar src={abilityIcon} sx={{width: 30, height: 30}}/>
+            <Avatar src={agentIcon} sx={{ width: 30, height: 30 }} />
+            <Avatar src={abilityIcon} sx={{ width: 30, height: 30 }} />
           </Stack>
-          <Typography variant="h6" sx={{marginTop: 1}}>{setup.title}</Typography>
+          <Typography variant="h6" sx={{ marginTop: 1 }}>{setup.title}</Typography>
         </CardContent>
       </Card>
 
-      <Backdrop
+      <Modal
         open={open}
-        sx={{zIndex: (theme) => theme.zIndex.drawer + 1}}
+        // sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        onClose={handleClose}
       >
-        <Card sx={{maxWidth: "50%", p: 2}}>
+        <Card
+          sx={{
+            maxWidth: "50%", p: 2, position: 'absolute',
+            top: '50%', left: '50%', transform: 'translate(-50%, -50%)'
+          }}
+        >
           <CardMedia
             component="img"
             image={setup[images[displayImageIndex]]}
           />
           <CardActions>
-          <Grid container>
-            <Grid item xs={4}></Grid>
-            <Grid item xs={2}>
-              <Box sx={{textAlign: "center", maxWidth: "100%"}}>
-                <Button onClick={displayPreviousImage}> {"<"} </Button>
-              </Box>
+            <Grid container>
+              <Grid item xs={4}></Grid>
+              <Grid item xs={2}>
+                <Box sx={{ textAlign: "center", maxWidth: "100%" }}>
+                  <Button onClick={displayPreviousImage}> {"<"} </Button>
+                </Box>
+              </Grid>
+              <Grid item xs={2}>
+                <Box sx={{ textAlign: "center", maxWidth: "100%" }}>
+                  <Button onClick={displayNextImage}>{">"}</Button>
+                </Box>
+              </Grid>
+              <Grid item xs={4}></Grid>
             </Grid>
-            <Grid item xs={2}>
-              <Box sx={{textAlign: "center", maxWidth: "100%"}}>
-                <Button onClick={displayNextImage}>{">"}</Button>
-              </Box>
-            </Grid>
-            <Grid item xs={4}></Grid>
-          </Grid>
           </CardActions>
-          
+
           <CardContent>
-            <Stack direction="row" spacing={3} sx={{marginBottom: 1}}>
-              <Avatar src={agentIcon} sx={{width: 30, height: 30}}/>
-              <Avatar src={abilityIcon} sx={{width: 30, height: 30}}/>
+            <Stack direction="row" spacing={3} sx={{ marginBottom: 1 }}>
+              <Avatar src={agentIcon} sx={{ width: 30, height: 30 }} />
+              <Avatar src={abilityIcon} sx={{ width: 30, height: 30 }} />
               <Typography variant="subtitle1">{setup.map}</Typography>
             </Stack>
             <Typography variant="subtitle1">{setup.title}</Typography>
             <Typography variant="body1">{setup.description}</Typography>
           </CardContent>
-          <CardActions>
-            <Grid container>
-              <Grid item xs={4}>
-                <Button onClick={handleClose} variant="contained">閉じる</Button>
-              </Grid>
-              <Grid item xs={0}></Grid>
-              <Grid item xs={8} sx={{textAlign: "right"}}>
-                <Button
-                  variant="contained"
-                  component={Link}
-                  to="/update"
-                  state={{setup: setup, createOrUpdate: "update"}}
-                  sx={{marginRight: 2}}
-                >
-                  編集
-                </Button>
-                <Delete setup={setup} detectDelete={props.detectDelete} setDetectDelete={props.setDetectDelete}/>
-              </Grid>
-            </Grid>
-            
-          </CardActions>
+
+          <Stack
+            direction="row"
+            spacing={1}
+            justifyContent="flex-end"
+            alignItems="center"
+            sx={{ mr: 1 }}
+          >
+            <Box sx={{ marginTop: 1, marginBottom: 1, mr: 1 }}>
+              <Button
+                variant="contained"
+                component={Link}
+                to="/update"
+                state={{ setup: setup, createOrUpdate: "update" }}
+                sx={{ marginRight: 2 }}
+              >
+                編集
+              </Button>
+            </Box>
+            <Box sx={{ marginTop: 1, marginBottom: 1, mr: 1 }}>
+              <Delete setup={setup} detectDelete={props.detectDelete} setDetectDelete={props.setDetectDelete} />
+            </Box>
+          </Stack>
         </Card>
-      </Backdrop>
+      </Modal>
     </Box>
+
   )
 }

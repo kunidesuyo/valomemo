@@ -18,16 +18,14 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import Button from '@mui/material/Button'
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 import Drawer from '@mui/material/Drawer';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import List from '@mui/material/List';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import HomeIcon from '@mui/icons-material/Home';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 
 export default function MenuAppBar() {
@@ -183,6 +181,7 @@ export default function MenuAppBar() {
                   to="/read"
                   onClick={toggleDrawer}
                 >
+                  <HomeIcon sx={{mr: 1}}/>
                   <ListItemText primary={'Read'} />
                 </ListItemButton>
               </ListItem>
@@ -194,6 +193,7 @@ export default function MenuAppBar() {
                   state={{createOrUpdate: "create"}}
                   onClick={toggleDrawer}
                 >
+                  <AddCircleOutlineIcon sx={{mr: 1}}/>
                   <ListItemText primary={'Create Setup'} />
                 </ListItemButton>
               </ListItem>

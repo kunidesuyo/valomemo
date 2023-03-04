@@ -21,9 +21,45 @@
 - api側でJWTを無効化(未実装)
 
 
+# 本番環境にデプロイ
+## 環境変数の設定
+.envの"DEV_OR_PRO"を"PRO"にする
+
+## Reactのbuild
+- frontendコンテナ内でreactをbuild
+`npm run build`
+- 作成されたbuildフォルダを./api/src/に配置
+`docker container cp valomemo-frontend:/usr/frontend/build ./api/src`
+- localhost:8080/でアクセス可能に
+
+## ImgurAPIのセットアップ
+- access_tokenとrefresh_tokenの発行
+1. (https://api.imgur.com/oauth2/authorize?client_id=<client_id>&response_type=token&state=hoge)
+にアクセス(<client_id>をおきかえて)
+2. chromeでF12→Network
+3. webページのallowを押す
+4. response headersのlocationにaccess_tokenとrefresh_tokenがある
+
+- docker compose downするときにdbのバックアップ(自動化したい)
+1. dbコンテナでmysqldumpを実行
+`mysqldump -uroot -p<password> valomemo_db > ./docker-entrypoint-initdb.d/pro.sql`
+2. ホスト側にコピー
+`docker container cp valomemo_db:/docker-entrypoint-initdb.d/pro.sql ./db/docker-entrypoint-initdb.d/`
+3. もしバックアップを取らなかったらaccess_tokenとrefresh_tokenを発行する。
+
+## 動作確認
+- apiコンテナにbuildしたreactファイルを配置。ルートにアクセスしてそのファイルを返すようにする
+- 表示されたwebページからapiコンテナに通信できるか
+- apiコンテナからdbに接続できるか
+
+## render.comにデプロイ
+
+### dbに接続
+- コマンドラインから接続する
+render.comのサイトでDBのページに移動(dashbordから)。  
+info->psql commandをコピーして実行(先頭のパスワードは消して、コマンド実行後に入力)
+
 # TODO
-- search画面
-  - アイコンのサイズ小さく
 - mypage作成
   - 投稿したセットアップの表示
   - 作成したmylistの表示
@@ -48,42 +84,3 @@
 - サイトの使い方
 - mysqlの起動が遅いのでなにか良い方法がないか探す
 - テストをどうするか
-
-
-## 本番環境にデプロイ
-### 環境変数の設定
-.envの"DEV_OR_PRO"を"PRO"にする
-
-### Reactのbuild
-- frontendコンテナ内でreactをbuild
-`npm run build`
-- 作成されたbuildフォルダを./api/src/に配置
-`docker container cp valomemo-frontend:/usr/frontend/build ./api/src`
-- localhost:8080/でアクセス可能に
-
-### ImgurAPIのセットアップ
-- access_tokenとrefresh_tokenの発行
-1. (https://api.imgur.com/oauth2/authorize?client_id=<client_id>&response_type=token&state=hoge)
-にアクセス(<client_id>をおきかえて)
-2. chromeでF12→Network
-3. webページのallowを押す
-4. response headersのlocationにaccess_tokenとrefresh_tokenがある
-
-- docker compose downするときにdbのバックアップ(自動化したい)
-1. dbコンテナでmysqldumpを実行
-`mysqldump -uroot -p<password> valomemo_db > ./docker-entrypoint-initdb.d/pro.sql`
-2. ホスト側にコピー
-`docker container cp valomemo_db:/docker-entrypoint-initdb.d/pro.sql ./db/docker-entrypoint-initdb.d/`
-3. もしバックアップを取らなかったらaccess_tokenとrefresh_tokenを発行する。
-
-### 動作確認
-- apiコンテナにbuildしたreactファイルを配置。ルートにアクセスしてそのファイルを返すようにする
-- 表示されたwebページからapiコンテナに通信できるか
-- apiコンテナからdbに接続できるか
-
-### render.comにデプロイ
-
-#### dbに接続
-- コマンドラインから接続する
-render.comのサイトでDBのページに移動(dashbordから)。  
-info->psql commandをコピーして実行(先頭のパスワードは消して、コマンド実行後に入力)

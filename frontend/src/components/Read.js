@@ -46,6 +46,7 @@ export default function Read() {
       })
       .catch((error) => {
         console.log(error);
+        localStorage.setItem("username", "");
         navigate('/login');
       })
     }
@@ -59,7 +60,7 @@ export default function Read() {
           setups={setups}
           setSetups={setSetups}
         />
-        <Typography variant="h5">Results</Typography>
+        <Typography variant="h5" sx={{mb: 1}}>Results</Typography>
         <Grid
           container
           alignItems="center"
