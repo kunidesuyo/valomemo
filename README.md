@@ -22,9 +22,12 @@
 
 
 # TODO
-- サイトのタイトル変更(react appのママになってる)
-
-
+- search画面
+  - アイコンのサイズ小さく
+- mypage作成
+  - 投稿したセットアップの表示
+  - 作成したmylistの表示
+- mylist機能
 - home画面を作る
   - 画像とか入れていい感じにする
 - not found画面作る
@@ -42,9 +45,7 @@
   - 作成したmylistの表示
 - search画面
 - mylist機能
-- userの権限を実装
 - サイトの使い方
-- dbのバックアップを取れるようにする
 - mysqlの起動が遅いのでなにか良い方法がないか探す
 - テストをどうするか
 
@@ -56,7 +57,7 @@
 ### Reactのbuild
 - frontendコンテナ内でreactをbuild
 `npm run build`
-- 作成されたbuildディレクトリを./api/src/に配置
+- 作成されたbuildフォルダを./api/src/に配置
 `docker container cp valomemo-frontend:/usr/frontend/build ./api/src`
 - localhost:8080/でアクセス可能に
 
@@ -81,3 +82,8 @@
 - apiコンテナからdbに接続できるか
 
 ### render.comにデプロイ
+
+#### dbに接続
+- コマンドラインから接続する
+render.comのサイトでDBのページに移動(dashbordから)。  
+info->psql commandをコピーして実行(先頭のパスワードは消して、コマンド実行後に入力)

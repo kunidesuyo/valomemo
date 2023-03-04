@@ -17,7 +17,7 @@ const User = require('./db/models/User');
 
 //dbマイグレーション
 const migration_db = require('./db/migration_db');
-migration_db();
+//migration_db();
 
 
 
@@ -404,26 +404,26 @@ app.delete('/api/delete/:id', auth, async (req, res) => {
 });
 
 
-app.get('/imgur-test', async (req, res) => {
+// app.get('/imgur-test', async (req, res) => {
 
-  //fs.writeFileSync("./src/test.txt", "bbb");
+//   //fs.writeFileSync("./src/test.txt", "bbb");
 
-  //[access_token, refresh_token] = getNowTokens();
-  //let tokens = getNowTokens();
-  //console.log(tokens);
-  //console.log("access_token: " + access_token);
-  //console.log("refresh_token: " + refresh_token);
-  //generateAccessToken(client_id, client_secret);
+//   //[access_token, refresh_token] = getNowTokens();
+//   //let tokens = getNowTokens();
+//   //console.log(tokens);
+//   //console.log("access_token: " + access_token);
+//   //console.log("refresh_token: " + refresh_token);
+//   //generateAccessToken(client_id, client_secret);
 
 
 
-  //const image = fs.readFileSync('/usr/api/src/testdata/test1-3.png', 'base64');
-  //const image_url = "https://i.imgur.com/f3hTO3S.png";
-  //deleteImageForImgur(image_url);
+//   //const image = fs.readFileSync('/usr/api/src/testdata/test1-3.png', 'base64');
+//   //const image_url = "https://i.imgur.com/f3hTO3S.png";
+//   //deleteImageForImgur(image_url);
 
-  //uploadImageForImgur(image);
+//   //uploadImageForImgur(image);
 
-});
+// });
 
 const JWTSecretKey = process.env.JWT_SECRET_KEY
 

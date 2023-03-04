@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import SetupCard from './SetupCard';
+import Search from './Search';
+
 
 import { TitleContext } from '../TitleProvider';
 import { LoginUsernameContext } from '../LoginUsernameProvider';
@@ -9,9 +11,11 @@ import { LoginUsernameContext } from '../LoginUsernameProvider';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 
+
 axios.defaults.withCredentials = true;
 
 export default function Read() {
+  const [allSetups, setAllSetups] = useState([]);
   const [setups, setSetups] = useState([]);
   const [detectDelete, setDetectDelete] = useState([0]);
   const [title, setTitle] = useContext(TitleContext);
@@ -35,6 +39,7 @@ export default function Read() {
       .then((res) => {
         //console.log(res);
         console.log(res.data);
+        setAllSetups(res.data);
         setSetups(res.data);
       })
       .catch((error) => {
@@ -42,13 +47,16 @@ export default function Read() {
         navigate('/login');
       })
     }
-
-    
   }, [detectDelete]);
 
   return (
     <>
       <Container maxWidth="lg" sx={{mt: 5, mb: 5}}>
+        <Search
+          allSetups={allSetups}
+          setups={setups}
+          setSetups={setSetups}
+        />
         <Grid
           container
           alignItems="center"
