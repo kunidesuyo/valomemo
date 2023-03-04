@@ -60,6 +60,7 @@ render.comのサイトでDBのページに移動(dashbordから)。
 info->psql commandをコピーして実行(先頭のパスワードは消して、コマンド実行後に入力)
 
 # TODO
+- readme.mdを作成(人に見せられるもの)
 - mypage作成
   - 投稿したセットアップの表示
   - 作成したmylistの表示
@@ -71,7 +72,6 @@ info->psql commandをコピーして実行(先頭のパスワードは消して�
   - docker compose down し忘れたとき(バックアップがされなかったとき)の復元
     - apiのtoken系は再発行手順を書いておく
 - (setupcardコンポーネント)ユーザー名が一致しないセットアップでは編集、削除ボタンを表示しないようにする
-- readme.mdを作成(人に見せられるもの)
 - apiのレスポンスを整える(messageに内容を入れ、frontendでその内容を表示するようにする)
 - コードのリファクタリング
   - createUpdateでpostDataとupdateDataをまとめる
@@ -79,7 +79,6 @@ info->psql commandをコピーして実行(先頭のパスワードは消して�
 - mypage作成
   - 投稿したセットアップの表示
   - 作成したmylistの表示
-- search画面
 - mylist機能
 - サイトの使い方
 - mysqlの起動が遅いのでなにか良い方法がないか探す
