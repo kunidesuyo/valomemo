@@ -395,7 +395,7 @@ app.delete('/api/delete/:id', auth, async (req, res) => {
 const JWTSecretKey = process.env.JWT_SECRET_KEY
 
 app.post('/api/login', (req, res) => {
-  console.log(req.body);
+  //console.log(req.body);
   //console.log("secret key", JWTSecretKey);
   const username = req.body.username;
   const password = req.body.password;
@@ -449,7 +449,7 @@ const max_num_of_user = process.env.MAX_NUM_OF_USER;
 
 app.post('/api/register', async (req, res) => {
   console.log("register");
-  console.log(req.body);
+  //console.log(req.body);
   const username = req.body.username;
   const password = req.body.password;
   //バリデーションチェック
