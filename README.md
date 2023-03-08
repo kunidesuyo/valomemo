@@ -31,7 +31,7 @@ VALORANTは5vs5のFPSゲーム。21人のエージェント(2022/03/07時点)が
 
 
 ## システム構成
-(システム構成図を貼る)
+![](dev_env.drawio.svg)
 
 ## frontend
 ReactとMaterial-UIを使用。
@@ -72,6 +72,7 @@ node.jsのexpressを使用。DB操作はsequelizeを使用。
 # 本番環境にデプロイ
 
 (システム構成図を貼る)
+![](pro_env.drawio.svg)
 
 ## 環境変数の設定
 .envの"DEV_OR_PRO"を"PRO"にする
