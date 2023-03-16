@@ -333,7 +333,7 @@ export default function CreateUpdate() {
             >
               <ImageList
                 variant='woven'
-                cols={10}
+                cols={11}
                 gap={1}
               >
                 {commonInfo.agent_names.map((agent_name) => (    
