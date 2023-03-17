@@ -46,6 +46,18 @@ DB操作はsequelizeを使用。もともとsql文を書いていたが、本番
 frontendのソースコードをbuildしてhtml,jsファイルに変換し、apiフォルダの中に配置。特定のURLにアクセスされたらbrowserに返すようにする。  
 本番環境(render.com)にはapiフォルダのDockerfileを用いてweb serviceをデプロイ。またdb serviceも立ち上げた。環境変数でdbサービスへの接続情報などを制御。
 
+## 作成に使用した教材
+- progate
+  - Node.jsコース
+  - Reactコース
+  - JavaScriptコース
+  - SQLコース
+  - HTML&CSSコース
+
+- 書籍
+  - asakohattori. 基礎から学ぶ React/React Hooks. シーアンドアール研究所. 2021
+  - 伊藤 裕一. たった1日で基本が身に付く！ Docker/Kubernetes超入門. 技術評論社. 2020
+
 ## (開発者用)ローカルで環境を再現する
 (編集中)(ファイル分けようかな)
 大まかなながれ
